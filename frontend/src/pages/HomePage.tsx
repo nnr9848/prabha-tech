@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { publicApi } from '../api/client';
 import { HeroSection } from '../components/home/HeroSection';
+import { ImpactStatsSection } from '../components/home/ImpactStatsSection';
 import { CaseStudiesGrid } from '../components/home/CaseStudiesGrid';
 import { ServicesGrid } from '../components/home/ServicesGrid';
 import { PhilosophySection } from '../components/home/PhilosophySection';
@@ -105,6 +106,7 @@ export const HomePage: React.FC = () => {
   return (
     <div>
       <HeroSection />
+      <ImpactStatsSection />
       <CaseStudiesGrid caseStudies={caseStudies} />
       <ServicesGrid services={services} />
       <PhilosophySection />
