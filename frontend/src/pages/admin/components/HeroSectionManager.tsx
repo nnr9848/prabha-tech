@@ -77,6 +77,7 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
   });
 
   const [savedFeedback, setSavedFeedback] = useState(false);
+  const [previewKey, setPreviewKey] = useState(0);
 
   useEffect(() => {
     if (heroConfig) {
@@ -89,6 +90,17 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
     onSave(formData);
     setSavedFeedback(true);
     setTimeout(() => setSavedFeedback(false), 3000);
+  };
+
+  const handleReplayPreview = () => {
+    setPreviewKey((prev) => prev + 1);
+  };
+
+  const handleResetToSaved = () => {
+    if (heroConfig) {
+      setFormData(heroConfig);
+      setPreviewKey((prev) => prev + 1);
+    }
   };
 
   return (
@@ -265,15 +277,40 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
               <Eye className="w-4 h-4 text-[var(--brand-primary,#9873ff)]" />
               <span>Real-Time Live Preview</span>
             </div>
-            <span className="text-[11px] text-[#64748B]">Simulated Homepage Screen</span>
+
+            <div className="flex items-center gap-2">
+              {/* Replay Video / Animation Button */}
+              <button
+                type="button"
+                onClick={handleReplayPreview}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[#94A3B8] hover:text-white text-[11px] font-medium transition-all group shadow-sm active:scale-95"
+                title="Replay video stream and entrance animations from start"
+              >
+                <RefreshCw className="w-3 h-3 text-[var(--brand-primary,#9873ff)] group-hover:rotate-180 transition-transform duration-500" />
+                <span>Replay Preview</span>
+              </button>
+
+              {/* Reset to saved values */}
+              <button
+                type="button"
+                onClick={handleResetToSaved}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[#94A3B8] hover:text-white text-[11px] font-medium transition-all shadow-sm active:scale-95"
+                title="Reset form fields to last saved configuration"
+              >
+                <span>Reset</span>
+              </button>
+            </div>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden border border-white/20 bg-[#050608] shadow-2xl min-h-[480px] p-6 sm:p-10 flex flex-col justify-center">
+          <div
+            key={previewKey}
+            className="relative rounded-2xl overflow-hidden border border-white/20 bg-[#050608] shadow-2xl min-h-[480px] p-6 sm:p-10 flex flex-col justify-center"
+          >
             {/* Background Simulated Video */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
               {formData.videoUrl && (
                 <video
-                  key={formData.videoUrl}
+                  key={`${formData.videoUrl}-${previewKey}`}
                   autoPlay
                   muted
                   playsInline
@@ -288,7 +325,12 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
             </div>
 
             {/* Live Text Overlay */}
-            <div className="relative z-10 max-w-xl space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="relative z-10 max-w-xl space-y-6"
+            >
               <p className="text-xs sm:text-sm text-white/90 font-normal leading-relaxed max-w-md">
                 {formData.subHeadline || 'Editorial sub-headline preview...'}
               </p>
@@ -307,7 +349,7 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
                   {formData.ctaText || 'Contact Us'}
                 </PillButton>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
