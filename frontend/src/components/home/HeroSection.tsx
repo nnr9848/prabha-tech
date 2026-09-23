@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden bg-[#050608]">
+    <section className="relative min-h-[auto] md:h-screen md:min-h-[700px] flex items-center pt-28 pb-14 md:py-0 overflow-hidden bg-[#050608]">
       {/* Background Holographic 3D Video / Overlay matching theuxda.com */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <video
@@ -13,41 +13,41 @@ export const HeroSection: React.FC = () => {
           muted
           playsInline
           poster="https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.jpg"
-          className="w-full h-full object-cover object-right md:object-center opacity-100"
+          className="w-full h-full object-cover object-center opacity-100"
         >
           <source
             src="https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.mp4"
             type="video/mp4"
           />
         </video>
-        {/* Subtle Dark Left Vignette for Typography Legibility while Keeping 3D X Crystal Bright */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050608]/90 via-[#050608]/30 to-transparent"></div>
+        {/* Responsive Dark Vignette for Typography Legibility while Keeping 3D X Crystal Bright */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050608]/85 via-[#050608]/40 to-[#050608] md:bg-gradient-to-r md:from-[#050608]/90 md:via-[#050608]/30 md:to-transparent"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-transparent to-[#050608]/60"></div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-8 sm:px-16 lg:px-24 relative z-10 w-full">
-        <div className="max-w-5xl pt-12 sm:pt-16">
+      <div className="max-w-[1600px] mx-auto px-6 sm:px-16 lg:px-24 relative z-10 w-full">
+        <div className="max-w-5xl pt-4 sm:pt-16">
           {/* Top Editorial Sub-headline */}
           <motion.div
             initial={{ opacity: 0, y: -60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 5.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[18px] sm:text-[21px] lg:text-[23px] text-white font-normal leading-[1.55] mb-12 sm:mb-14 max-w-[480px]"
+            className="text-[18px] sm:text-[21px] lg:text-[23px] text-white/95 font-normal leading-[1.55] mb-12 sm:mb-14 max-w-[540px]"
           >
-            Financial UX design authority enabling large-scale financial institutions to differentiate and lead in the digital world.
+            We catalyze business growth by reimagining digital experiences that conquer complex challenges through innovation and agility.
           </motion.div>
 
-          {/* Main Headline - Authentic UXDA Stature */}
+          {/* Main Headline - Elegant Light Weight & Expanded Font Size matching theuxda.com */}
           <motion.h1
             initial={{ opacity: 0, y: -95 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 6.4, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-5xl lg:text-[54px] xl:text-[60px] font-normal text-white tracking-[-0.02em] leading-[1.15] mb-12 sm:mb-14 max-w-4xl"
+            className="text-4xl sm:text-6xl lg:text-[64px] xl:text-[70px] font-light font-[300] text-white tracking-[-0.03em] leading-[1.12] mb-12 sm:mb-14 max-w-5xl"
           >
-            Defining Distinctive{' '}
-            <span className="text-[#9873ff] font-normal">Digital Brand</span>
+            Meet the{' '}
+            <span className="text-[#9873ff] font-light font-[300]">Digital Drivers</span>
             <br />
-            <span className="text-[#9873ff] font-normal">Identities</span> for Financial Institutions
+            of Global Disruptors
           </motion.h1>
 
           {/* Authentic UXDA Pill Button */}
@@ -56,8 +56,8 @@ export const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 6.0, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Link to="/case-studies" className="uxda-pill-btn group inline-flex items-center">
-              <span>Cases: strategic outcomes</span>
+            <Link to="/contact" className="uxda-pill-btn group inline-flex items-center">
+              <span>Contact Our Experts</span>
               <ArrowRight className="w-4 h-4 text-[#9873ff] transition-transform duration-300 group-hover:translate-x-1 ml-2" />
             </Link>
           </motion.div>
