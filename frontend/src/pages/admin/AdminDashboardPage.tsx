@@ -11,6 +11,7 @@ import { ArticlesManager } from './components/ArticlesManager';
 import { InquiriesManager } from './components/InquiriesManager';
 import { SocialLinksManager } from './components/SocialLinksManager';
 import { PillButton } from '../../components/common/PillButton';
+import { useToast } from '../../context/ToastContext';
 import { X, Save, Image as ImageIcon } from 'lucide-react';
 
 export const AdminDashboardPage: React.FC = () => {
@@ -19,6 +20,7 @@ export const AdminDashboardPage: React.FC = () => {
   const [selectedInquiry, setSelectedInquiry] = useState<LeadInquiry | null>(null);
 
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   // Queries
   const { data: caseStudies = [] } = useQuery<CaseStudy[]>({
@@ -51,6 +53,10 @@ export const AdminDashboardPage: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminHeroConfig'] });
       queryClient.invalidateQueries({ queryKey: ['heroConfig'] });
+      toast.success('Hero Section Updated', 'Homepage value proposition & background live synchronized.');
+    },
+    onError: (err: any) => {
+      toast.error('Failed to update Hero Section', err.response?.data?.message || 'Server error occurred.');
     },
   });
 
@@ -97,7 +103,11 @@ export const AdminDashboardPage: React.FC = () => {
   // Mutations
   const deleteCaseMutation = useMutation({
     mutationFn: (id: number) => adminApi.deleteCaseStudy(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adminCaseStudies'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminCaseStudies'] });
+      toast.info('Case Study Deleted', 'The portfolio item has been removed.');
+    },
+    onError: () => toast.error('Error', 'Failed to delete case study.'),
   });
 
   const saveCaseMutation = useMutation({
@@ -105,12 +115,20 @@ export const AdminDashboardPage: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminCaseStudies'] });
       setIsCaseModalOpen(false);
+      toast.success('Case Study Saved', 'Portfolio changes are now live across the platform.');
+    },
+    onError: (err: any) => {
+      toast.error('Failed to save Case Study', err.response?.data?.message || 'Check required fields.');
     },
   });
 
   const deleteArticleMutation = useMutation({
     mutationFn: (id: number) => adminApi.deleteArticle(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adminArticles'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminArticles'] });
+      toast.info('Article Deleted', 'The article has been permanently un-published.');
+    },
+    onError: () => toast.error('Error', 'Failed to delete article.'),
   });
 
   const saveArticleMutation = useMutation({
@@ -118,13 +136,21 @@ export const AdminDashboardPage: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminArticles'] });
       setIsArticleModalOpen(false);
+      toast.success('Article Saved', 'Article publication updated successfully.');
+    },
+    onError: (err: any) => {
+      toast.error('Failed to save Article', err.response?.data?.message || 'Check required fields.');
     },
   });
 
   const updateInquiryStatusMutation = useMutation({
     mutationFn: ({ id, status }: { id: number; status: string }) =>
       adminApi.updateInquiryStatus(id, status),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['adminInquiries'] }),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['adminInquiries'] });
+      toast.success('Status Updated', `Lead inquiry status changed to ${variables.status}.`);
+    },
+    onError: () => toast.error('Error', 'Failed to update inquiry status.'),
   });
 
   const saveSocialMutation = useMutation({
@@ -138,6 +164,10 @@ export const AdminDashboardPage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['adminSocialLinks'] });
       queryClient.invalidateQueries({ queryKey: ['socialLinks'] });
       setIsSocialModalOpen(false);
+      toast.success('Social Channel Updated', 'Social footer & channels live synchronized.');
+    },
+    onError: (err: any) => {
+      toast.error('Failed to save Social Channel', err.response?.data?.message || 'Invalid URL or payload.');
     },
   });
 
@@ -146,7 +176,9 @@ export const AdminDashboardPage: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminSocialLinks'] });
       queryClient.invalidateQueries({ queryKey: ['socialLinks'] });
+      toast.info('Social Channel Removed', 'The social channel is no longer active.');
     },
+    onError: () => toast.error('Error', 'Failed to delete social channel.'),
   });
 
   // Modal Triggers

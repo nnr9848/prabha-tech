@@ -54,8 +54,8 @@ public class HeroConfigService {
         config.setHeadlineSuffix("of Global Disruptors");
         config.setCtaText("Contact Our Experts");
         config.setCtaLink("/contact");
-        config.setVideoUrl("https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.mp4");
-        config.setPosterUrl("https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.jpg");
+        config.setVideoUrl("/assets/video/hero-bg.mp4");
+        config.setPosterUrl("https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80");
         return heroConfigRepository.save(config);
     }
 

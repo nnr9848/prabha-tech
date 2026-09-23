@@ -36,6 +36,6 @@ INSERT INTO hero_section_config (
     'of Global Disruptors',
     'Contact Our Experts',
     '/contact',
-    'https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.mp4',
-    'https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.jpg'
+    '/assets/video/hero-bg.mp4',
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80'
 ) ON CONFLICT (config_key) DO NOTHING;

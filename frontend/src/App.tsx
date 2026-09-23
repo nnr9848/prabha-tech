@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
@@ -50,38 +51,40 @@ export const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Public PrabhaTech Marketing Website Layout */}
-            <Route element={<PublicLayout />}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/case-studies" element={<CaseStudiesPage />} />
-              <Route path="/case-studies/:slug" element={<CaseStudyDetailPage />} />
-              <Route path="/services" element={<ServicesPage />} />
-              <Route path="/philosophy" element={<PhilosophyPage />} />
-              <Route path="/insights" element={<InsightsPage />} />
-              <Route path="/insights/:slug" element={<InsightDetailPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<HomePage />} />
-            </Route>
+        <ToastProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Public PrabhaTech Marketing Website Layout */}
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/case-studies" element={<CaseStudiesPage />} />
+                <Route path="/case-studies/:slug" element={<CaseStudyDetailPage />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/philosophy" element={<PhilosophyPage />} />
+                <Route path="/insights" element={<InsightsPage />} />
+                <Route path="/insights/:slug" element={<InsightDetailPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<HomePage />} />
+              </Route>
 
-            {/* Admin CMS Authentication Route */}
-            <Route path="/admin" element={<AdminLoginPage />} />
+              {/* Admin CMS Authentication Route */}
+              <Route path="/admin" element={<AdminLoginPage />} />
 
-            {/* Enterprise Admin CMS Workspace */}
-            <Route
-              path="/admin/dashboard"
-              element={
-                <ProtectedAdminRoute>
-                  <AdminDashboardPage />
-                </ProtectedAdminRoute>
-              }
-            />
+              {/* Enterprise Admin CMS Workspace */}
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminDashboardPage />
+                  </ProtectedAdminRoute>
+                }
+              />
 
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </BrowserRouter>
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </ToastProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

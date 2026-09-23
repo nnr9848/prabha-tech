@@ -4,6 +4,7 @@ import { adminApi } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 import { ShieldCheck, Lock, User } from 'lucide-react';
 import { PillButton } from '../../components/common/PillButton';
+import { useToast } from '../../context/ToastContext';
 
 export const AdminLoginPage: React.FC = () => {
   const [username, setUsername] = useState('admin');
@@ -11,6 +12,7 @@ export const AdminLoginPage: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -21,6 +23,7 @@ export const AdminLoginPage: React.FC = () => {
     try {
       const response = await adminApi.login({ username, password });
       login(response);
+      toast.success('Welcome back, Admin', 'Signed in to PrabhaTech CMS.');
       navigate('/admin/dashboard');
     } catch (err: any) {
       // For standalone demo / dev testing fallback if backend is starting
@@ -33,10 +36,13 @@ export const AdminLoginPage: React.FC = () => {
           role: 'ROLE_ADMIN',
           expiresInMs: 86400000,
         });
+        toast.info('Signed In', 'Connected in fallback mode.');
         navigate('/admin/dashboard');
         return;
       }
-      setError(err.response?.data?.message || 'Invalid username or password');
+      const msg = err.response?.data?.message || 'Invalid username or password';
+      setError(msg);
+      toast.error('Authentication Failed', msg);
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ import { publicApi } from '../../api/client';
 import { LeadInquiry } from '../../types';
 import { Send, CheckCircle2, ShieldCheck, Mail, Building, Phone, User, MessageSquare } from 'lucide-react';
 import { PillButton } from '../common/PillButton';
+import { useToast } from '../../context/ToastContext';
 
 export const InquirySection: React.FC = () => {
   const [formData, setFormData] = useState<LeadInquiry>({
@@ -35,6 +36,8 @@ export const InquirySection: React.FC = () => {
     '$250k+',
   ];
 
+  const { toast } = useToast();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -43,6 +46,7 @@ export const InquirySection: React.FC = () => {
     try {
       await publicApi.submitInquiry(formData);
       setIsSuccess(true);
+      toast.success('Consultation Request Submitted', 'Our financial UX architects will contact you within 24 hours.');
       setFormData({
         fullName: '',
         email: '',
@@ -53,7 +57,9 @@ export const InquirySection: React.FC = () => {
         message: '',
       });
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.message || 'Failed to submit inquiry. Please try again.');
+      const msg = err.response?.data?.message || 'Failed to submit inquiry. Please try again.';
+      setErrorMessage(msg);
+      toast.error('Submission Failed', msg);
     } finally {
       setIsSubmitting(false);
     }
