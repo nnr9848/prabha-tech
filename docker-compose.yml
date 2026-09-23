@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # =========================================================
+  # Database: PostgreSQL 16 (Private Internal Network)
+  # =========================================================
+  db:
+    image: postgres:16-alpine
+    container_name: prabhatech_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-uxda_db}
+      POSTGRES_USER: ${POSTGRES_USER:-purchoose_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-purchoose_pass}
+    volumes:
+      - prabhatech_pgdata:/var/lib/postgresql/data
+    networks:
+      - prabhatech_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-purchoose_user} -d ${POSTGRES_DB:-uxda_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # =========================================================
+  # Backend API: Spring Boot 3 REST API (Private Internal)
+  # =========================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: prabhatech_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-uxda_db}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-purchoose_user}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-purchoose_pass}
+      APP_JWT_SECRET: ${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      APP_CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-*}
+    networks:
+      - prabhatech_net
+
+  # =========================================================
+  # Frontend: React Vite SPA + Nginx Reverse Proxy
+  # (Binds to 127.0.0.1:APP_PORT for Host Reverse Proxy)
+  # =========================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: prabhatech_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      # Binds only to localhost on VPS to prevent public port exposure
+      - "127.0.0.1:${APP_PORT:-3005}:80"
+    networks:
+      - prabhatech_net
+
+# =========================================================
+# Volumes & Networks
+# =========================================================
+volumes:
+  prabhatech_pgdata:
+    name: prabhatech_pgdata
+
+networks:
+  prabhatech_net:
+    name: prabhatech_net
+    driver: bridge
