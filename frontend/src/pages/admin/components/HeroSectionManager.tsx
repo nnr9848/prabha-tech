@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HeroConfig } from '../../../types';
 import { PillButton } from '../../../components/common/PillButton';
+import { HeroSection } from '../../../components/home/HeroSection';
 import { MediaPicker, MediaPreset } from './MediaPicker';
 import {
   Sparkles,
@@ -18,19 +19,35 @@ import { motion } from 'framer-motion';
 const VIDEO_PRESETS: MediaPreset[] = [
   {
     id: 'local-3d-hologram',
-    name: '3D Hologram Mesh (Self-Hosted)',
+    name: '3D Hologram Mesh',
     url: '/assets/video/hero-bg.mp4',
     type: 'video',
-    badge: 'Recommended',
-    description: 'High performance local MP4 stream optimized for seamless rendering',
+    badge: 'Self-Hosted',
+    description: 'Local 3D hologram asset stored in frontend assets',
   },
   {
-    id: 'abstract-fintech-grid',
-    name: 'Abstract Digital Stream',
+    id: 'cybernetic-data-stream',
+    name: 'Cybernetic Telemetry',
     url: 'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-screens-with-charts-and-data-31913-large.mp4',
     type: 'video',
-    badge: 'Fintech Grid',
-    description: 'High-tech telemetry and real-time visualization loop',
+    badge: 'Fintech HUD',
+    description: 'High-tech financial charts and screen telemetry stream',
+  },
+  {
+    id: 'abstract-network-nodes',
+    name: 'Neural Grid Network',
+    url: 'https://assets.mixkit.co/videos/preview/mixkit-circuit-board-and-electronic-elements-41551-large.mp4',
+    type: 'video',
+    badge: 'Cyber Core',
+    description: 'Futuristic circuitry and digital connectivity mesh',
+  },
+  {
+    id: 'ambient-dark-fluid',
+    name: 'Dark Atmospheric Glow',
+    url: 'https://assets.mixkit.co/videos/preview/mixkit-flowing-blue-and-purple-ink-in-water-41223-large.mp4',
+    type: 'video',
+    badge: 'Ambient 4K',
+    description: 'Deep violet ambient fluid motion for high-contrast typography',
   },
 ];
 
@@ -50,6 +67,22 @@ const POSTER_PRESETS: MediaPreset[] = [
     type: 'image',
     badge: 'Brand Mesh',
     description: 'Deep violet gradient geometry with subtle atmospheric depth',
+  },
+  {
+    id: 'neural-network-dark',
+    name: 'Digital Matrix Nodes',
+    url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1600&q=80',
+    type: 'image',
+    badge: 'Security',
+    description: 'Cryptographic code matrix and dark technology landscape',
+  },
+  {
+    id: 'abstract-purple-hologram',
+    name: 'Purple Prismatic Void',
+    url: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=1600&q=80',
+    type: 'image',
+    badge: 'Studio',
+    description: '3D abstract geometric illumination with vibrant rim lighting',
   },
 ];
 
@@ -302,55 +335,12 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
             </div>
           </div>
 
-          <div
+          {/* Live Simulator uses Single Source of Truth HeroSection */}
+          <HeroSection
             key={previewKey}
-            className="relative rounded-2xl overflow-hidden border border-white/20 bg-[#050608] shadow-2xl min-h-[480px] p-6 sm:p-10 flex flex-col justify-center"
-          >
-            {/* Background Simulated Video */}
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-              {formData.videoUrl && (
-                <video
-                  key={`${formData.videoUrl}-${previewKey}`}
-                  autoPlay
-                  muted
-                  playsInline
-                  poster={formData.posterUrl}
-                  className="w-full h-full object-cover opacity-80"
-                >
-                  <source src={formData.videoUrl} type="video/mp4" />
-                </video>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#050608]/90 via-[#050608]/50 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-transparent to-[#050608]/60"></div>
-            </div>
-
-            {/* Live Text Overlay */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="relative z-10 max-w-xl space-y-6"
-            >
-              <p className="text-xs sm:text-sm text-white/90 font-normal leading-relaxed max-w-md">
-                {formData.subHeadline || 'Editorial sub-headline preview...'}
-              </p>
-
-              <h2 className="text-2xl sm:text-4xl font-light text-white tracking-tight leading-tight">
-                {formData.headlinePrefix}{' '}
-                <span className="text-[var(--brand-primary,#9873ff)] font-normal">
-                  {formData.headlineHighlight}
-                </span>
-                <br />
-                {formData.headlineSuffix}
-              </h2>
-
-              <div>
-                <PillButton size="md" showDefaultIcon={true}>
-                  {formData.ctaText || 'Contact Us'}
-                </PillButton>
-              </div>
-            </motion.div>
-          </div>
+            overrideConfig={formData}
+            isPreview={true}
+          />
         </div>
       </div>
     </div>

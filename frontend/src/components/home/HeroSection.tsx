@@ -5,7 +5,7 @@ import { publicApi } from '../../api/client';
 import { HeroConfig } from '../../types';
 import { PillButton } from '../common/PillButton';
 
-const DEFAULT_HERO_CONFIG: HeroConfig = {
+export const DEFAULT_HERO_CONFIG: HeroConfig = {
   id: 1,
   subHeadline:
     'We catalyze business growth by reimagining digital experiences that conquer complex challenges through innovation and agility.',
@@ -18,17 +18,52 @@ const DEFAULT_HERO_CONFIG: HeroConfig = {
   posterUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
 };
 
-export const HeroSection: React.FC = () => {
-  const { data: config = DEFAULT_HERO_CONFIG } = useQuery<HeroConfig>({
+// Centralized Framer Motion Transitions (Cinematic ease-out curve matching brand standard)
+export const HERO_MOTION_VARIANTS = {
+  subHeadline: {
+    initial: { opacity: 0, y: -60 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 5.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] as const },
+  },
+  headline: {
+    initial: { opacity: 0, y: -95 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 6.4, delay: 0.45, ease: [0.16, 1, 0.3, 1] as const },
+  },
+  ctaButton: {
+    initial: { opacity: 0, y: -65 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 6.0, delay: 0.55, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
+interface HeroSectionProps {
+  overrideConfig?: Partial<HeroConfig> | null;
+  isPreview?: boolean;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ overrideConfig, isPreview = false }) => {
+  const { data: fetchedConfig } = useQuery<HeroConfig>({
     queryKey: ['heroConfig'],
     queryFn: () => publicApi.getHeroConfig(),
     staleTime: 1000 * 60 * 5, // 5 minutes fresh
+    enabled: !overrideConfig, // Skip remote query if override is provided (e.g. CMS live simulator)
   });
 
-  const hero = config || DEFAULT_HERO_CONFIG;
+  const hero: HeroConfig = {
+    ...DEFAULT_HERO_CONFIG,
+    ...(fetchedConfig || {}),
+    ...(overrideConfig || {}),
+  };
 
   return (
-    <section className="relative min-h-[auto] md:h-screen md:min-h-[700px] flex items-center pt-28 pb-14 md:py-0 overflow-hidden bg-[#050608]">
+    <section
+      className={`relative overflow-hidden bg-[#050608] flex items-center ${
+        isPreview
+          ? 'min-h-[480px] p-6 sm:p-10 rounded-2xl border border-white/20 shadow-2xl'
+          : 'min-h-[auto] md:h-screen md:min-h-[700px] pt-28 pb-14 md:py-0'
+      }`}
+    >
       {/* Background Holographic 3D Video / Overlay */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {hero.videoUrl && (
@@ -48,24 +83,38 @@ export const HeroSection: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-transparent to-[#050608]/60"></div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-6 sm:px-16 lg:px-24 relative z-10 w-full">
-        <div className="max-w-5xl pt-4 sm:pt-16">
+      <div
+        className={`relative z-10 w-full ${
+          isPreview
+            ? 'max-w-xl'
+            : 'max-w-[1600px] mx-auto px-6 sm:px-16 lg:px-24'
+        }`}
+      >
+        <div className={isPreview ? 'space-y-6' : 'max-w-5xl pt-4 sm:pt-16'}>
           {/* Top Editorial Sub-headline */}
           <motion.div
-            initial={{ opacity: 0, y: -60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 5.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[18px] sm:text-[21px] lg:text-[23px] text-white/95 font-normal leading-[1.55] mb-12 sm:mb-14 max-w-[540px]"
+            initial={HERO_MOTION_VARIANTS.subHeadline.initial}
+            animate={HERO_MOTION_VARIANTS.subHeadline.animate}
+            transition={HERO_MOTION_VARIANTS.subHeadline.transition}
+            className={
+              isPreview
+                ? 'text-xs sm:text-sm text-white/95 font-normal leading-relaxed max-w-md'
+                : 'text-[18px] sm:text-[21px] lg:text-[23px] text-white/95 font-normal leading-[1.55] mb-12 sm:mb-14 max-w-[540px]'
+            }
           >
             {hero.subHeadline}
           </motion.div>
 
           {/* Main Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: -95 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 6.4, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-6xl lg:text-[64px] xl:text-[70px] font-light font-[300] text-white tracking-[-0.03em] leading-[1.12] mb-12 sm:mb-14 max-w-5xl"
+            initial={HERO_MOTION_VARIANTS.headline.initial}
+            animate={HERO_MOTION_VARIANTS.headline.animate}
+            transition={HERO_MOTION_VARIANTS.headline.transition}
+            className={
+              isPreview
+                ? 'text-2xl sm:text-4xl font-light font-[300] text-white tracking-tight leading-tight'
+                : 'text-4xl sm:text-6xl lg:text-[64px] xl:text-[70px] font-light font-[300] text-white tracking-[-0.03em] leading-[1.12] mb-12 sm:mb-14 max-w-5xl'
+            }
           >
             {hero.headlinePrefix}{' '}
             <span className="text-[var(--brand-primary,#9873ff)] font-light font-[300]">
@@ -77,19 +126,22 @@ export const HeroSection: React.FC = () => {
 
           {/* Reusable Brand Pill Button */}
           <motion.div
-            initial={{ opacity: 0, y: -65 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 6.0, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            initial={HERO_MOTION_VARIANTS.ctaButton.initial}
+            animate={HERO_MOTION_VARIANTS.ctaButton.animate}
+            transition={HERO_MOTION_VARIANTS.ctaButton.transition}
           >
-            <PillButton to={hero.ctaLink || '/contact'} size="lg">
-              {hero.ctaText || 'Contact Our Experts'}
-            </PillButton>
+            {isPreview ? (
+              <PillButton size="md" showDefaultIcon={true}>
+                {hero.ctaText || 'Contact Our Experts'}
+              </PillButton>
+            ) : (
+              <PillButton to={hero.ctaLink || '/contact'} size="lg">
+                {hero.ctaText || 'Contact Our Experts'}
+              </PillButton>
+            )}
           </motion.div>
         </div>
       </div>
     </section>
   );
 };
-
-
-

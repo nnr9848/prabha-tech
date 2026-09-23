@@ -1,5 +1,17 @@
-import React, { useState } from 'react';
-import { Video, Image as ImageIcon, Check, Link2, Sparkles, FolderOpen, Play } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import {
+  Video,
+  Image as ImageIcon,
+  Check,
+  Link2,
+  Sparkles,
+  UploadCloud,
+  FileVideo,
+  FileImage,
+  X,
+  Play,
+  Layers,
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export interface MediaPreset {
@@ -31,15 +43,53 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
   helperText,
   placeholder = 'Enter media URL or select from library...',
 }) => {
-  const [activeTab, setActiveTab] = useState<'presets' | 'custom'>('presets');
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<'presets' | 'upload' | 'custom'>('presets');
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadedFileMetadata, setUploadedFileMetadata] = useState<{
+    name: string;
+    size: string;
+  } | null>(null);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const selectedPreset = presets.find((p) => p.url === value);
+
+  // Handle local file selection with instant client-side blob object URL
+  const handleFileProcess = (file: File) => {
+    if (!file) return;
+
+    // Validate mime type
+    if (type === 'video' && !file.type.startsWith('video/')) {
+      alert('Please upload a valid video file (.mp4, .webm).');
+      return;
+    }
+    if (type === 'image' && !file.type.startsWith('image/')) {
+      alert('Please upload a valid image file (.jpg, .png, .webp).');
+      return;
+    }
+
+    const blobUrl = URL.createObjectURL(file);
+    const sizeInMB = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+
+    setUploadedFileMetadata({
+      name: file.name,
+      size: sizeInMB,
+    });
+
+    onChange(blobUrl);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileProcess(e.dataTransfer.files[0]);
+    }
+  };
 
   return (
     <div className="space-y-3 p-4 rounded-xl bg-[#090C13] border border-white/10 hover:border-white/20 transition-all">
-      {/* Header & Tabs */}
-      <div className="flex items-center justify-between">
+      {/* Header & 3-Way Tab Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div className="flex items-center gap-2">
           {type === 'video' ? (
             <Video className="w-4 h-4 text-[var(--brand-primary,#9873ff)]" />
@@ -51,8 +101,8 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
           </label>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="flex items-center p-0.5 rounded-lg bg-[#05060A] border border-white/10 text-[11px]">
+        {/* Tab Switcher: Presets | Upload | Custom URL */}
+        <div className="flex items-center p-0.5 rounded-lg bg-[#05060A] border border-white/10 text-[11px] self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setActiveTab('presets')}
@@ -63,8 +113,22 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
             }`}
           >
             <Sparkles className="w-3 h-3" />
-            <span>Preset Library</span>
+            <span>Preset Gallery</span>
           </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('upload')}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md font-medium transition-all ${
+              activeTab === 'upload'
+                ? 'bg-[var(--brand-primary,#9873ff)]/20 text-[var(--brand-primary,#9873ff)] border border-[var(--brand-primary,#9873ff)]/30'
+                : 'text-[#94A3B8] hover:text-white'
+            }`}
+          >
+            <UploadCloud className="w-3 h-3" />
+            <span>Upload File</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setActiveTab('custom')}
@@ -80,7 +144,7 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
         </div>
       </div>
 
-      {/* Tab 1: Preset Library Cards */}
+      {/* Tab 1: Preset Gallery Grid */}
       {activeTab === 'presets' && (
         <div className="space-y-2">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -90,7 +154,10 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
                 <button
                   key={preset.id}
                   type="button"
-                  onClick={() => onChange(preset.url)}
+                  onClick={() => {
+                    setUploadedFileMetadata(null);
+                    onChange(preset.url);
+                  }}
                   className={`group relative text-left p-3 rounded-xl border transition-all flex flex-col justify-between overflow-hidden ${
                     isSelected
                       ? 'bg-[var(--brand-primary,#9873ff)]/10 border-[var(--brand-primary,#9873ff)] shadow-[0_0_15px_rgba(152,115,255,0.2)]'
@@ -138,21 +205,87 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
         </div>
       )}
 
-      {/* Tab 2: Custom URL Input */}
+      {/* Tab 2: Direct File Upload (Drag & Drop) */}
+      {activeTab === 'upload' && (
+        <div className="space-y-3">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                handleFileProcess(e.target.files[0]);
+              }
+            }}
+            accept={type === 'video' ? 'video/mp4,video/webm' : 'image/jpeg,image/png,image/webp'}
+            className="hidden"
+          />
+
+          <div
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
+            className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 ${
+              isDragging
+                ? 'border-[var(--brand-primary,#9873ff)] bg-[var(--brand-primary,#9873ff)]/10'
+                : 'border-white/10 hover:border-white/25 bg-[#05070D] hover:bg-[#080B12]'
+            }`}
+          >
+            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[var(--brand-primary,#9873ff)]">
+              {type === 'video' ? <FileVideo className="w-5 h-5" /> : <FileImage className="w-5 h-5" />}
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-white">
+                Drag & drop your {type === 'video' ? 'video' : 'image'} here, or{' '}
+                <span className="text-[var(--brand-primary,#9873ff)] underline">browse files</span>
+              </p>
+              <p className="text-[11px] text-[#64748B] mt-0.5">
+                {type === 'video' ? 'Supports MP4, WebM (Auto client-side live preview)' : 'Supports PNG, JPG, WebP'}
+              </p>
+            </div>
+          </div>
+
+          {uploadedFileMetadata && (
+            <div className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--brand-primary,#9873ff)]/10 border border-[var(--brand-primary,#9873ff)]/20 text-xs">
+              <div className="flex items-center gap-2 truncate">
+                <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="text-white font-mono text-[11px] truncate">
+                  {uploadedFileMetadata.name} ({uploadedFileMetadata.size})
+                </span>
+              </div>
+              <span className="text-[10px] uppercase font-bold text-[var(--brand-primary,#9873ff)] px-2 py-0.5 rounded bg-[var(--brand-primary,#9873ff)]/20">
+                Ready for Live Preview
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab 3: Custom URL Input */}
       {activeTab === 'custom' && (
         <div className="space-y-2">
           <div className="relative">
             <input
               type="text"
               value={value}
-              onChange={(e) => onChange(e.target.value)}
+              onChange={(e) => {
+                setUploadedFileMetadata(null);
+                onChange(e.target.value);
+              }}
               placeholder={placeholder}
               className="w-full p-2.5 pl-3 pr-24 rounded-xl bg-[#05070D] border border-white/10 text-white text-xs font-mono focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50 transition-colors"
             />
             {value && (
               <button
                 type="button"
-                onClick={() => onChange('')}
+                onClick={() => {
+                  setUploadedFileMetadata(null);
+                  onChange('');
+                }}
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#94A3B8] hover:text-white px-2 py-1 rounded bg-white/5 hover:bg-white/10"
               >
                 Clear
@@ -174,11 +307,15 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
               <span className="text-white font-mono text-[11px] truncate block">{value}</span>
             </div>
           </div>
-          {selectedPreset && (
+          {selectedPreset ? (
             <span className="shrink-0 text-[10px] font-semibold text-[var(--brand-primary,#9873ff)] px-2 py-0.5 rounded bg-[var(--brand-primary,#9873ff)]/10">
               {selectedPreset.name}
             </span>
-          )}
+          ) : uploadedFileMetadata ? (
+            <span className="shrink-0 text-[10px] font-semibold text-emerald-400 px-2 py-0.5 rounded bg-emerald-400/10">
+              Local Upload
+            </span>
+          ) : null}
         </div>
       )}
 
