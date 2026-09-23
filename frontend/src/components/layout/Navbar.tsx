@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ShieldCheck } from 'lucide-react';
 import logoImg from '../../assets/prabhatech-logo.png';
+import { SocialIconsGroup } from '../common/SocialIconsGroup';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -78,62 +79,18 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Social & CMS Icons (Desktop) */}
-          <div className="hidden md:flex items-center gap-2.5">
+          <div className="hidden md:flex items-center gap-3">
             <Link
               to="/admin"
-              className="text-xs px-3.5 py-1.5 rounded-full border border-white/20 text-[#E2E8F0] hover:text-white hover:border-[#9873ff]/60 transition-all duration-200 flex items-center gap-1.5 mr-2"
+              className="text-xs px-3.5 py-1.5 rounded-full border border-white/20 text-[#E2E8F0] hover:text-white hover:border-[#9873ff]/60 transition-all duration-200 flex items-center gap-1.5 mr-1"
               title="CMS Admin Portal"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-[#9873ff]" />
               <span className="font-medium">CMS</span>
             </Link>
 
-            {/* Crisp Branded Solid Social Circles */}
-            <a
-              href="https://www.linkedin.com/company/theuxda"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-[#0077B5] hover:opacity-90 hover:scale-105 text-white flex items-center justify-center text-xs font-bold transition-all duration-200 shadow-sm"
-              title="LinkedIn"
-            >
-              in
-            </a>
-            <a
-              href="https://twitter.com/theuxda"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-white text-black hover:opacity-90 hover:scale-105 flex items-center justify-center text-xs font-bold transition-all duration-200 shadow-sm"
-              title="X"
-            >
-              𝕏
-            </a>
-            <a
-              href="https://www.behance.net/theuxda"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-[#0057FF] hover:opacity-90 hover:scale-105 text-white flex items-center justify-center text-xs font-bold transition-all duration-200 shadow-sm"
-              title="Behance"
-            >
-              Bē
-            </a>
-            <a
-              href="https://www.instagram.com/theuxda"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FF543E] via-[#E4405F] to-[#833AB4] hover:opacity-90 hover:scale-105 text-white flex items-center justify-center text-[11px] font-bold transition-all duration-200 shadow-sm"
-              title="Instagram"
-            >
-              ig
-            </a>
-            <a
-              href="https://www.youtube.com/c/theuxda"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-[#FF0000] hover:opacity-90 hover:scale-105 text-white flex items-center justify-center text-xs font-bold transition-all duration-200 shadow-sm"
-              title="YouTube"
-            >
-              ▶
-            </a>
+            {/* Official Pixel-Perfect Brand SVG Badges */}
+            <SocialIconsGroup size="md" />
           </div>
 
           {/* Mobile Hamburger Button */}
@@ -220,58 +177,14 @@ export const Navbar: React.FC = () => {
               </motion.div>
             </nav>
 
-            {/* Bottom Social Media Pills Row */}
+            {/* Bottom Official Social Media Badges */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-center justify-center gap-4 pt-6 border-t border-white/5"
+              className="flex items-center justify-center pt-6 border-t border-white/5"
             >
-              <a
-                href="https://www.linkedin.com/company/theuxda"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#0077B5] text-white flex items-center justify-center text-xs font-bold transition-all"
-                title="LinkedIn"
-              >
-                in
-              </a>
-              <a
-                href="https://twitter.com/theuxda"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center text-xs font-bold transition-all"
-                title="X"
-              >
-                𝕏
-              </a>
-              <a
-                href="https://www.behance.net/theuxda"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#0057FF] text-white flex items-center justify-center text-xs font-bold transition-all"
-                title="Behance"
-              >
-                Bē
-              </a>
-              <a
-                href="https://www.instagram.com/theuxda"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#E4405F] text-white flex items-center justify-center text-xs font-bold transition-all"
-                title="Instagram"
-              >
-                ig
-              </a>
-              <a
-                href="https://www.youtube.com/c/theuxda"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#FF0000] text-white flex items-center justify-center text-xs font-bold transition-all"
-                title="YouTube"
-              >
-                ▶
-              </a>
+              <SocialIconsGroup size="lg" />
             </motion.div>
           </motion.div>
         )}

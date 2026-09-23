@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Award, Globe2, Shield } from 'lucide-react';
 import logoImg from '../../assets/prabhatech-logo.png';
+import { SocialIconsGroup } from '../common/SocialIconsGroup';
 
 export const Footer: React.FC = () => {
   return (
@@ -60,15 +61,21 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="font-display text-white font-bold text-xs uppercase tracking-[0.15em] mb-4">Connect</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><a href="mailto:info@theuxda.com" className="text-white hover:text-[#00F2FE] transition-colors flex items-center gap-1">info@theuxda.com <ArrowUpRight className="w-3.5 h-3.5" /></a></li>
+              <li><a href="mailto:info@prabhatech.com" className="text-white hover:text-[#00F2FE] transition-colors flex items-center gap-1">info@prabhatech.com <ArrowUpRight className="w-3.5 h-3.5" /></a></li>
+              <li><a href="tel:+971543255456" className="text-white hover:text-[#00F2FE] transition-colors">+971 54 325 5456</a></li>
               <li><Link to="/contact" className="hover:text-[#00F2FE] transition-colors">Request Consultation</Link></li>
               <li><Link to="/admin" className="text-xs text-[#64748B] hover:text-[#00F2FE] flex items-center gap-1 mt-3"><Shield className="w-3 h-3" /> Admin CMS Login</Link></li>
             </ul>
+
+            {/* Social Icons Row */}
+            <div className="mt-5">
+              <SocialIconsGroup size="sm" />
+            </div>
           </div>
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#64748B] gap-4">
-          <p>© {new Date().getFullYear()} UXDA Clone — Built with React Vite TS, Tailwind CSS & Spring Boot.</p>
+          <p>© {new Date().getFullYear()} Prabha Technologies. All Rights Reserved.</p>
           <div className="flex items-center gap-6">
             <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
             <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
