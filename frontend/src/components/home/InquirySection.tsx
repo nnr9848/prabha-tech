@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { publicApi } from '../../api/client';
 import { LeadInquiry } from '../../types';
 import { Send, CheckCircle2, ShieldCheck, Mail, Building, Phone, User, MessageSquare } from 'lucide-react';
+import { PillButton } from '../common/PillButton';
 
 export const InquirySection: React.FC = () => {
   const [formData, setFormData] = useState<LeadInquiry>({
@@ -111,12 +112,14 @@ export const InquirySection: React.FC = () => {
                   <p className="text-sm text-[#94A3B8] max-w-md mx-auto font-normal">
                     Thank you for reaching out to PrabhaTech. Our senior financial UX strategists will review your specifications and connect within 24 hours.
                   </p>
-                  <button
+                  <PillButton
                     onClick={() => setIsSuccess(false)}
-                    className="mt-4 px-6 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-wider transition-all"
+                    variant="secondary"
+                    size="sm"
+                    className="mt-4"
                   >
                     Submit Another Request
-                  </button>
+                  </PillButton>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -261,20 +264,16 @@ export const InquirySection: React.FC = () => {
                     ></textarea>
                   </div>
 
-                  <button
+                  <PillButton
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest text-black bg-[#9873ff] hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(152,115,255,0.4)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    isLoading={isSubmitting}
+                    size="lg"
+                    className="w-full"
+                    icon={<Send className="w-4 h-4 text-[#9873ff] group-hover:text-white transition-colors" />}
                   >
-                    {isSubmitting ? (
-                      <span>Sending Request...</span>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        <span>Submit Project Consultation</span>
-                      </>
-                    )}
-                  </button>
+                    Submit Project Consultation
+                  </PillButton>
                 </form>
               )}
             </motion.div>

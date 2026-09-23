@@ -10,6 +10,7 @@ import { InquirySection } from '../components/home/InquirySection';
 import { CaseStudy, ServiceItem, Article } from '../types';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Sparkles } from 'lucide-react';
+import { PillButton } from '../components/common/PillButton';
 
 export const HomePage: React.FC = () => {
   const { data: caseStudies = [] } = useQuery<CaseStudy[]>({
@@ -124,13 +125,9 @@ export const HomePage: React.FC = () => {
                 Latest Research, Frameworks & Trends
               </h2>
             </div>
-            <Link
-              to="/insights"
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#9873ff] hover:text-white transition-colors"
-            >
-              <span>View All Articles</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <PillButton to="/insights" size="sm" variant="secondary">
+              View All Articles
+            </PillButton>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Brain, Compass, Cpu, Target, CheckCircle2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Sparkles, Brain, Compass, Cpu, Target } from 'lucide-react';
+import { PillButton } from '../common/PillButton';
 
 export const PhilosophySection: React.FC = () => {
   const pillars = [
@@ -44,18 +44,12 @@ export const PhilosophySection: React.FC = () => {
               Money is deeply emotional. Yet most digital banking interfaces look and feel like outdated spreadsheets. We replace complexity with delight, engineering interfaces that empower people to master their financial destiny.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <Link
-                to="/philosophy"
-                className="px-7 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black bg-[#9873ff] hover:bg-white transition-all shadow-[0_0_25px_rgba(152,115,255,0.35)] text-center"
-              >
+              <PillButton to="/philosophy" size="md">
                 Read Full FXD Whitepaper
-              </Link>
-              <Link
-                to="/contact"
-                className="px-7 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider text-white bg-white/5 hover:bg-white/10 border border-white/10 text-center"
-              >
+              </PillButton>
+              <PillButton to="/contact" variant="secondary" size="md">
                 Schedule Executive Briefing
-              </Link>
+              </PillButton>
             </div>
           </div>
 

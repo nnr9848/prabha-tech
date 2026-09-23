@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { PillButton } from '../common/PillButton';
 
 export const HeroSection: React.FC = () => {
   return (
@@ -56,10 +55,9 @@ export const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 6.0, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Link to="/contact" className="uxda-pill-btn group inline-flex items-center">
-              <span>Contact Our Experts</span>
-              <ArrowRight className="w-4 h-4 text-[#9873ff] transition-transform duration-300 group-hover:translate-x-1 ml-2" />
-            </Link>
+            <PillButton to="/contact" size="lg">
+              Contact Our Experts
+            </PillButton>
           </motion.div>
         </div>
       </div>

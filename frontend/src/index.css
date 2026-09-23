@@ -70,28 +70,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  padding: 16px 36px;
   border-radius: 9999px;
   background: rgba(10, 12, 18, 0.4);
-  border: 2px solid rgba(152, 115, 255, 0.55);
+  border: 1.5px solid rgba(152, 115, 255, 0.55);
   color: #FFFFFF;
-  font-size: 16px;
   font-weight: 400;
   letter-spacing: -0.01em;
   overflow: hidden;
+  position: relative;
   z-index: 1;
   transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-}
-
-@media (min-width: 640px) {
-  .uxda-pill-btn {
-    padding: 18px 42px;
-    font-size: 18px;
-    gap: 16px;
-  }
 }
 
 /* Background Color Fill Sliding from Left to Right */
@@ -103,7 +93,7 @@
   background: linear-gradient(90deg, #9873ff 0%, #7c4dff 100%);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.85s cubic-bezier(0.25, 1, 0.35, 1);
+  transition: transform 0.65s cubic-bezier(0.25, 1, 0.35, 1);
   z-index: -1;
 }
 
@@ -126,7 +116,7 @@
 
 .uxda-pill-btn:hover svg {
   color: #FFFFFF;
-  transform: translateX(4px);
+  transform: translateX(3px);
 }
 
 /* Gradient Text Highlight */
