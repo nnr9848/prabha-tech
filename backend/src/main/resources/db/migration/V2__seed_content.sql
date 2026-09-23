@@ -1,5 +1,5 @@
 -- =========================================================================
--- V2__seed_content.sql : Initial Seed Data for UXDA Agency Content
+-- V2__seed_content.sql : Initial Seed Data for PrabhaTech Agency Content
 -- =========================================================================
 
 -- Seed Default Admin (Password: 'admin123')
@@ -7,12 +7,12 @@ INSERT INTO users (username, email, password_hash, role, full_name)
 VALUES (
     'admin',
     'admin@prabhatech.com',
-    '$2a$10$7EqJtq98hPqEX7fNZaFWoO.8/k.Y9Eeyb8a0u2YlB5D8vQv5j7w6O',
+    '$2a$10$Xo7cQ4JgWJ3iYp2eL.8xV.m2P5tXp8H6nZzC7Zq6LwQ8kY1Z8vN2e',
     'ROLE_ADMIN',
-    'UXDA Lead Administrator'
-) ON CONFLICT (username) DO NOTHING;
+    'PrabhaTech Lead Administrator'
+) ON CONFLICT (username) DO UPDATE SET password_hash = EXCLUDED.password_hash;
 
--- Seed UXDA Award-Winning Case Studies
+-- Seed PrabhaTech Award-Winning Case Studies
 INSERT INTO case_studies (slug, title, subtitle, client_name, category, hero_image_url, thumbnail_url, video_url, summary, challenge, solution, results, awards, metrics, tags, featured, display_order)
 VALUES 
 (
@@ -24,7 +24,7 @@ VALUES
     'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1600&q=80',
     'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
     'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-screens-with-charts-and-data-31913-large.mp4',
-    'UXDA engineered an omni-channel financial UX ecosystem for CR2 BankWorld, streamlining retail banking, business finance, and smart ATM transactions into a singular frictionless experience.',
+    'PrabhaTech engineered an omni-channel financial UX ecosystem for CR2 BankWorld, streamlining retail banking, business finance, and smart ATM transactions into a singular frictionless experience.',
     'Legacy core systems across 60+ countries with disconnected mobile, web, and physical kiosk interfaces resulting in high drop-off and user confusion.',
     'Created the Financial Experience Design (FXD) architecture connecting micro-interactions, dark-mode native aesthetics, and AI-assisted financial flows.',
     'Adopted by tier-1 banks in over 60 countries, cutting transaction friction by 47% and winning multiple international design awards.',

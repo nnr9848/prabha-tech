@@ -1,5 +1,5 @@
 -- =========================================================================
--- V1__init_schema.sql : Core Schema for UXDA Full-Stack Platform & CMS
+-- V1__init_schema.sql : Core Schema for PrabhaTech Full-Stack Platform & CMS
 -- =========================================================================
 
 -- 1. Users & RBAC for CMS Administration
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Case Studies (UXDA Portfolio)
+-- 2. Case Studies (PrabhaTech Portfolio)
 CREATE TABLE IF NOT EXISTS case_studies (
     id BIGSERIAL PRIMARY KEY,
     slug VARCHAR(150) NOT NULL UNIQUE,

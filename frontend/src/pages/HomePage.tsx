@@ -24,7 +24,7 @@ export const HomePage: React.FC = () => {
         clientName: 'CR2 (Global Banking Software)',
         category: 'Banking',
         heroImageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1600&q=80',
-        summary: 'UXDA engineered an omni-channel financial UX ecosystem for CR2 BankWorld, streamlining retail banking, business finance, and smart ATM transactions into a singular frictionless experience.',
+        summary: 'PrabhaTech engineered an omni-channel financial UX ecosystem for CR2 BankWorld, streamlining retail banking, business finance, and smart ATM transactions into a singular frictionless experience.',
         awards: ['Red Dot Award Winner', 'IF Design Award'],
         metrics: [{ label: '+180%', description: 'Digital Engagement' }, { label: '60+', description: 'Countries Deployed' }],
         tags: ['Fintech', 'Omnichannel', 'Design System'],

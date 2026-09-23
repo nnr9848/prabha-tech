@@ -1,12 +1,12 @@
 spring:
   application:
-    name: uxda-backend
+    name: prabhatech-backend
   profiles:
     active: dev
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/uxda_db}
-    username: ${SPRING_DATASOURCE_USERNAME:purchoose_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:purchoose_pass}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/prabhatech_db}
+    username: ${SPRING_DATASOURCE_USERNAME:prabhatech_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:prabhatech_pass}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -28,7 +28,7 @@ server:
 
 app:
   jwt:
-    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    secret: ${APP_JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
     expiration-ms: 86400000 # 24 hours
   cors:
-    allowed-origins: http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:*}

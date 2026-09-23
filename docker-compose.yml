@@ -7,15 +7,15 @@ services:
     container_name: prabhatech_db
     restart: always
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-uxda_db}
-      POSTGRES_USER: ${POSTGRES_USER:-purchoose_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-purchoose_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-prabhatech_db}
+      POSTGRES_USER: ${POSTGRES_USER:-prabhatech_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-prabhatech_pass}
     volumes:
       - prabhatech_pgdata:/var/lib/postgresql/data
     networks:
       - prabhatech_net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-purchoose_user} -d ${POSTGRES_DB:-uxda_db}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-prabhatech_user} -d ${POSTGRES_DB:-prabhatech_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,9 +34,9 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-uxda_db}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-purchoose_user}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-purchoose_pass}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-prabhatech_db}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-prabhatech_user}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-prabhatech_pass}
       APP_JWT_SECRET: ${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
       APP_CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-*}
     networks:

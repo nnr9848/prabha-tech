@@ -14,12 +14,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<AuthResponse | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('uxda_token');
-    const storedUser = localStorage.getItem('uxda_user');
+    const token = localStorage.getItem('prabhatech_token') || localStorage.getItem('uxda_token');
+    const storedUser = localStorage.getItem('prabhatech_user') || localStorage.getItem('uxda_user');
     if (token && storedUser) {
       try {
         setUser(JSON.parse(storedUser));
       } catch (e) {
+        localStorage.removeItem('prabhatech_token');
+        localStorage.removeItem('prabhatech_user');
         localStorage.removeItem('uxda_token');
         localStorage.removeItem('uxda_user');
       }
@@ -27,12 +29,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (data: AuthResponse) => {
-    localStorage.setItem('uxda_token', data.token);
-    localStorage.setItem('uxda_user', JSON.stringify(data));
+    localStorage.setItem('prabhatech_token', data.token);
+    localStorage.setItem('prabhatech_user', JSON.stringify(data));
     setUser(data);
   };
 
   const logout = () => {
+    localStorage.removeItem('prabhatech_token');
+    localStorage.removeItem('prabhatech_user');
     localStorage.removeItem('uxda_token');
     localStorage.removeItem('uxda_user');
     setUser(null);

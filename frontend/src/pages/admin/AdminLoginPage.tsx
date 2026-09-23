@@ -29,7 +29,7 @@ export const AdminLoginPage: React.FC = () => {
           token: 'demo_token_' + Date.now(),
           tokenType: 'Bearer',
           username: username,
-          fullName: 'UXDA Lead Admin',
+          fullName: 'PrabhaTech Lead Administrator',
           role: 'ROLE_ADMIN',
           expiresInMs: 86400000,
         });

@@ -22,7 +22,7 @@ public class UxdaApplication {
                 User newUser = new User();
                 newUser.setUsername("admin");
                 newUser.setEmail("admin@prabhatech.com");
-                newUser.setFullName("UXDA Lead Administrator");
+                newUser.setFullName("PrabhaTech Lead Administrator");
                 newUser.setRole("ROLE_ADMIN");
                 return newUser;
             });

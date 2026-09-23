@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>com.prabhatech</groupId>
-    <artifactId>uxda-backend</artifactId>
+    <artifactId>prabhatech-backend</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>uxda-backend</name>
-    <description>Full CMS and REST API backend for UXDA Clone</description>
+    <name>prabhatech-backend</name>
+    <description>Enterprise CMS and REST API backend for PrabhaTech Platform</description>
 
     <properties>
         <java.version>17</java.version>
