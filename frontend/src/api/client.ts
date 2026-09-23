@@ -10,10 +10,11 @@ const apiClient = axios.create({
   },
 });
 
-// Attach JWT token to requests if present
+// Attach JWT token to requests if present (skip for auth login endpoints)
 apiClient.interceptors.request.use((config) => {
+  const isAuthEndpoint = config.url && config.url.includes('/auth/login');
   const token = localStorage.getItem('prabhatech_token');
-  if (token && config.headers) {
+  if (token && config.headers && !isAuthEndpoint) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
