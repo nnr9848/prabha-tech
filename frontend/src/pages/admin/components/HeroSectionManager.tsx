@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HeroConfig } from '../../../types';
 import { PillButton } from '../../../components/common/PillButton';
+import { MediaPicker, MediaPreset } from './MediaPicker';
 import {
   Sparkles,
   Save,
@@ -13,6 +14,44 @@ import {
   Eye,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+const VIDEO_PRESETS: MediaPreset[] = [
+  {
+    id: 'local-3d-hologram',
+    name: '3D Hologram Mesh (Self-Hosted)',
+    url: '/assets/video/hero-bg.mp4',
+    type: 'video',
+    badge: 'Recommended',
+    description: 'High performance local MP4 stream optimized for seamless rendering',
+  },
+  {
+    id: 'abstract-fintech-grid',
+    name: 'Abstract Digital Stream',
+    url: 'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-screens-with-charts-and-data-31913-large.mp4',
+    type: 'video',
+    badge: 'Fintech Grid',
+    description: 'High-tech telemetry and real-time visualization loop',
+  },
+];
+
+const POSTER_PRESETS: MediaPreset[] = [
+  {
+    id: 'abstract-analytics',
+    name: 'Fintech Analytics Glow',
+    url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
+    type: 'image',
+    badge: 'Recommended',
+    description: 'Curated dark high-tech financial dashboard backdrop',
+  },
+  {
+    id: 'deep-mesh-gradient',
+    name: 'Cybernetic Mesh Dark',
+    url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80',
+    type: 'image',
+    badge: 'Brand Mesh',
+    description: 'Deep violet gradient geometry with subtle atmospheric depth',
+  },
+];
 
 interface HeroSectionManagerProps {
   heroConfig: HeroConfig | null;
@@ -177,32 +216,30 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
           <div className="pt-3 border-t border-white/10">
             <div className="flex items-center gap-2 pb-3">
               <Video className="w-4 h-4 text-[var(--brand-primary,#9873ff)]" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-white">3D Hologram Video Background</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-white">Hero Media Stream & Poster</h4>
             </div>
 
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Video Stream URL (.mp4) *</label>
-                <input
-                  type="url"
-                  required
-                  value={formData.videoUrl || ''}
-                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs font-mono focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
-                />
-              </div>
+            {/* Video Background MediaPicker */}
+            <MediaPicker
+              label="3D Background Stream"
+              type="video"
+              value={formData.videoUrl || ''}
+              onChange={(url) => setFormData({ ...formData, videoUrl: url })}
+              presets={VIDEO_PRESETS}
+              helperText="Select a curated local video preset or paste a custom stream URL."
+              placeholder="e.g. /assets/video/hero-bg.mp4"
+            />
 
-              <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Fallback Poster Image URL *</label>
-                <input
-                  type="url"
-                  required
-                  value={formData.posterUrl || ''}
-                  onChange={(e) => setFormData({ ...formData, posterUrl: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs font-mono focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
-                />
-              </div>
-            </div>
+            {/* Poster Fallback MediaPicker */}
+            <MediaPicker
+              label="Fallback Poster Backdrop"
+              type="image"
+              value={formData.posterUrl || ''}
+              onChange={(url) => setFormData({ ...formData, posterUrl: url })}
+              presets={POSTER_PRESETS}
+              helperText="Image displayed while video is downloading or on data-saver connections."
+              placeholder="e.g. https://images.unsplash.com/..."
+            />
           </div>
 
           <div className="pt-4 border-t border-white/10 flex justify-end">
