@@ -32,10 +32,10 @@ public class HeroConfig {
     @Column(name = "cta_link", nullable = false, length = 255)
     private String ctaLink;
 
-    @Column(name = "video_url", nullable = false, length = 500)
+    @Column(name = "video_url", nullable = true, length = 500)
     private String videoUrl;
 
-    @Column(name = "poster_url", nullable = false, length = 500)
+    @Column(name = "poster_url", nullable = true, length = 500)
     private String posterUrl;
 
     @Column(name = "created_at")

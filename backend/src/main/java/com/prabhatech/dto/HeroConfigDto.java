@@ -77,10 +77,8 @@ public class HeroConfigDto {
         @NotBlank(message = "CTA link is required")
         private String ctaLink;
 
-        @NotBlank(message = "Video URL is required")
         private String videoUrl;
 
-        @NotBlank(message = "Poster URL is required")
         private String posterUrl;
 
         public Request() {}
