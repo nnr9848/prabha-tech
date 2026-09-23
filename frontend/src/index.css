@@ -27,28 +27,69 @@
   }
 }
 
-/* Authentic UXDA Pill CTA Button */
+/* Authentic UXDA Pill CTA Button with Left-to-Right Fill Animation */
 .uxda-pill-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 28px;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px 36px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(10, 12, 18, 0.4);
+  border: 2px solid rgba(152, 115, 255, 0.55);
   color: #FFFFFF;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
-  letter-spacing: 0.02em;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(10px);
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  z-index: 1;
+  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@media (min-width: 640px) {
+  .uxda-pill-btn {
+    padding: 18px 42px;
+    font-size: 18px;
+    gap: 16px;
+  }
+}
+
+/* Background Color Fill Sliding from Left to Right */
+.uxda-pill-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #9873ff 0%, #7c4dff 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.85s cubic-bezier(0.25, 1, 0.35, 1);
+  z-index: -1;
+}
+
+.uxda-pill-btn:hover::before {
+  transform: scaleX(1);
 }
 
 .uxda-pill-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(152, 115, 255, 0.9);
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 12px 35px rgba(152, 115, 255, 0.35);
+}
+
+.uxda-pill-btn span,
+.uxda-pill-btn svg {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.35, 1), color 0.4s ease;
+}
+
+.uxda-pill-btn:hover svg {
+  color: #FFFFFF;
+  transform: translateX(4px);
 }
 
 /* Gradient Text Highlight */
