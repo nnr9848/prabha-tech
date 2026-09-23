@@ -52,7 +52,7 @@ export const App: React.FC = () => {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            {/* Public UXDA Marketing Website Layout */}
+            {/* Public PrabhaTech Marketing Website Layout */}
             <Route element={<PublicLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/case-studies" element={<CaseStudiesPage />} />

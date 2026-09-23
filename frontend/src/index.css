@@ -2,7 +2,7 @@
 
 @layer base {
   :root {
-    --font-uxda: 'Lato', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-brand: 'Lato', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
     /* PrabhaTech Official Violet Luxury Palette */
     --brand-primary: #9873ff;
@@ -12,18 +12,18 @@
     --brand-primary-border: rgba(152, 115, 255, 0.35);
     --brand-primary-glow: rgba(152, 115, 255, 0.4);
 
-    --uxda-bg: #050608;
-    --uxda-surface: #0A0C10;
-    --uxda-card: #0E1118;
-    --uxda-text: #FFFFFF;
-    --uxda-text-muted: #8E9BAE;
-    --uxda-border: rgba(255, 255, 255, 0.12);
+    --brand-bg: #050608;
+    --brand-surface: #0A0C10;
+    --brand-card: #0E1118;
+    --brand-text: #FFFFFF;
+    --brand-text-muted: #8E9BAE;
+    --brand-border: rgba(255, 255, 255, 0.12);
   }
 
   body {
-    background-color: var(--uxda-bg);
-    color: var(--uxda-text);
-    font-family: var(--font-uxda);
+    background-color: var(--brand-bg);
+    color: var(--brand-text);
+    font-family: var(--font-brand);
     overflow-x: hidden;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
@@ -64,8 +64,8 @@
   box-shadow: 0 0 35px rgba(255, 255, 255, 0.6);
 }
 
-/* Authentic UXDA Pill CTA Button with Left-to-Right Fill Animation */
-.uxda-pill-btn {
+/* Authentic Brand Pill CTA Button with Left-to-Right Fill Animation */
+.brand-pill-btn {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -85,7 +85,7 @@
 }
 
 /* Background Color Fill Sliding from Left to Right */
-.uxda-pill-btn::before {
+.brand-pill-btn::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -97,33 +97,31 @@
   z-index: -1;
 }
 
-.uxda-pill-btn:hover::before {
+.brand-pill-btn:hover::before {
   transform: scaleX(1);
 }
 
-.uxda-pill-btn:hover {
+.brand-pill-btn:hover {
   border-color: rgba(152, 115, 255, 0.9);
   transform: translateY(-2px);
   box-shadow: 0 12px 35px rgba(152, 115, 255, 0.35);
 }
 
-.uxda-pill-btn span,
-.uxda-pill-btn svg {
+.brand-pill-btn span,
+.brand-pill-btn svg {
   position: relative;
   z-index: 2;
   transition: transform 0.45s cubic-bezier(0.25, 1, 0.35, 1), color 0.4s ease;
 }
 
-.uxda-pill-btn:hover svg {
+.brand-pill-btn:hover svg {
   color: #FFFFFF;
   transform: translateX(3px);
 }
 
 /* Gradient Text Highlight */
-.uxda-purple-gradient {
+.brand-purple-gradient {
   background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 50%, #6D28D9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
-

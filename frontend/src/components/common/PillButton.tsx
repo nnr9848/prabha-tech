@@ -46,7 +46,7 @@ export const PillButton: React.FC<PillButtonProps> = ({
 
   // Variant Classes
   const variantClasses = {
-    primary: 'uxda-pill-btn',
+    primary: 'brand-pill-btn',
     solid: 'btn-brand font-semibold text-black rounded-full transition-all',
     secondary: 'bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-full font-medium transition-all',
     glass: 'bg-black/40 hover:bg-black/60 text-white border border-white/15 backdrop-blur-md rounded-full font-medium transition-all',

@@ -5,21 +5,21 @@ import { PillButton } from '../common/PillButton';
 export const HeroSection: React.FC = () => {
   return (
     <section className="relative min-h-[auto] md:h-screen md:min-h-[700px] flex items-center pt-28 pb-14 md:py-0 overflow-hidden bg-[#050608]">
-      {/* Background Holographic 3D Video / Overlay matching theuxda.com */}
+      {/* Background Holographic 3D Video / Overlay */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <video
           autoPlay
           muted
           playsInline
-          poster="https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.jpg"
+          poster="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80"
           className="w-full h-full object-cover object-center opacity-100"
         >
           <source
-            src="https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.mp4"
+            src="https://assets.mixkit.co/videos/preview/mixkit-network-connection-background-3179-large.mp4"
             type="video/mp4"
           />
         </video>
-        {/* Responsive Dark Vignette for Typography Legibility while Keeping 3D X Crystal Bright */}
+        {/* Responsive Dark Vignette for Typography Legibility while Keeping Visuals Crystal Bright */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#050608]/85 via-[#050608]/40 to-[#050608] md:bg-gradient-to-r md:from-[#050608]/90 md:via-[#050608]/30 md:to-transparent"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-transparent to-[#050608]/60"></div>
       </div>
@@ -36,7 +36,7 @@ export const HeroSection: React.FC = () => {
             We catalyze business growth by reimagining digital experiences that conquer complex challenges through innovation and agility.
           </motion.div>
 
-          {/* Main Headline - Elegant Light Weight & Expanded Font Size matching theuxda.com */}
+          {/* Main Headline */}
           <motion.h1
             initial={{ opacity: 0, y: -95 }}
             animate={{ opacity: 1, y: 0 }}
@@ -49,7 +49,7 @@ export const HeroSection: React.FC = () => {
             of Global Disruptors
           </motion.h1>
 
-          {/* Authentic UXDA Pill Button */}
+          {/* Reusable Brand Pill Button */}
           <motion.div
             initial={{ opacity: 0, y: -65 }}
             animate={{ opacity: 1, y: 0 }}

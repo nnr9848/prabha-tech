@@ -36,7 +36,7 @@ nano .env
 Set your production values in `.env`:
 ```env
 APP_PORT=3005
-POSTGRES_DB=uxda_db
+POSTGRES_DB=prabhatech_db
 POSTGRES_USER=prabhatech_user
 POSTGRES_PASSWORD=YourStrongDatabasePassword123!
 JWT_SECRET=Your64CharacterRandomHexSecret
