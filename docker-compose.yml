@@ -1,13 +1,11 @@
-version: '3.8'
-
 services:
   # =========================================================
-  # Database: PostgreSQL 16 (Private Internal Network)
+  # Database: PostgreSQL 16
   # =========================================================
   db:
     image: postgres:16-alpine
     container_name: prabhatech_db
-    restart: unless-stopped
+    restart: always
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-uxda_db}
       POSTGRES_USER: ${POSTGRES_USER:-purchoose_user}
@@ -18,19 +16,19 @@ services:
       - prabhatech_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-purchoose_user} -d ${POSTGRES_DB:-uxda_db}"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
 
   # =========================================================
-  # Backend API: Spring Boot 3 REST API (Private Internal)
+  # Backend API: Spring Boot 3 REST API
   # =========================================================
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: prabhatech_backend
-    restart: unless-stopped
+    restart: always
     depends_on:
       db:
         condition: service_healthy
@@ -45,20 +43,18 @@ services:
       - prabhatech_net
 
   # =========================================================
-  # Frontend: React Vite SPA + Nginx Reverse Proxy
-  # (Binds to 127.0.0.1:APP_PORT for Host Reverse Proxy)
+  # Frontend: React Vite SPA + Nginx Web Server (Port 3005)
   # =========================================================
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: prabhatech_frontend
-    restart: unless-stopped
+    restart: always
+    ports:
+      - "${APP_PORT:-3005}:80"
     depends_on:
       - backend
-    ports:
-      # Binds only to localhost on VPS to prevent public port exposure
-      - "127.0.0.1:${APP_PORT:-3005}:80"
     networks:
       - prabhatech_net
 
@@ -67,9 +63,7 @@ services:
 # =========================================================
 volumes:
   prabhatech_pgdata:
-    name: prabhatech_pgdata
 
 networks:
   prabhatech_net:
-    name: prabhatech_net
     driver: bridge
