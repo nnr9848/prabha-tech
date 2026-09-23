@@ -5,6 +5,7 @@ import com.prabhatech.uxda.service.ArticleService;
 import com.prabhatech.uxda.service.CaseStudyService;
 import com.prabhatech.uxda.service.LeadInquiryService;
 import com.prabhatech.uxda.service.ServiceItemService;
+import com.prabhatech.uxda.service.SocialLinkService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +20,40 @@ public class AdminController {
     private final ServiceItemService serviceItemService;
     private final ArticleService articleService;
     private final LeadInquiryService leadInquiryService;
+    private final SocialLinkService socialLinkService;
 
     public AdminController(CaseStudyService caseStudyService,
                            ServiceItemService serviceItemService,
                            ArticleService articleService,
-                           LeadInquiryService leadInquiryService) {
+                           LeadInquiryService leadInquiryService,
+                           SocialLinkService socialLinkService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
         this.leadInquiryService = leadInquiryService;
+        this.socialLinkService = socialLinkService;
+    }
+
+    // --- Social Links CMS ---
+    @GetMapping("/social-links")
+    public ResponseEntity<List<SocialLinkDto>> getAllSocialLinks() {
+        return ResponseEntity.ok(socialLinkService.getAllSocialLinksAdmin());
+    }
+
+    @PostMapping("/social-links")
+    public ResponseEntity<SocialLinkDto> createSocialLink(@Valid @RequestBody SocialLinkDto dto) {
+        return ResponseEntity.ok(socialLinkService.createSocialLink(dto));
+    }
+
+    @PutMapping("/social-links/{id}")
+    public ResponseEntity<SocialLinkDto> updateSocialLink(@PathVariable Long id, @Valid @RequestBody SocialLinkDto dto) {
+        return ResponseEntity.ok(socialLinkService.updateSocialLink(id, dto));
+    }
+
+    @DeleteMapping("/social-links/{id}")
+    public ResponseEntity<Void> deleteSocialLink(@PathVariable Long id) {
+        socialLinkService.deleteSocialLink(id);
+        return ResponseEntity.noContent().build();
     }
 
     // --- Case Studies CMS ---

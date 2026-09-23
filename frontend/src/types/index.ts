@@ -78,3 +78,16 @@ export interface AuthResponse {
   role: string;
   expiresInMs: number;
 }
+
+export interface SocialLink {
+  id?: number;
+  platformKey: string;
+  platformName: string;
+  url: string;
+  bgColor: string;
+  displayOrder?: number;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+

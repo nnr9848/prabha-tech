@@ -116,7 +116,7 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div>
-              <div className="text-xs uppercase tracking-widest font-semibold text-[#00F0FF] mb-3 flex items-center gap-2">
+              <div className="text-xs uppercase tracking-widest font-semibold text-[#9873ff] mb-3 flex items-center gap-2">
                 <BookOpen className="w-4 h-4" />
                 Fintech Design Insights
               </div>
@@ -126,7 +126,7 @@ export const HomePage: React.FC = () => {
             </div>
             <Link
               to="/insights"
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#00F0FF] hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#9873ff] hover:text-white transition-colors"
             >
               <span>View All Articles</span>
               <ArrowRight className="w-4 h-4" />
@@ -138,7 +138,7 @@ export const HomePage: React.FC = () => {
               <Link
                 key={art.slug || idx}
                 to={`/insights/${art.slug}`}
-                className="group rounded-2xl bg-[#0D111A] border border-white/10 overflow-hidden hover:border-[#00F0FF]/40 transition-all duration-300 flex flex-col"
+                className="group rounded-2xl bg-[#0D111A] border border-white/10 overflow-hidden hover:border-[#9873ff]/40 transition-all duration-300 flex flex-col"
               >
                 <div className="aspect-[16/9] overflow-hidden bg-black relative">
                   <img
@@ -146,7 +146,7 @@ export const HomePage: React.FC = () => {
                     alt={art.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/60 border border-white/10 text-[#00F0FF]">
+                  <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/60 border border-white/10 text-[#9873ff]">
                     {art.category}
                   </span>
                 </div>
@@ -157,14 +157,14 @@ export const HomePage: React.FC = () => {
                       <span>•</span>
                       <span>{art.readTime}</span>
                     </div>
-                    <h3 className="text-2xl font-bold text-white group-hover:text-[#00F0FF] transition-colors mb-3">
+                    <h3 className="text-2xl font-bold text-white group-hover:text-[#9873ff] transition-colors mb-3">
                       {art.title}
                     </h3>
                     <p className="text-sm text-[#94A3B8] leading-relaxed line-clamp-2">
                       {art.excerpt}
                     </p>
                   </div>
-                  <div className="pt-6 mt-6 border-t border-white/5 flex items-center text-xs font-bold uppercase tracking-wider text-[#00F0FF]">
+                  <div className="pt-6 mt-6 border-t border-white/5 flex items-center text-xs font-bold uppercase tracking-wider text-[#9873ff]">
                     <span>Read Full Insight</span>
                     <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
                   </div>

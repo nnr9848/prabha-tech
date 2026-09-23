@@ -22,12 +22,12 @@ export const Footer: React.FC = () => {
               The world's leading Financial UX design agency. We architect intuitive digital banking, crypto ecosystems, and wealthtech platforms across 37+ countries.
             </p>
             <div className="flex items-center gap-4 text-xs">
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#00F2FE]/10 border border-[#00F2FE]/20 text-[#00F2FE] font-semibold">
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#9873ff]/10 border border-[#9873ff]/20 text-[#9873ff] font-semibold">
                 <Award className="w-3.5 h-3.5" />
                 Red Dot Award Winners
               </span>
               <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white font-medium">
-                <Globe2 className="w-3.5 h-3.5 text-[#00F2FE]" />
+                <Globe2 className="w-3.5 h-3.5 text-[#9873ff]" />
                 Global Clients
               </span>
             </div>
@@ -37,11 +37,11 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="font-display text-white font-bold text-xs uppercase tracking-[0.15em] mb-4">Navigation</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><Link to="/case-studies" className="hover:text-[#00F2FE] transition-colors">Case Studies</Link></li>
-              <li><Link to="/services" className="hover:text-[#00F2FE] transition-colors">Services & UX Audit</Link></li>
-              <li><Link to="/philosophy" className="hover:text-[#00F2FE] transition-colors">FXD Methodology</Link></li>
-              <li><Link to="/insights" className="hover:text-[#00F2FE] transition-colors">Fintech Blog & Reports</Link></li>
-              <li><Link to="/about" className="hover:text-[#00F2FE] transition-colors">About Agency</Link></li>
+              <li><Link to="/case-studies" className="hover:text-[#9873ff] transition-colors">Case Studies</Link></li>
+              <li><Link to="/services" className="hover:text-[#9873ff] transition-colors">Services & UX Audit</Link></li>
+              <li><Link to="/philosophy" className="hover:text-[#9873ff] transition-colors">FXD Methodology</Link></li>
+              <li><Link to="/insights" className="hover:text-[#9873ff] transition-colors">Fintech Blog & Reports</Link></li>
+              <li><Link to="/about" className="hover:text-[#9873ff] transition-colors">About Agency</Link></li>
             </ul>
           </div>
 
@@ -61,10 +61,10 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="font-display text-white font-bold text-xs uppercase tracking-[0.15em] mb-4">Connect</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><a href="mailto:info@prabhatech.com" className="text-white hover:text-[#00F2FE] transition-colors flex items-center gap-1">info@prabhatech.com <ArrowUpRight className="w-3.5 h-3.5" /></a></li>
-              <li><a href="tel:+971543255456" className="text-white hover:text-[#00F2FE] transition-colors">+971 54 325 5456</a></li>
-              <li><Link to="/contact" className="hover:text-[#00F2FE] transition-colors">Request Consultation</Link></li>
-              <li><Link to="/admin" className="text-xs text-[#64748B] hover:text-[#00F2FE] flex items-center gap-1 mt-3"><Shield className="w-3 h-3" /> Admin CMS Login</Link></li>
+              <li><a href="mailto:info@prabhatech.com" className="text-white hover:text-[#9873ff] transition-colors flex items-center gap-1">info@prabhatech.com <ArrowUpRight className="w-3.5 h-3.5" /></a></li>
+              <li><a href="tel:+971543255456" className="text-white hover:text-[#9873ff] transition-colors">+971 54 325 5456</a></li>
+              <li><Link to="/contact" className="hover:text-[#9873ff] transition-colors">Request Consultation</Link></li>
+              <li><Link to="/admin" className="text-xs text-[#64748B] hover:text-[#9873ff] flex items-center gap-1 mt-3"><Shield className="w-3 h-3" /> Admin CMS Login</Link></li>
             </ul>
 
             {/* Social Icons Row */}

@@ -17,7 +17,7 @@ export const CaseStudyDetailPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen pt-36 pb-20 flex items-center justify-center text-white">
-        <div className="w-8 h-8 rounded-full border-2 border-[#00F0FF] border-t-transparent animate-spin"></div>
+        <div className="w-8 h-8 rounded-full border-2 border-[#9873ff] border-t-transparent animate-spin"></div>
       </div>
     );
   }
@@ -26,7 +26,7 @@ export const CaseStudyDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen pt-36 pb-20 max-w-4xl mx-auto px-6 text-center text-white">
         <h2 className="text-3xl font-bold mb-4">Case Study Not Found</h2>
-        <Link to="/case-studies" className="text-[#00F0FF] underline">
+        <Link to="/case-studies" className="text-[#9873ff] underline">
           Back to Case Studies
         </Link>
       </div>
@@ -39,7 +39,7 @@ export const CaseStudyDetailPage: React.FC = () => {
       <div className="max-w-6xl mx-auto px-6 sm:px-8 mb-8">
         <Link
           to="/case-studies"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#94A3B8] hover:text-[#00F0FF] transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#94A3B8] hover:text-[#9873ff] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>All Case Studies</span>
@@ -49,7 +49,7 @@ export const CaseStudyDetailPage: React.FC = () => {
       {/* Header */}
       <div className="max-w-6xl mx-auto px-6 sm:px-8 mb-12">
         <div className="flex flex-wrap items-center gap-3 mb-4">
-          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#00F0FF]/15 border border-[#00F0FF]/30 text-[#00F0FF]">
+          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#9873ff]/15 border border-[#9873ff]/30 text-[#9873ff]">
             {study.category}
           </span>
           <span className="text-xs text-[#94A3B8] flex items-center gap-1">
@@ -98,7 +98,7 @@ export const CaseStudyDetailPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-8 rounded-2xl bg-[#0D111A] border border-white/10">
             {study.metrics.map((m, idx) => (
               <div key={idx} className="text-center sm:text-left">
-                <div className="text-3xl sm:text-4xl font-extrabold text-[#00F0FF] mb-1">{m.label}</div>
+                <div className="text-3xl sm:text-4xl font-extrabold text-[#9873ff] mb-1">{m.label}</div>
                 <div className="text-xs uppercase tracking-wider text-[#94A3B8]">{m.description}</div>
               </div>
             ))}
@@ -110,7 +110,7 @@ export const CaseStudyDetailPage: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 sm:px-8 space-y-16 text-white">
         {/* Summary */}
         <div>
-          <h3 className="text-xs uppercase tracking-widest font-semibold text-[#00F0FF] mb-3">
+          <h3 className="text-xs uppercase tracking-widest font-semibold text-[#9873ff] mb-3">
             Executive Summary
           </h3>
           <p className="text-lg text-[#94A3B8] leading-relaxed">{study.summary}</p>
@@ -134,9 +134,9 @@ export const CaseStudyDetailPage: React.FC = () => {
 
         {/* Results */}
         {study.results && (
-          <div className="p-8 rounded-2xl bg-gradient-to-br from-[#0D111A] to-[#121824] border border-[#00F0FF]/30">
+          <div className="p-8 rounded-2xl bg-gradient-to-br from-[#0D111A] to-[#121824] border border-[#9873ff]/30">
             <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-              <TrendingUp className="w-6 h-6 text-[#00F0FF]" />
+              <TrendingUp className="w-6 h-6 text-[#9873ff]" />
               Business Impact & Results
             </h3>
             <p className="text-base text-[#94A3B8] leading-relaxed">{study.results}</p>

@@ -65,7 +65,7 @@ export const InquirySection: React.FC = () => {
           {/* Left Info */}
           <div className="lg:col-span-5 space-y-8">
             <div>
-              <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#00F2FE] mb-3">
+              <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#9873ff] mb-3">
                 Start Your Digital Transformation
               </div>
               <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-5">
@@ -78,17 +78,17 @@ export const InquirySection: React.FC = () => {
 
             <div className="space-y-4 pt-6 border-t border-white/8">
               <div className="flex items-center gap-3 text-sm text-[#94A3B8] font-medium">
-                <ShieldCheck className="w-5 h-5 text-[#00F2FE]" />
+                <ShieldCheck className="w-5 h-5 text-[#9873ff]" />
                 <span>Strict Non-Disclosure Agreement (NDA) Guarantee</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-[#94A3B8] font-medium">
-                <CheckCircle2 className="w-5 h-5 text-[#00F2FE]" />
+                <CheckCircle2 className="w-5 h-5 text-[#9873ff]" />
                 <span>Direct Executive Consultation within 24 Hours</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-[#94A3B8] font-medium">
-                <Mail className="w-5 h-5 text-[#00F2FE]" />
-                <a href="mailto:info@theuxda.com" className="text-white hover:text-[#00F2FE] transition-colors">
-                  info@theuxda.com
+                <Mail className="w-5 h-5 text-[#9873ff]" />
+                <a href="mailto:info@prabhatech.com" className="text-white hover:text-[#9873ff] transition-colors">
+                  info@prabhatech.com
                 </a>
               </div>
             </div>
@@ -104,12 +104,12 @@ export const InquirySection: React.FC = () => {
             >
               {isSuccess ? (
                 <div className="py-12 text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-[#00F2FE]/10 border border-[#00F2FE]/30 text-[#00F2FE] flex items-center justify-center mx-auto shadow-lg">
+                  <div className="w-16 h-16 rounded-full bg-[#9873ff]/10 border border-[#9873ff]/30 text-[#9873ff] flex items-center justify-center mx-auto shadow-lg">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <h3 className="font-display text-2xl font-bold text-white">Inquiry Received Successfully!</h3>
                   <p className="text-sm text-[#94A3B8] max-w-md mx-auto font-normal">
-                    Thank you for reaching out to UXDA. Our senior financial UX strategists will review your specifications and connect within 24 hours.
+                    Thank you for reaching out to PrabhaTech. Our senior financial UX strategists will review your specifications and connect within 24 hours.
                   </p>
                   <button
                     onClick={() => setIsSuccess(false)}
@@ -140,7 +140,7 @@ export const InquirySection: React.FC = () => {
                           value={formData.fullName}
                           onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                           placeholder="e.g. Alex Morgan"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors"
                         />
                       </div>
                     </div>
@@ -158,7 +158,7 @@ export const InquirySection: React.FC = () => {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="alex@bankgroup.com"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors"
                         />
                       </div>
                     </div>
@@ -177,7 +177,7 @@ export const InquirySection: React.FC = () => {
                           value={formData.companyName}
                           onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                           placeholder="Fintech Corp"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors"
                         />
                       </div>
                     </div>
@@ -194,7 +194,7 @@ export const InquirySection: React.FC = () => {
                           value={formData.phoneNumber}
                           onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                           placeholder="+1 (555) 000-0000"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors"
                         />
                       </div>
                     </div>
@@ -213,7 +213,7 @@ export const InquirySection: React.FC = () => {
                           onClick={() => setFormData({ ...formData, projectType: type })}
                           className={`p-2.5 rounded-xl text-xs font-medium border text-left transition-all ${
                             formData.projectType === type
-                              ? 'bg-[#00F2FE]/15 border-[#00F2FE] text-[#00F2FE]'
+                              ? 'bg-[#9873ff]/15 border-[#9873ff] text-[#9873ff]'
                               : 'bg-[#030508] border-white/10 text-[#94A3B8] hover:border-white/20'
                           }`}
                         >
@@ -236,7 +236,7 @@ export const InquirySection: React.FC = () => {
                           onClick={() => setFormData({ ...formData, budgetRange: range })}
                           className={`p-2.5 rounded-xl text-xs font-medium border text-center transition-all ${
                             formData.budgetRange === range
-                              ? 'bg-[#00F2FE]/15 border-[#00F2FE] text-[#00F2FE]'
+                              ? 'bg-[#9873ff]/15 border-[#9873ff] text-[#9873ff]'
                               : 'bg-[#030508] border-white/10 text-[#94A3B8] hover:border-white/20'
                           }`}
                         >
@@ -257,14 +257,14 @@ export const InquirySection: React.FC = () => {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Describe your product challenges, current timeline, and target goals..."
-                      className="w-full p-4 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors resize-none"
+                      className="w-full p-4 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors resize-none"
                     ></textarea>
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest text-black bg-[#00F2FE] hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(0,242,254,0.4)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest text-black bg-[#9873ff] hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(152,115,255,0.4)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <span>Sending Request...</span>

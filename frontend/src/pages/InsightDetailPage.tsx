@@ -17,7 +17,7 @@ export const InsightDetailPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen pt-36 pb-20 flex items-center justify-center text-white">
-        <div className="w-8 h-8 rounded-full border-2 border-[#00F0FF] border-t-transparent animate-spin"></div>
+        <div className="w-8 h-8 rounded-full border-2 border-[#9873ff] border-t-transparent animate-spin"></div>
       </div>
     );
   }
@@ -26,7 +26,7 @@ export const InsightDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen pt-36 pb-20 max-w-4xl mx-auto px-6 text-center text-white">
         <h2 className="text-3xl font-bold mb-4">Article Not Found</h2>
-        <Link to="/insights" className="text-[#00F0FF] underline">
+        <Link to="/insights" className="text-[#9873ff] underline">
           Back to Insights
         </Link>
       </div>
@@ -38,7 +38,7 @@ export const InsightDetailPage: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 sm:px-8 mb-8">
         <Link
           to="/insights"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#94A3B8] hover:text-[#00F0FF] transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#94A3B8] hover:text-[#9873ff] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>All Insights</span>
@@ -47,7 +47,7 @@ export const InsightDetailPage: React.FC = () => {
 
       <article className="max-w-4xl mx-auto px-6 sm:px-8 text-white">
         <div className="mb-8">
-          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#00F0FF]/15 border border-[#00F0FF]/30 text-[#00F0FF] mb-4 inline-block">
+          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#9873ff]/15 border border-[#9873ff]/30 text-[#9873ff] mb-4 inline-block">
             {article.category}
           </span>
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-6">
@@ -55,7 +55,7 @@ export const InsightDetailPage: React.FC = () => {
           </h1>
           <div className="flex items-center gap-4 text-xs text-[#94A3B8] pb-6 border-b border-white/10">
             <span className="flex items-center gap-1.5 font-medium text-white">
-              <User className="w-3.5 h-3.5 text-[#00F0FF]" />
+              <User className="w-3.5 h-3.5 text-[#9873ff]" />
               {article.authorName}
             </span>
             <span>•</span>
@@ -76,7 +76,7 @@ export const InsightDetailPage: React.FC = () => {
         </div>
 
         {/* Lead Excerpt */}
-        <div className="p-6 rounded-2xl bg-[#0D111A] border-l-4 border-[#00F0FF] mb-10">
+        <div className="p-6 rounded-2xl bg-[#0D111A] border-l-4 border-[#9873ff] mb-10">
           <p className="text-lg text-[#94A3B8] italic leading-relaxed">
             "{article.excerpt}"
           </p>

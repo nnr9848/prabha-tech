@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse } from '../types';
+import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -21,6 +21,11 @@ apiClient.interceptors.request.use((config) => {
 
 // Public APIs
 export const publicApi = {
+  getSocialLinks: async (): Promise<SocialLink[]> => {
+    const res = await apiClient.get('/public/social-links');
+    return res.data;
+  },
+
   getCaseStudies: async (category?: string, featured?: boolean): Promise<CaseStudy[]> => {
     const params: Record<string, any> = {};
     if (category && category !== 'All') params.category = category;
@@ -39,16 +44,16 @@ export const publicApi = {
     return res.data;
   },
 
+  getArticleBySlug: async (slug: string): Promise<Article> => {
+    const res = await apiClient.get(`/public/articles/${slug}`);
+    return res.data;
+  },
+
   getArticles: async (category?: string, featured?: boolean): Promise<Article[]> => {
     const params: Record<string, any> = {};
     if (category && category !== 'All') params.category = category;
     if (featured) params.featured = true;
     const res = await apiClient.get('/public/articles', { params });
-    return res.data;
-  },
-
-  getArticleBySlug: async (slug: string): Promise<Article> => {
-    const res = await apiClient.get(`/public/articles/${slug}`);
     return res.data;
   },
 
@@ -63,6 +68,26 @@ export const adminApi = {
   login: async (credentials: { username: string; password: string }): Promise<AuthResponse> => {
     const res = await apiClient.post('/auth/login', credentials);
     return res.data;
+  },
+
+  // Social Links CMS
+  getAllSocialLinks: async (): Promise<SocialLink[]> => {
+    const res = await apiClient.get('/admin/social-links');
+    return res.data;
+  },
+
+  createSocialLink: async (data: Partial<SocialLink>): Promise<SocialLink> => {
+    const res = await apiClient.post('/admin/social-links', data);
+    return res.data;
+  },
+
+  updateSocialLink: async (id: number, data: Partial<SocialLink>): Promise<SocialLink> => {
+    const res = await apiClient.put(`/admin/social-links/${id}`, data);
+    return res.data;
+  },
+
+  deleteSocialLink: async (id: number): Promise<void> => {
+    await apiClient.delete(`/admin/social-links/${id}`);
   },
 
   // Case Studies CMS
@@ -130,3 +155,4 @@ export const adminApi = {
 };
 
 export default apiClient;
+

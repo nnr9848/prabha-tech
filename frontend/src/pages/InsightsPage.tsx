@@ -14,7 +14,7 @@ export const InsightsPage: React.FC = () => {
   return (
     <div className="pt-28 pb-24">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 mb-16 text-center">
-        <div className="text-xs uppercase tracking-widest font-semibold text-[#00F0FF] mb-3">
+        <div className="text-xs uppercase tracking-widest font-semibold text-[#9873ff] mb-3">
           Thought Leadership
         </div>
         <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-4">
@@ -31,7 +31,7 @@ export const InsightsPage: React.FC = () => {
             <Link
               key={art.slug}
               to={`/insights/${art.slug}`}
-              className="group rounded-2xl bg-[#0D111A] border border-white/10 overflow-hidden hover:border-[#00F0FF]/40 transition-all duration-300 flex flex-col"
+              className="group rounded-2xl bg-[#0D111A] border border-white/10 overflow-hidden hover:border-[#9873ff]/40 transition-all duration-300 flex flex-col"
             >
               <div className="aspect-[16/10] overflow-hidden bg-black relative">
                 <img
@@ -39,7 +39,7 @@ export const InsightsPage: React.FC = () => {
                   alt={art.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/60 border border-white/10 text-[#00F0FF]">
+                <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/60 border border-white/10 text-[#9873ff]">
                   {art.category}
                 </span>
               </div>
@@ -50,14 +50,14 @@ export const InsightsPage: React.FC = () => {
                     <span>•</span>
                     <span>{art.readTime || '5 min read'}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white group-hover:text-[#00F0FF] transition-colors mb-3 leading-snug">
+                  <h3 className="text-xl font-bold text-white group-hover:text-[#9873ff] transition-colors mb-3 leading-snug">
                     {art.title}
                   </h3>
                   <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-3">
                     {art.excerpt}
                   </p>
                 </div>
-                <div className="pt-4 mt-6 border-t border-white/5 flex items-center text-xs font-bold uppercase tracking-wider text-[#00F0FF]">
+                <div className="pt-4 mt-6 border-t border-white/5 flex items-center text-xs font-bold uppercase tracking-wider text-[#9873ff]">
                   <span>Read Article</span>
                   <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
                 </div>

@@ -7,7 +7,7 @@ export const PhilosophyPage: React.FC = () => {
   return (
     <div className="pt-28">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 mb-8 text-center">
-        <div className="text-xs uppercase tracking-widest font-semibold text-[#00F0FF] mb-3">
+        <div className="text-xs uppercase tracking-widest font-semibold text-[#9873ff] mb-3">
           Methodology & Vision
         </div>
         <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-4">
@@ -29,21 +29,21 @@ export const PhilosophyPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-6 rounded-2xl bg-[#0D111A] border border-white/10">
-              <div className="text-2xl font-extrabold text-[#00F0FF] mb-2">01</div>
+              <div className="text-2xl font-extrabold text-[#9873ff] mb-2">01</div>
               <h3 className="text-lg font-bold text-white mb-2">Forensic UX Research</h3>
               <p className="text-xs text-[#94A3B8] leading-relaxed">
                 Analyzing financial user journeys, identifying cognitive drop-offs, and benchmarking against global leaders.
               </p>
             </div>
             <div className="p-6 rounded-2xl bg-[#0D111A] border border-white/10">
-              <div className="text-2xl font-extrabold text-[#00F0FF] mb-2">02</div>
+              <div className="text-2xl font-extrabold text-[#9873ff] mb-2">02</div>
               <h3 className="text-lg font-bold text-white mb-2">Emotional Banking Architecture</h3>
               <p className="text-xs text-[#94A3B8] leading-relaxed">
                 Structuring data flows and micro-interactions around human peace of mind rather than legacy bank database schemas.
               </p>
             </div>
             <div className="p-6 rounded-2xl bg-[#0D111A] border border-white/10">
-              <div className="text-2xl font-extrabold text-[#00F0FF] mb-2">03</div>
+              <div className="text-2xl font-extrabold text-[#9873ff] mb-2">03</div>
               <h3 className="text-lg font-bold text-white mb-2">Atomic Fintech Design System</h3>
               <p className="text-xs text-[#94A3B8] leading-relaxed">
                 Developing responsive, accessible components, charts, and dark-mode tokens for high-speed cross-platform parity.

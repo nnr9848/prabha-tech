@@ -4,13 +4,17 @@
   :root {
     --font-uxda: 'Lato', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-    /* theuxda.com Official Dark Palette */
+    /* PrabhaTech Official Violet Luxury Palette */
+    --brand-primary: #9873ff;
+    --brand-primary-light: #b499ff;
+    --brand-primary-dark: #7c4dff;
+    --brand-primary-muted: rgba(152, 115, 255, 0.15);
+    --brand-primary-border: rgba(152, 115, 255, 0.35);
+    --brand-primary-glow: rgba(152, 115, 255, 0.4);
+
     --uxda-bg: #050608;
     --uxda-surface: #0A0C10;
     --uxda-card: #0E1118;
-    --uxda-purple: #8B5CF6;
-    --uxda-purple-light: #A78BFA;
-    --uxda-cyan: #00F2FE;
     --uxda-text: #FFFFFF;
     --uxda-text-muted: #8E9BAE;
     --uxda-border: rgba(255, 255, 255, 0.12);
@@ -25,6 +29,39 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
+
+/* Reusable Brand Theme Utilities */
+.text-brand {
+  color: var(--brand-primary);
+}
+
+.bg-brand {
+  background-color: var(--brand-primary);
+}
+
+.border-brand {
+  border-color: var(--brand-primary);
+}
+
+.badge-brand {
+  background-color: var(--brand-primary-muted);
+  border: 1px solid var(--brand-primary-border);
+  color: var(--brand-primary);
+}
+
+.btn-brand {
+  background-color: var(--brand-primary);
+  color: #050608;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 25px var(--brand-primary-glow);
+}
+
+.btn-brand:hover {
+  background-color: #FFFFFF;
+  color: #050608;
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.6);
 }
 
 /* Authentic UXDA Pill CTA Button with Left-to-Right Fill Animation */

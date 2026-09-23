@@ -4,10 +4,12 @@ import com.prabhatech.uxda.dto.ArticleDto;
 import com.prabhatech.uxda.dto.CaseStudyDto;
 import com.prabhatech.uxda.dto.LeadInquiryDto;
 import com.prabhatech.uxda.dto.ServiceItemDto;
+import com.prabhatech.uxda.dto.SocialLinkDto;
 import com.prabhatech.uxda.service.ArticleService;
 import com.prabhatech.uxda.service.CaseStudyService;
 import com.prabhatech.uxda.service.LeadInquiryService;
 import com.prabhatech.uxda.service.ServiceItemService;
+import com.prabhatech.uxda.service.SocialLinkService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +25,24 @@ public class PublicController {
     private final ServiceItemService serviceItemService;
     private final ArticleService articleService;
     private final LeadInquiryService leadInquiryService;
+    private final SocialLinkService socialLinkService;
 
     public PublicController(CaseStudyService caseStudyService,
                             ServiceItemService serviceItemService,
                             ArticleService articleService,
-                            LeadInquiryService leadInquiryService) {
+                            LeadInquiryService leadInquiryService,
+                            SocialLinkService socialLinkService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
         this.leadInquiryService = leadInquiryService;
+        this.socialLinkService = socialLinkService;
+    }
+
+    // --- Social Links ---
+    @GetMapping("/social-links")
+    public ResponseEntity<List<SocialLinkDto>> getActiveSocialLinks() {
+        return ResponseEntity.ok(socialLinkService.getActiveSocialLinks());
     }
 
     // --- Case Studies ---

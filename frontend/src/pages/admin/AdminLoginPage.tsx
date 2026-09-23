@@ -45,11 +45,11 @@ export const AdminLoginPage: React.FC = () => {
     <div className="min-h-screen pt-32 pb-20 flex items-center justify-center px-6">
       <div className="w-full max-w-md p-8 sm:p-10 rounded-2xl bg-[#0D111A] border border-white/10 shadow-2xl">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-[#00F0FF]/15 border border-[#00F0FF]/30 text-[#00F0FF] flex items-center justify-center mx-auto mb-4">
+          <div className="w-12 h-12 rounded-2xl bg-[#9873ff]/15 border border-[#9873ff]/30 text-[#9873ff] flex items-center justify-center mx-auto mb-4 shadow-sm">
             <ShieldCheck className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-1">UXDA CMS Admin</h1>
-          <p className="text-xs text-[#94A3B8]">Sign in to manage case studies, services, and lead inquiries</p>
+          <h1 className="text-2xl font-bold text-white mb-1">PrabhaTech CMS Admin</h1>
+          <p className="text-xs text-[#94A3B8]">Sign in to manage portfolio, services, social channels, and inquiries</p>
         </div>
 
         {error && (
@@ -70,7 +70,7 @@ export const AdminLoginPage: React.FC = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F0FF] focus:outline-none text-sm"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors"
               />
             </div>
           </div>
@@ -86,7 +86,7 @@ export const AdminLoginPage: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F0FF] focus:outline-none text-sm"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ export const AdminLoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 mt-2 rounded-xl font-bold text-xs uppercase tracking-wider text-black bg-[#00F0FF] hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(0,240,255,0.4)] flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3.5 mt-2 rounded-xl font-bold text-xs uppercase tracking-wider text-black bg-[#9873ff] hover:bg-white transition-all duration-300 shadow-[0_0_25px_rgba(152,115,255,0.45)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
             <span>{loading ? 'Authenticating...' : 'Sign In to CMS'}</span>
             <ArrowRight className="w-4 h-4" />

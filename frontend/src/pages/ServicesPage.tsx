@@ -14,7 +14,7 @@ export const ServicesPage: React.FC = () => {
   return (
     <div className="pt-28">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 mb-8 text-center">
-        <div className="text-xs uppercase tracking-widest font-semibold text-[#00F0FF] mb-3">
+        <div className="text-xs uppercase tracking-widest font-semibold text-[#9873ff] mb-3">
           Agency Capabilities
         </div>
         <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-4">

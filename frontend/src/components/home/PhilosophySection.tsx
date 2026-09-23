@@ -33,9 +33,9 @@ export const PhilosophySection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Text */}
           <div>
-            <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#00F2FE] mb-3 flex items-center gap-2">
+            <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#9873ff] mb-3 flex items-center gap-2">
               <Sparkles className="w-4 h-4" />
-              The UXDA Philosophy
+              The FXD Philosophy
             </div>
             <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
               Why 99% of Banking Apps Feel Cold, and How We Change It
@@ -46,7 +46,7 @@ export const PhilosophySection: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <Link
                 to="/philosophy"
-                className="px-7 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black bg-[#00F2FE] hover:bg-white transition-all shadow-[0_0_25px_rgba(0,242,254,0.35)] text-center"
+                className="px-7 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black bg-[#9873ff] hover:bg-white transition-all shadow-[0_0_25px_rgba(152,115,255,0.35)] text-center"
               >
                 Read Full FXD Whitepaper
               </Link>
@@ -70,9 +70,9 @@ export const PhilosophySection: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
-                  className="p-7 rounded-2xl bg-[#0B101D] border border-white/10 hover:border-[#7C3AED]/50 transition-all duration-300 shadow-lg hover:shadow-[0_10px_30px_rgba(0,0,0,0.7)]"
+                  className="p-7 rounded-2xl bg-[#0B101D] border border-white/10 hover:border-[#9873ff]/50 transition-all duration-300 shadow-lg hover:shadow-[0_10px_30px_rgba(0,0,0,0.7)]"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#00F2FE] mb-5 shadow-sm">
+                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#9873ff] mb-5 shadow-sm">
                     <Icon className="w-5 h-5" />
                   </div>
                   <h4 className="font-display text-lg font-bold text-white mb-2 leading-snug">{pillar.title}</h4>

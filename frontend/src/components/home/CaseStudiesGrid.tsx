@@ -24,8 +24,8 @@ export const CaseStudiesGrid: React.FC<CaseStudiesGridProps> = ({ caseStudies, s
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
-            <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#00F2FE] mb-3 flex items-center gap-2">
-              <span className="w-8 h-[1px] bg-[#00F2FE]"></span>
+            <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#9873ff] mb-3 flex items-center gap-2">
+              <span className="w-8 h-[1px] bg-[#9873ff]"></span>
               Portfolio Showcase
             </div>
             <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
@@ -40,9 +40,9 @@ export const CaseStudiesGrid: React.FC<CaseStudiesGridProps> = ({ caseStudies, s
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wider transition-all duration-300 ${
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold tracking-wider transition-all duration-300 cursor-pointer ${
                     selectedCategory === cat
-                      ? 'bg-[#00F2FE] text-black shadow-[0_0_20px_rgba(0,242,254,0.35)] font-bold'
+                      ? 'bg-[#9873ff] text-black shadow-[0_0_20px_rgba(152,115,255,0.35)] font-bold'
                       : 'bg-white/5 text-[#94A3B8] hover:text-white hover:bg-white/10 border border-white/10'
                   }`}
                 >
@@ -62,7 +62,7 @@ export const CaseStudiesGrid: React.FC<CaseStudiesGridProps> = ({ caseStudies, s
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="group relative rounded-2xl bg-[#0B101D] border border-white/10 overflow-hidden hover:border-[#00F2FE]/40 transition-all duration-500 flex flex-col shadow-xl hover:shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
+              className="group relative rounded-2xl bg-[#0B101D] border border-white/10 overflow-hidden hover:border-[#9873ff]/40 transition-all duration-500 flex flex-col shadow-xl hover:shadow-[0_10px_40px_rgba(0,0,0,0.8)]"
             >
               {/* Media Preview Container */}
               <div className="relative aspect-[16/10] overflow-hidden bg-black">
@@ -75,7 +75,7 @@ export const CaseStudiesGrid: React.FC<CaseStudiesGridProps> = ({ caseStudies, s
 
                 {/* Top Overlay Badges */}
                 <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                  <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/75 backdrop-blur-md border border-white/10 text-[#00F2FE]">
+                  <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/75 backdrop-blur-md border border-white/10 text-[#9873ff]">
                     {study.category}
                   </span>
                   {study.awards && study.awards.length > 0 && (
@@ -91,7 +91,7 @@ export const CaseStudiesGrid: React.FC<CaseStudiesGridProps> = ({ caseStudies, s
                   <div className="absolute bottom-4 left-4 flex gap-2">
                     {study.metrics.slice(0, 2).map((m, mIdx) => (
                       <div key={mIdx} className="bg-black/85 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl shadow-lg">
-                        <span className="font-mono text-xs font-extrabold text-[#00F2FE]">{m.label}</span>
+                        <span className="font-mono text-xs font-extrabold text-[#9873ff]">{m.label}</span>
                         <span className="text-[10px] text-[#94A3B8] ml-1.5 font-medium">{m.description}</span>
                       </div>
                     ))}
@@ -105,7 +105,7 @@ export const CaseStudiesGrid: React.FC<CaseStudiesGridProps> = ({ caseStudies, s
                   <div className="text-[11px] font-mono uppercase tracking-[0.15em] text-[#64748B] mb-2 font-medium">
                     Client: {study.clientName}
                   </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-white group-hover:text-[#00F2FE] transition-colors duration-200 mb-3 leading-snug">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-white group-hover:text-[#9873ff] transition-colors duration-200 mb-3 leading-snug">
                     {study.title}
                   </h3>
                   <p className="text-sm text-[#94A3B8] line-clamp-3 leading-relaxed mb-6 font-normal">
@@ -124,7 +124,7 @@ export const CaseStudiesGrid: React.FC<CaseStudiesGridProps> = ({ caseStudies, s
 
                   <Link
                     to={`/case-studies/${study.slug}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#00F2FE] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#9873ff] transition-colors"
                   >
                     <span>View Study</span>
                     <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
