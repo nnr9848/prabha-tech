@@ -59,35 +59,35 @@ export const InquirySection: React.FC = () => {
   };
 
   return (
-    <section className="py-24 relative z-10 bg-[#07090E] border-t border-white/5">
+    <section className="py-28 relative z-10 bg-[#030508] border-t border-white/8">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           {/* Left Info */}
           <div className="lg:col-span-5 space-y-8">
             <div>
-              <div className="text-xs uppercase tracking-widest font-semibold text-[#00F0FF] mb-3">
+              <div className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#00F2FE] mb-3">
                 Start Your Digital Transformation
               </div>
-              <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-5">
                 Let's Architect the Future of Your Financial Product
               </h2>
-              <p className="text-base text-[#94A3B8] leading-relaxed">
+              <p className="text-base text-[#94A3B8] leading-relaxed font-normal">
                 Whether you're launching a disruptive fintech unicorn or modernizing a tier-1 banking ecosystem, our senior UX architects are ready to guide your journey.
               </p>
             </div>
 
-            <div className="space-y-4 pt-4 border-t border-white/10">
-              <div className="flex items-center gap-3 text-sm text-[#94A3B8]">
-                <ShieldCheck className="w-5 h-5 text-[#00F0FF]" />
+            <div className="space-y-4 pt-6 border-t border-white/8">
+              <div className="flex items-center gap-3 text-sm text-[#94A3B8] font-medium">
+                <ShieldCheck className="w-5 h-5 text-[#00F2FE]" />
                 <span>Strict Non-Disclosure Agreement (NDA) Guarantee</span>
               </div>
-              <div className="flex items-center gap-3 text-sm text-[#94A3B8]">
-                <CheckCircle2 className="w-5 h-5 text-[#00F0FF]" />
+              <div className="flex items-center gap-3 text-sm text-[#94A3B8] font-medium">
+                <CheckCircle2 className="w-5 h-5 text-[#00F2FE]" />
                 <span>Direct Executive Consultation within 24 Hours</span>
               </div>
-              <div className="flex items-center gap-3 text-sm text-[#94A3B8]">
-                <Mail className="w-5 h-5 text-[#00F0FF]" />
-                <a href="mailto:info@theuxda.com" className="text-white hover:text-[#00F0FF] transition-colors">
+              <div className="flex items-center gap-3 text-sm text-[#94A3B8] font-medium">
+                <Mail className="w-5 h-5 text-[#00F2FE]" />
+                <a href="mailto:info@theuxda.com" className="text-white hover:text-[#00F2FE] transition-colors">
                   info@theuxda.com
                 </a>
               </div>
@@ -100,15 +100,15 @@ export const InquirySection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="p-8 sm:p-10 rounded-2xl bg-[#0D111A] border border-white/10 shadow-2xl relative"
+              className="p-8 sm:p-10 rounded-2xl bg-[#0B101D] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] relative"
             >
               {isSuccess ? (
                 <div className="py-12 text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/30 text-[#00F0FF] flex items-center justify-center mx-auto">
+                  <div className="w-16 h-16 rounded-full bg-[#00F2FE]/10 border border-[#00F2FE]/30 text-[#00F2FE] flex items-center justify-center mx-auto shadow-lg">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white">Inquiry Received Successfully!</h3>
-                  <p className="text-sm text-[#94A3B8] max-w-md mx-auto">
+                  <h3 className="font-display text-2xl font-bold text-white">Inquiry Received Successfully!</h3>
+                  <p className="text-sm text-[#94A3B8] max-w-md mx-auto font-normal">
                     Thank you for reaching out to UXDA. Our senior financial UX strategists will review your specifications and connect within 24 hours.
                   </p>
                   <button
@@ -129,7 +129,7 @@ export const InquirySection: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Full Name */}
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
                         Full Name *
                       </label>
                       <div className="relative">
@@ -140,14 +140,14 @@ export const InquirySection: React.FC = () => {
                           value={formData.fullName}
                           onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                           placeholder="e.g. Alex Morgan"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F0FF] focus:outline-none text-sm transition-colors"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors"
                         />
                       </div>
                     </div>
 
                     {/* Email */}
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
                         Corporate Email *
                       </label>
                       <div className="relative">
@@ -158,7 +158,7 @@ export const InquirySection: React.FC = () => {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="alex@bankgroup.com"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F0FF] focus:outline-none text-sm transition-colors"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors"
                         />
                       </div>
                     </div>
@@ -167,7 +167,7 @@ export const InquirySection: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Company */}
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
                         Company Name
                       </label>
                       <div className="relative">
@@ -177,14 +177,14 @@ export const InquirySection: React.FC = () => {
                           value={formData.companyName}
                           onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                           placeholder="Fintech Corp"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F0FF] focus:outline-none text-sm transition-colors"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors"
                         />
                       </div>
                     </div>
 
                     {/* Phone */}
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
                         Phone Number
                       </label>
                       <div className="relative">
@@ -194,7 +194,7 @@ export const InquirySection: React.FC = () => {
                           value={formData.phoneNumber}
                           onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                           placeholder="+1 (555) 000-0000"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F0FF] focus:outline-none text-sm transition-colors"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors"
                         />
                       </div>
                     </div>
@@ -202,7 +202,7 @@ export const InquirySection: React.FC = () => {
 
                   {/* Project Type */}
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
                       Primary Project Focus
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -213,8 +213,8 @@ export const InquirySection: React.FC = () => {
                           onClick={() => setFormData({ ...formData, projectType: type })}
                           className={`p-2.5 rounded-xl text-xs font-medium border text-left transition-all ${
                             formData.projectType === type
-                              ? 'bg-[#00F0FF]/15 border-[#00F0FF] text-[#00F0FF]'
-                              : 'bg-[#07090E] border-white/10 text-[#94A3B8] hover:border-white/20'
+                              ? 'bg-[#00F2FE]/15 border-[#00F2FE] text-[#00F2FE]'
+                              : 'bg-[#030508] border-white/10 text-[#94A3B8] hover:border-white/20'
                           }`}
                         >
                           {type}
@@ -225,7 +225,7 @@ export const InquirySection: React.FC = () => {
 
                   {/* Budget Range */}
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
                       Estimated Project Budget
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -236,8 +236,8 @@ export const InquirySection: React.FC = () => {
                           onClick={() => setFormData({ ...formData, budgetRange: range })}
                           className={`p-2.5 rounded-xl text-xs font-medium border text-center transition-all ${
                             formData.budgetRange === range
-                              ? 'bg-[#00F0FF]/15 border-[#00F0FF] text-[#00F0FF]'
-                              : 'bg-[#07090E] border-white/10 text-[#94A3B8] hover:border-white/20'
+                              ? 'bg-[#00F2FE]/15 border-[#00F2FE] text-[#00F2FE]'
+                              : 'bg-[#030508] border-white/10 text-[#94A3B8] hover:border-white/20'
                           }`}
                         >
                           {range}
@@ -248,7 +248,7 @@ export const InquirySection: React.FC = () => {
 
                   {/* Message */}
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">
                       Project Goals & Context *
                     </label>
                     <textarea
@@ -257,14 +257,14 @@ export const InquirySection: React.FC = () => {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Describe your product challenges, current timeline, and target goals..."
-                      className="w-full p-4 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F0FF] focus:outline-none text-sm transition-colors resize-none"
+                      className="w-full p-4 rounded-xl bg-[#030508] border border-white/10 text-white placeholder-[#64748B] focus:border-[#00F2FE] focus:outline-none text-sm transition-colors resize-none"
                     ></textarea>
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest text-black bg-[#00F0FF] hover:bg-white transition-all duration-300 shadow-[0_0_25px_rgba(0,240,255,0.4)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="w-full py-4 rounded-xl font-bold text-xs uppercase tracking-widest text-black bg-[#00F2FE] hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(0,242,254,0.4)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <span>Sending Request...</span>
@@ -284,3 +284,4 @@ export const InquirySection: React.FC = () => {
     </section>
   );
 };
+

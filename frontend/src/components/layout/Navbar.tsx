@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, ShieldCheck } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,124 +16,264 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent background scrolling when mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenuOpen]);
+
   const navLinks = [
-    { name: 'Case Studies', path: '/case-studies' },
-    { name: 'Services', path: '/services' },
-    { name: 'Philosophy', path: '/philosophy' },
-    { name: 'Insights', path: '/insights' },
-    { name: 'About', path: '/about' },
+    { name: 'Why us', path: '/philosophy' },
+    { name: 'Portfolio', path: '/case-studies' },
+    { name: 'Team', path: '/about' },
+    { name: 'Blog', path: '/insights' },
+    { name: 'Contact us', path: '/contact' },
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-[#07090E]/90 border-b border-white/10 backdrop-none py-4 shadow-2xl'
-          : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00F0FF] via-[#0070F3] to-[#7928CA] p-[2px] transition-transform duration-300 group-hover:scale-105">
-            <div className="w-full h-full bg-[#07090E] rounded-[10px] flex items-center justify-center">
-              <span className="font-extrabold text-lg text-white tracking-tighter">UX</span>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-xl tracking-tight text-white flex items-center gap-1.5">
-              UXDA
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#00F0FF] animate-pulse"></span>
+    <>
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: 'easeOut' }}
+        className={`fixed top-0 left-0 right-0 z-40 transition-[background-color,padding,border-color] duration-300 ${
+          isScrolled
+            ? 'py-4 bg-[#050608]/90 backdrop-blur-md border-b border-white/5'
+            : 'py-6 bg-transparent'
+        }`}
+      >
+        <div className="max-w-[1600px] mx-auto px-8 sm:px-16 lg:px-24 flex items-center justify-between">
+          {/* Authentic UXDA Logo with Registered Mark */}
+          <Link to="/" className="flex items-center gap-1 group">
+            <span className="text-2xl sm:text-[28px] font-light tracking-[0.25em] text-white transition-opacity hover:opacity-80">
+              UXD<span className="font-extrabold tracking-normal">^</span>
             </span>
-            <span className="text-[10px] uppercase tracking-widest text-[#94A3B8] -mt-1 font-medium">
-              Financial UX Agency
-            </span>
-          </div>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => {
-            const isActive = location.pathname === link.path;
-            return (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`text-sm font-medium tracking-wide transition-colors duration-200 relative py-1 ${
-                  isActive ? 'text-[#00F0FF]' : 'text-[#94A3B8] hover:text-white'
-                }`}
-              >
-                {link.name}
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#00F0FF] rounded-full"></span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Right CTA & CMS Link */}
-        <div className="hidden md:flex items-center gap-4">
-          <Link
-            to="/admin"
-            className="text-xs font-semibold px-3 py-2 rounded-lg border border-white/10 text-[#94A3B8] hover:text-white hover:border-[#00F0FF]/40 transition-all flex items-center gap-1.5"
-            title="CMS Admin Portal"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-[#00F0FF]" />
-            <span>CMS</span>
+            <span className="text-[10px] text-[#8E9BAE] align-super -mt-3 font-normal">®</span>
           </Link>
 
-          <Link
-            to="/contact"
-            className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs tracking-wider uppercase text-black bg-[#00F0FF] hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
-          >
-            <span>Let's Talk</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
-        </div>
+          {/* Center Navigation Links (Desktop) */}
+          <nav className="hidden lg:flex items-center gap-10">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`text-[15px] font-normal tracking-[0.02em] transition-colors duration-200 ${
+                    isActive ? 'text-[#9873ff] font-medium' : 'text-white hover:text-[#9873ff]'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+          </nav>
 
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg text-white hover:bg-white/5 transition-colors"
-          aria-label="Toggle Navigation"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#07090E] border-b border-white/10 px-6 py-6 space-y-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-base font-medium text-[#94A3B8] hover:text-[#00F0FF] py-2"
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
+          {/* Right Social & CMS Icons (Desktop) */}
+          <div className="hidden md:flex items-center gap-2.5">
             <Link
               to="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-center py-2.5 text-xs font-semibold rounded-lg border border-white/10 text-white flex items-center justify-center gap-2"
+              className="text-xs px-3.5 py-1.5 rounded-full border border-white/20 text-[#E2E8F0] hover:text-white hover:border-[#9873ff]/60 transition-all duration-200 flex items-center gap-1.5 mr-2"
+              title="CMS Admin Portal"
             >
-              <ShieldCheck className="w-4 h-4 text-[#00F0FF]" />
-              Admin CMS
+              <ShieldCheck className="w-3.5 h-3.5 text-[#9873ff]" />
+              <span className="font-medium">CMS</span>
             </Link>
-            <Link
-              to="/contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-center py-3 text-xs font-bold uppercase tracking-wider rounded-xl bg-[#00F0FF] text-black shadow-lg"
+
+            {/* Crisp Branded Solid Social Circles */}
+            <a
+              href="https://www.linkedin.com/company/theuxda"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-[#0077B5] hover:opacity-90 hover:scale-105 text-white flex items-center justify-center text-xs font-bold transition-all duration-200 shadow-sm"
+              title="LinkedIn"
             >
-              Start a Project
-            </Link>
+              in
+            </a>
+            <a
+              href="https://twitter.com/theuxda"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-white text-black hover:opacity-90 hover:scale-105 flex items-center justify-center text-xs font-bold transition-all duration-200 shadow-sm"
+              title="X"
+            >
+              𝕏
+            </a>
+            <a
+              href="https://www.behance.net/theuxda"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-[#0057FF] hover:opacity-90 hover:scale-105 text-white flex items-center justify-center text-xs font-bold transition-all duration-200 shadow-sm"
+              title="Behance"
+            >
+              Bē
+            </a>
+            <a
+              href="https://www.instagram.com/theuxda"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FF543E] via-[#E4405F] to-[#833AB4] hover:opacity-90 hover:scale-105 text-white flex items-center justify-center text-[11px] font-bold transition-all duration-200 shadow-sm"
+              title="Instagram"
+            >
+              ig
+            </a>
+            <a
+              href="https://www.youtube.com/c/theuxda"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-[#FF0000] hover:opacity-90 hover:scale-105 text-white flex items-center justify-center text-xs font-bold transition-all duration-200 shadow-sm"
+              title="YouTube"
+            >
+              ▶
+            </a>
           </div>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="lg:hidden p-2 rounded-lg text-white hover:bg-white/5 transition-colors focus:outline-none"
+            aria-label="Open Navigation Menu"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
-      )}
-    </header>
+      </motion.header>
+
+      {/* Fullscreen Mobile Drawer Overlay with Downward Entry */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-50 bg-[#050608] flex flex-col justify-between p-8 sm:p-12 lg:hidden"
+          >
+            {/* Top Bar inside Overlay */}
+            <div className="flex items-center justify-between">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2"
+              >
+                <span className="text-2xl font-light tracking-[0.25em] text-white">
+                  UXD<span className="font-extrabold tracking-normal">^</span>
+                </span>
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 text-white/80 hover:text-white transition-colors focus:outline-none"
+                aria-label="Close Navigation Menu"
+              >
+                <X className="w-7 h-7" />
+              </button>
+            </div>
+
+            {/* Centered Navigation Links */}
+            <nav className="flex flex-col items-center justify-center gap-8 my-auto">
+              {navLinks.map((link, idx) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 + idx * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <Link
+                      to={link.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`text-xl sm:text-2xl tracking-wide font-normal transition-colors ${
+                        isActive ? 'text-white font-medium' : 'text-[#8E9BAE] hover:text-white'
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                );
+              })}
+
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="pt-4"
+              >
+                <Link
+                  to="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-xs px-4 py-2 rounded-full border border-white/10 text-white/80 hover:text-white hover:border-[#8B5CF6]/60 transition-all flex items-center gap-2"
+                >
+                  <ShieldCheck className="w-4 h-4 text-[#8B5CF6]" />
+                  <span>Admin CMS</span>
+                </Link>
+              </motion.div>
+            </nav>
+
+            {/* Bottom Social Media Pills Row */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center justify-center gap-4 pt-6 border-t border-white/5"
+            >
+              <a
+                href="https://www.linkedin.com/company/theuxda"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#0077B5] text-white flex items-center justify-center text-xs font-bold transition-all"
+                title="LinkedIn"
+              >
+                in
+              </a>
+              <a
+                href="https://twitter.com/theuxda"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/20 text-white flex items-center justify-center text-xs font-bold transition-all"
+                title="X"
+              >
+                𝕏
+              </a>
+              <a
+                href="https://www.behance.net/theuxda"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#0057FF] text-white flex items-center justify-center text-xs font-bold transition-all"
+                title="Behance"
+              >
+                Bē
+              </a>
+              <a
+                href="https://www.instagram.com/theuxda"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#E4405F] text-white flex items-center justify-center text-xs font-bold transition-all"
+                title="Instagram"
+              >
+                ig
+              </a>
+              <a
+                href="https://www.youtube.com/c/theuxda"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#FF0000] text-white flex items-center justify-center text-xs font-bold transition-all"
+                title="YouTube"
+              >
+                ▶
+              </a>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
+
+
