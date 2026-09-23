@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Award, Globe2, Shield, Heart } from 'lucide-react';
+import { ArrowUpRight, Award, Globe2, Shield } from 'lucide-react';
+import logoImg from '../../assets/prabhatech-logo.png';
 
 export const Footer: React.FC = () => {
   return (
@@ -10,14 +11,11 @@ export const Footer: React.FC = () => {
           {/* Col 1: Brand & Mission */}
           <div className="lg:col-span-2 space-y-6">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00F2FE] via-[#3877FF] to-[#7C3AED] p-[1.5px] shadow-[0_0_20px_rgba(0,242,254,0.3)]">
-                <div className="w-full h-full bg-[#030508] rounded-[10px] flex items-center justify-center">
-                  <span className="font-display font-extrabold text-lg text-white">UX</span>
-                </div>
-              </div>
-              <span className="font-display font-bold text-2xl tracking-tight text-white group-hover:text-[#00F2FE] transition-colors">
-                UXDA
-              </span>
+              <img
+                src={logoImg}
+                alt="PrabhaTech Logo"
+                className="h-9 w-auto object-contain brightness-0 invert transition-opacity group-hover:opacity-80"
+              />
             </Link>
             <p className="text-sm leading-relaxed text-[#94A3B8] max-w-sm font-normal">
               The world's leading Financial UX design agency. We architect intuitive digital banking, crypto ecosystems, and wealthtech platforms across 37+ countries.

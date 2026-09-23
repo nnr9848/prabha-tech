@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ShieldCheck } from 'lucide-react';
+import logoImg from '../../assets/prabhatech-logo.png';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -49,12 +50,13 @@ export const Navbar: React.FC = () => {
         }`}
       >
         <div className="max-w-[1600px] mx-auto px-8 sm:px-16 lg:px-24 flex items-center justify-between">
-          {/* Authentic UXDA Logo with Registered Mark */}
-          <Link to="/" className="flex items-center gap-1 group">
-            <span className="text-2xl sm:text-[28px] font-light tracking-[0.25em] text-white transition-opacity hover:opacity-80">
-              UXD<span className="font-extrabold tracking-normal">^</span>
-            </span>
-            <span className="text-[10px] text-[#8E9BAE] align-super -mt-3 font-normal">®</span>
+          {/* Authentic Logo Image */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <img
+              src={logoImg}
+              alt="PrabhaTech Logo"
+              className="h-8 sm:h-9 w-auto object-contain brightness-0 invert transition-opacity duration-200 group-hover:opacity-80"
+            />
           </Link>
 
           {/* Center Navigation Links (Desktop) */}
@@ -65,8 +67,8 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`text-[15px] font-normal tracking-[0.02em] transition-colors duration-200 ${
-                    isActive ? 'text-[#9873ff] font-medium' : 'text-white hover:text-[#9873ff]'
+                  className={`text-[15.5px] font-medium tracking-[0.015em] transition-colors duration-200 ${
+                    isActive ? 'text-[#9873ff] font-semibold' : 'text-white hover:text-[#9873ff]'
                   }`}
                 >
                   {link.name}
@@ -162,9 +164,11 @@ export const Navbar: React.FC = () => {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-2"
               >
-                <span className="text-2xl font-light tracking-[0.25em] text-white">
-                  UXD<span className="font-extrabold tracking-normal">^</span>
-                </span>
+                <img
+                  src={logoImg}
+                  alt="PrabhaTech Logo"
+                  className="h-8 w-auto object-contain brightness-0 invert"
+                />
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
