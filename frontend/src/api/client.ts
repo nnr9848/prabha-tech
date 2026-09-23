@@ -19,6 +19,21 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
+// Response interceptor to handle session expiration cleanly
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      // If unauthorized / forbidden due to token invalidation or expiry on admin routes
+      if (window.location.pathname.startsWith('/admin') && window.location.pathname !== '/admin/login') {
+        localStorage.removeItem('prabhatech_token');
+        localStorage.removeItem('prabhatech_user');
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Public APIs
 export const publicApi = {
   getSocialLinks: async (): Promise<SocialLink[]> => {
