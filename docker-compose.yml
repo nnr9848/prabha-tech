@@ -19,9 +19,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 384M
 
   # =========================================================
-  # Backend API: Spring Boot 3 REST API
+  # Backend API: Spring Boot 3 REST API (Optimized JVM)
   # =========================================================
   backend:
     build:
@@ -39,8 +43,13 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-prabhatech_pass}
       APP_JWT_SECRET: ${JWT_SECRET:-404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
       APP_CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-*}
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx384m -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ExitOnOutOfMemoryError"
     networks:
       - prabhatech_net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   # =========================================================
   # Frontend: React Vite SPA + Nginx Web Server (Port 3005)
@@ -57,6 +66,10 @@ services:
       - backend
     networks:
       - prabhatech_net
+    deploy:
+      resources:
+        limits:
+          memory: 128M
 
 # =========================================================
 # Volumes & Networks
