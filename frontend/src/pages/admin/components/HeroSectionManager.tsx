@@ -238,7 +238,6 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
                 <video
                   key={formData.videoUrl}
                   autoPlay
-                  loop
                   muted
                   playsInline
                   poster={formData.posterUrl}

@@ -35,7 +35,6 @@ export const HeroSection: React.FC = () => {
           <video
             key={hero.videoUrl}
             autoPlay
-            loop
             muted
             playsInline
             poster={hero.posterUrl}
