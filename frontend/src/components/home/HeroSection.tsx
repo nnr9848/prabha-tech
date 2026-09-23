@@ -9,13 +9,14 @@ export const HeroSection: React.FC = () => {
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <video
           autoPlay
+          loop
           muted
           playsInline
-          poster="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80"
+          poster="https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.jpg"
           className="w-full h-full object-cover object-center opacity-100"
         >
           <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-network-connection-background-3179-large.mp4"
+            src="https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.mp4"
             type="video/mp4"
           />
         </video>
