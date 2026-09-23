@@ -37,12 +37,19 @@ export const HERO_MOTION_VARIANTS = {
   },
 };
 
+export type PreviewLayerMode = 'all' | 'poster-only' | 'gradient-only';
+
 interface HeroSectionProps {
   overrideConfig?: Partial<HeroConfig> | null;
   isPreview?: boolean;
+  previewLayerMode?: PreviewLayerMode;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ overrideConfig, isPreview = false }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({
+  overrideConfig,
+  isPreview = false,
+  previewLayerMode = 'all',
+}) => {
   const { data: fetchedConfig } = useQuery<HeroConfig>({
     queryKey: ['heroConfig'],
     queryFn: () => publicApi.getHeroConfig(),
@@ -56,6 +63,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ overrideConfig, isPrev
     ...(overrideConfig || {}),
   };
 
+  const showVideo = previewLayerMode === 'all' && Boolean(hero.videoUrl);
+  const showPosterImage =
+    (previewLayerMode === 'poster-only' || (!hero.videoUrl && previewLayerMode === 'all')) &&
+    Boolean(hero.posterUrl);
+
   return (
     <section
       className={`relative overflow-hidden bg-[#050608] flex items-center ${
@@ -64,21 +76,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ overrideConfig, isPrev
           : 'min-h-[auto] md:h-screen md:min-h-[700px] pt-28 pb-14 md:py-0'
       }`}
     >
-      {/* Background Holographic 3D Video / Overlay */}
+      {/* Background Holographic 3D Video / Fallback Poster Image / Pure Dark Vignette */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {hero.videoUrl && (
+        {/* 1. Video Layer */}
+        {showVideo && (
           <video
             key={hero.videoUrl}
             autoPlay
             muted
             playsInline
             poster={hero.posterUrl}
-            className="w-full h-full object-cover object-center opacity-100"
+            className="w-full h-full object-cover object-center opacity-100 transition-opacity duration-500"
           >
             <source src={hero.videoUrl} type="video/mp4" />
           </video>
         )}
-        {/* Responsive Dark Vignette for Typography Legibility while Keeping Visuals Crystal Bright */}
+
+        {/* 2. Isolated Fallback Poster Image Layer (when previewing poster or video is disabled) */}
+        {showPosterImage && (
+          <img
+            src={hero.posterUrl}
+            alt="Hero Background Poster"
+            className="w-full h-full object-cover object-center opacity-90 transition-opacity duration-500"
+          />
+        )}
+
+        {/* 3. Responsive Dark Vignette for Typography Legibility while Keeping Visuals Crystal Bright */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#050608]/85 via-[#050608]/40 to-[#050608] md:bg-gradient-to-r md:from-[#050608]/90 md:via-[#050608]/30 md:to-transparent"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-transparent to-[#050608]/60"></div>
       </div>

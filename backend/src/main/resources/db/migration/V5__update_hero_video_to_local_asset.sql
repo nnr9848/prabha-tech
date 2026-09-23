@@ -8,3 +8,7 @@ SET
     poster_url = 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
     updated_at = CURRENT_TIMESTAMP
 WHERE config_key = 'default_hero';
+
+UPDATE users
+SET full_name = 'PrabhaTech Lead Administrator'
+WHERE username = 'admin';

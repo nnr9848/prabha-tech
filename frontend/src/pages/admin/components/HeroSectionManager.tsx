@@ -111,6 +111,7 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
 
   const [savedFeedback, setSavedFeedback] = useState(false);
   const [previewKey, setPreviewKey] = useState(0);
+  const [layerMode, setLayerMode] = useState<'all' | 'poster-only' | 'gradient-only'>('all');
 
   useEffect(() => {
     if (heroConfig) {
@@ -305,13 +306,53 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
 
         {/* Right Column: Interactive Real-Time Live Preview Card (7 cols) */}
         <div className="lg:col-span-7 space-y-4 sticky top-24">
-          <div className="flex items-center justify-between px-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
             <div className="flex items-center gap-2 text-xs font-bold text-white uppercase tracking-wider">
               <Eye className="w-4 h-4 text-[var(--brand-primary,#9873ff)]" />
               <span>Real-Time Live Preview</span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Layer Inspector Mode Switcher */}
+              <div className="flex items-center p-0.5 rounded-lg bg-[#05060A] border border-white/10 text-[10px]">
+                <button
+                  type="button"
+                  onClick={() => setLayerMode('all')}
+                  className={`px-2 py-1 rounded font-medium transition-all ${
+                    layerMode === 'all'
+                      ? 'bg-[var(--brand-primary,#9873ff)] text-white shadow-sm'
+                      : 'text-[#94A3B8] hover:text-white'
+                  }`}
+                  title="View full composition with active 3D video stream"
+                >
+                  Video Layer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLayerMode('poster-only')}
+                  className={`px-2 py-1 rounded font-medium transition-all ${
+                    layerMode === 'poster-only'
+                      ? 'bg-[var(--brand-primary,#9873ff)] text-white shadow-sm'
+                      : 'text-[#94A3B8] hover:text-white'
+                  }`}
+                  title="Inspect fallback poster image isolated without video"
+                >
+                  Poster Layer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLayerMode('gradient-only')}
+                  className={`px-2 py-1 rounded font-medium transition-all ${
+                    layerMode === 'gradient-only'
+                      ? 'bg-[var(--brand-primary,#9873ff)] text-white shadow-sm'
+                      : 'text-[#94A3B8] hover:text-white'
+                  }`}
+                  title="Inspect clean dark gradient without any media"
+                >
+                  Dark Only
+                </button>
+              </div>
+
               {/* Replay Video / Animation Button */}
               <button
                 type="button"
@@ -320,7 +361,7 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
                 title="Replay video stream and entrance animations from start"
               >
                 <RefreshCw className="w-3 h-3 text-[var(--brand-primary,#9873ff)] group-hover:rotate-180 transition-transform duration-500" />
-                <span>Replay Preview</span>
+                <span>Replay</span>
               </button>
 
               {/* Reset to saved values */}
@@ -335,11 +376,12 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
             </div>
           </div>
 
-          {/* Live Simulator uses Single Source of Truth HeroSection */}
+          {/* Live Simulator uses Single Source of Truth HeroSection with Layer Inspector Mode */}
           <HeroSection
             key={previewKey}
             overrideConfig={formData}
             isPreview={true}
+            previewLayerMode={layerMode}
           />
         </div>
       </div>
