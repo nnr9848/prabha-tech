@@ -91,3 +91,18 @@ export interface SocialLink {
   updatedAt?: string;
 }
 
+export interface HeroConfig {
+  id?: number;
+  configKey?: string;
+  subHeadline: string;
+  headlinePrefix: string;
+  headlineHighlight: string;
+  headlineSuffix: string;
+  ctaText: string;
+  ctaLink: string;
+  videoUrl: string;
+  posterUrl: string;
+  updatedAt?: string;
+}
+
+

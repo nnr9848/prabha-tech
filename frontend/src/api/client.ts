@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink } from '../types';
+import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, HeroConfig } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -61,12 +61,28 @@ export const publicApi = {
     const res = await apiClient.post('/public/inquiries', inquiry);
     return res.data;
   },
+
+  getHeroConfig: async (): Promise<HeroConfig> => {
+    const res = await apiClient.get('/public/hero-config');
+    return res.data;
+  },
 };
 
 // Admin CMS APIs
 export const adminApi = {
   login: async (credentials: { username: string; password: string }): Promise<AuthResponse> => {
     const res = await apiClient.post('/auth/login', credentials);
+    return res.data;
+  },
+
+  // Hero Section CMS
+  getHeroConfig: async (): Promise<HeroConfig> => {
+    const res = await apiClient.get('/admin/hero-config');
+    return res.data;
+  },
+
+  updateHeroConfig: async (data: Partial<HeroConfig>): Promise<HeroConfig> => {
+    const res = await apiClient.put('/admin/hero-config', data);
     return res.data;
   },
 

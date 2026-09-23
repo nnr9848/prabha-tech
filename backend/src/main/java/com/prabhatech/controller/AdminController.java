@@ -21,17 +21,31 @@ public class AdminController {
     private final ArticleService articleService;
     private final LeadInquiryService leadInquiryService;
     private final SocialLinkService socialLinkService;
+    private final com.prabhatech.service.HeroConfigService heroConfigService;
 
     public AdminController(CaseStudyService caseStudyService,
                            ServiceItemService serviceItemService,
                            ArticleService articleService,
                            LeadInquiryService leadInquiryService,
-                           SocialLinkService socialLinkService) {
+                           SocialLinkService socialLinkService,
+                           com.prabhatech.service.HeroConfigService heroConfigService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
         this.leadInquiryService = leadInquiryService;
         this.socialLinkService = socialLinkService;
+        this.heroConfigService = heroConfigService;
+    }
+
+    // --- Hero Section CMS ---
+    @GetMapping("/hero-config")
+    public ResponseEntity<HeroConfigDto.Response> getHeroConfig() {
+        return ResponseEntity.ok(heroConfigService.getHeroConfig());
+    }
+
+    @PutMapping("/hero-config")
+    public ResponseEntity<HeroConfigDto.Response> updateHeroConfig(@Valid @RequestBody HeroConfigDto.Request request) {
+        return ResponseEntity.ok(heroConfigService.updateHeroConfig(request));
     }
 
     // --- Social Links CMS ---

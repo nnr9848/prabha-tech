@@ -26,17 +26,26 @@ public class PublicController {
     private final ArticleService articleService;
     private final LeadInquiryService leadInquiryService;
     private final SocialLinkService socialLinkService;
+    private final com.prabhatech.service.HeroConfigService heroConfigService;
 
     public PublicController(CaseStudyService caseStudyService,
                             ServiceItemService serviceItemService,
                             ArticleService articleService,
                             LeadInquiryService leadInquiryService,
-                            SocialLinkService socialLinkService) {
+                            SocialLinkService socialLinkService,
+                            com.prabhatech.service.HeroConfigService heroConfigService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
         this.leadInquiryService = leadInquiryService;
         this.socialLinkService = socialLinkService;
+        this.heroConfigService = heroConfigService;
+    }
+
+    // --- Hero Section Dynamic Config ---
+    @GetMapping("/hero-config")
+    public ResponseEntity<com.prabhatech.dto.HeroConfigDto.Response> getHeroConfig() {
+        return ResponseEntity.ok(heroConfigService.getHeroConfig());
     }
 
     // --- Social Links ---
