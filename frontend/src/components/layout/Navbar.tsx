@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ShieldCheck } from 'lucide-react';
 import logoImg from '../../assets/prabhatech-logo.png';
 import { SocialIconsGroup } from '../common/SocialIconsGroup';
+import { PillButton } from '../common/PillButton';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -80,14 +81,17 @@ export const Navbar: React.FC = () => {
 
           {/* Right Social & CMS Icons (Desktop) */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
+            <PillButton
               to="/admin"
-              className="text-xs px-3.5 py-1.5 rounded-full border border-white/20 text-[#E2E8F0] hover:text-white hover:border-[#9873ff]/60 transition-all duration-200 flex items-center gap-1.5 mr-1"
-              title="CMS Admin Portal"
+              size="sm"
+              variant="secondary"
+              icon={<ShieldCheck className="w-3.5 h-3.5 text-[#9873ff]" />}
+              iconPosition="left"
+              showDefaultIcon={false}
+              className="mr-1 py-1.5 px-3.5 text-xs font-medium"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-[#9873ff]" />
-              <span className="font-medium">CMS</span>
-            </Link>
+              CMS
+            </PillButton>
 
             {/* Official Pixel-Perfect Brand SVG Badges */}
             <SocialIconsGroup size="md" />
@@ -166,14 +170,17 @@ export const Navbar: React.FC = () => {
                 transition={{ delay: 0.55, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className="pt-4"
               >
-                <Link
+                <PillButton
                   to="/admin"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-xs px-4 py-2 rounded-full border border-white/10 text-white/80 hover:text-white hover:border-[#8B5CF6]/60 transition-all flex items-center gap-2"
+                  size="sm"
+                  variant="secondary"
+                  icon={<ShieldCheck className="w-4 h-4 text-[#9873ff]" />}
+                  iconPosition="left"
+                  showDefaultIcon={false}
                 >
-                  <ShieldCheck className="w-4 h-4 text-[#8B5CF6]" />
-                  <span>Admin CMS</span>
-                </Link>
+                  Admin CMS
+                </PillButton>
               </motion.div>
             </nav>
 

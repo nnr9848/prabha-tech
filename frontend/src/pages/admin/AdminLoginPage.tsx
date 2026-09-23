@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminApi } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
-import { ShieldCheck, Lock, User, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Lock, User } from 'lucide-react';
+import { PillButton } from '../../components/common/PillButton';
 
 export const AdminLoginPage: React.FC = () => {
   const [username, setUsername] = useState('admin');
@@ -91,14 +92,15 @@ export const AdminLoginPage: React.FC = () => {
             </div>
           </div>
 
-          <button
+          <PillButton
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 mt-2 rounded-xl font-bold text-xs uppercase tracking-wider text-black bg-[#9873ff] hover:bg-white transition-all duration-300 shadow-[0_0_25px_rgba(152,115,255,0.45)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            isLoading={loading}
+            size="md"
+            className="w-full mt-2"
           >
-            <span>{loading ? 'Authenticating...' : 'Sign In to CMS'}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+            Sign In to CMS
+          </PillButton>
         </form>
 
         <div className="mt-6 pt-6 border-t border-white/5 text-center text-xs text-[#64748B]">

@@ -23,6 +23,7 @@ import {
   ToggleRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PillButton } from '../../components/common/PillButton';
 
 export const AdminDashboardPage: React.FC = () => {
   const { user, logout } = useAuth();
@@ -243,7 +244,7 @@ export const AdminDashboardPage: React.FC = () => {
               <h2 className="text-lg font-bold text-white">Brand Social Links & Channels</h2>
               <p className="text-xs text-[#94A3B8] mt-1">Configure live social links displayed in the Header, Mobile Drawer, and Footer.</p>
             </div>
-            <button
+            <PillButton
               onClick={() => {
                 setEditingSocial({
                   platformKey: 'linkedin',
@@ -255,11 +256,13 @@ export const AdminDashboardPage: React.FC = () => {
                 });
                 setIsSocialModalOpen(true);
               }}
-              className="px-4 py-2 rounded-xl bg-[#9873ff] text-black text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 hover:bg-white transition-all cursor-pointer"
+              size="sm"
+              icon={<Plus className="w-3.5 h-3.5 text-[#9873ff] group-hover:text-white transition-colors" />}
+              iconPosition="left"
+              showDefaultIcon={false}
             >
-              <Plus className="w-4 h-4" />
-              <span>Add Social Link</span>
-            </button>
+              Add Social Link
+            </PillButton>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -341,7 +344,7 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold text-white">Manage UX Portfolio</h2>
-            <button
+            <PillButton
               onClick={() => {
                 setEditingCase({
                   title: '',
@@ -359,11 +362,13 @@ export const AdminDashboardPage: React.FC = () => {
                 });
                 setIsCaseModalOpen(true);
               }}
-              className="px-4 py-2 rounded-xl bg-[#9873ff] text-black text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 hover:bg-white transition-all cursor-pointer"
+              size="sm"
+              icon={<Plus className="w-3.5 h-3.5 text-[#9873ff] group-hover:text-white transition-colors" />}
+              iconPosition="left"
+              showDefaultIcon={false}
             >
-              <Plus className="w-4 h-4" />
-              <span>Add Case Study</span>
-            </button>
+              Add Case Study
+            </PillButton>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -414,7 +419,7 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold text-white">Manage Blog & Insights</h2>
-            <button
+            <PillButton
               onClick={() => {
                 setEditingArticle({
                   title: '',
@@ -429,11 +434,13 @@ export const AdminDashboardPage: React.FC = () => {
                 });
                 setIsArticleModalOpen(true);
               }}
-              className="px-4 py-2 rounded-xl bg-[#9873ff] text-black text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 hover:bg-white transition-all cursor-pointer"
+              size="sm"
+              icon={<Plus className="w-3.5 h-3.5 text-[#9873ff] group-hover:text-white transition-colors" />}
+              iconPosition="left"
+              showDefaultIcon={false}
             >
-              <Plus className="w-4 h-4" />
-              <span>Add Article</span>
-            </button>
+              Add Article
+            </PillButton>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -657,20 +664,24 @@ export const AdminDashboardPage: React.FC = () => {
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-              <button
+              <PillButton
                 onClick={() => setIsSocialModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-white/10 text-white text-xs font-semibold hover:bg-white/20"
+                variant="secondary"
+                size="sm"
+                showDefaultIcon={false}
               >
                 Cancel
-              </button>
-              <button
+              </PillButton>
+              <PillButton
                 onClick={() => saveSocialMutation.mutate(editingSocial)}
                 disabled={!editingSocial.url}
-                className="px-6 py-2 rounded-xl bg-[#9873ff] text-black text-xs font-bold uppercase tracking-wider hover:bg-white flex items-center gap-1.5 disabled:opacity-50"
+                size="sm"
+                icon={<Save className="w-4 h-4 text-[#9873ff] group-hover:text-white transition-colors" />}
+                iconPosition="left"
+                showDefaultIcon={false}
               >
-                <Save className="w-4 h-4" />
-                <span>Save Channel</span>
-              </button>
+                Save Channel
+              </PillButton>
             </div>
           </div>
         </div>
@@ -771,19 +782,23 @@ export const AdminDashboardPage: React.FC = () => {
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-              <button
+              <PillButton
                 onClick={() => setIsCaseModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-white/10 text-white text-xs font-semibold hover:bg-white/20"
+                variant="secondary"
+                size="sm"
+                showDefaultIcon={false}
               >
                 Cancel
-              </button>
-              <button
+              </PillButton>
+              <PillButton
                 onClick={() => saveCaseMutation.mutate(editingCase)}
-                className="px-6 py-2 rounded-xl bg-[#9873ff] text-black text-xs font-bold uppercase tracking-wider hover:bg-white flex items-center gap-1.5"
+                size="sm"
+                icon={<Save className="w-4 h-4 text-[#9873ff] group-hover:text-white transition-colors" />}
+                iconPosition="left"
+                showDefaultIcon={false}
               >
-                <Save className="w-4 h-4" />
-                <span>Save Case Study</span>
-              </button>
+                Save Case Study
+              </PillButton>
             </div>
           </div>
         </div>
@@ -881,19 +896,23 @@ export const AdminDashboardPage: React.FC = () => {
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-              <button
+              <PillButton
                 onClick={() => setIsArticleModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-white/10 text-white text-xs font-semibold hover:bg-white/20"
+                variant="secondary"
+                size="sm"
+                showDefaultIcon={false}
               >
                 Cancel
-              </button>
-              <button
+              </PillButton>
+              <PillButton
                 onClick={() => saveArticleMutation.mutate(editingArticle)}
-                className="px-6 py-2 rounded-xl bg-[#9873ff] text-black text-xs font-bold uppercase tracking-wider hover:bg-white flex items-center gap-1.5"
+                size="sm"
+                icon={<Save className="w-4 h-4 text-[#9873ff] group-hover:text-white transition-colors" />}
+                iconPosition="left"
+                showDefaultIcon={false}
               >
-                <Save className="w-4 h-4" />
-                <span>Save Article</span>
-              </button>
+                Save Article
+              </PillButton>
             </div>
           </div>
         </div>
