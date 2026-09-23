@@ -1,0 +1,15 @@
+package com.prabhatech.repository;
+
+import com.prabhatech.entity.SocialLink;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface SocialLinkRepository extends JpaRepository<SocialLink, Long> {
+    List<SocialLink> findByIsActiveTrueOrderByDisplayOrderAsc();
+    List<SocialLink> findAllByOrderByDisplayOrderAsc();
+    Optional<SocialLink> findByPlatformKey(String platformKey);
+}

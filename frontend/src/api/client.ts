@@ -12,7 +12,7 @@ const apiClient = axios.create({
 
 // Attach JWT token to requests if present
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('prabhatech_token') || localStorage.getItem('uxda_token');
+  const token = localStorage.getItem('prabhatech_token');
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }

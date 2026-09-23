@@ -128,5 +128,5 @@ docker compose up -d --build
 
 ### Backup database:
 ```bash
-docker compose exec db pg_dump -U prabhatech_user uxda_db > backup_$(date +%F).sql
+docker compose exec db pg_dump -U prabhatech_user prabhatech_db > backup_$(date +%F).sql
 ```
