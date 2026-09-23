@@ -32,22 +32,22 @@ export const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: -60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 5.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[18px] sm:text-[21px] lg:text-[23px] text-[#A0A8B8] font-light leading-[1.5] mb-12 sm:mb-14 max-w-[480px]"
+            className="text-[18px] sm:text-[21px] lg:text-[23px] text-white font-normal leading-[1.55] mb-12 sm:mb-14 max-w-[480px]"
           >
             Financial UX design authority enabling large-scale financial institutions to differentiate and lead in the digital world.
           </motion.div>
 
-          {/* Main Headline - Slower and deeper travel, large authentic UXDA stature */}
+          {/* Main Headline - Authentic UXDA Stature */}
           <motion.h1
             initial={{ opacity: 0, y: -95 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 6.4, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-6xl lg:text-[68px] xl:text-[76px] font-light text-white tracking-[-0.03em] leading-[1.1] mb-12 sm:mb-14 max-w-5xl"
+            className="text-3xl sm:text-5xl lg:text-[54px] xl:text-[60px] font-normal text-white tracking-[-0.02em] leading-[1.15] mb-12 sm:mb-14 max-w-4xl"
           >
             Defining Distinctive{' '}
-            <span className="text-[#9873ff] font-light">Digital Brand</span>
+            <span className="text-[#9873ff] font-normal">Digital Brand</span>
             <br />
-            <span className="text-[#9873ff] font-light">Identities</span> for Financial Institutions
+            <span className="text-[#9873ff] font-normal">Identities</span> for Financial Institutions
           </motion.h1>
 
           {/* Authentic UXDA Pill Button */}
