@@ -82,7 +82,7 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onDismiss: (id: string) => voi
   return (
     <div
       aria-live="polite"
-      className="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"
+      className="fixed top-6 right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"
     >
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => {
@@ -91,10 +91,10 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onDismiss: (id: string) => voi
             <motion.div
               key={toast.id}
               layout
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              initial={{ opacity: 0, y: -25, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, y: 10, transition: { duration: 0.2 } }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              exit={{ opacity: 0, scale: 0.9, y: -15, transition: { duration: 0.2 } }}
+              transition={{ type: 'spring', stiffness: 450, damping: 30 }}
               className={`pointer-events-auto flex items-start gap-3.5 p-4 rounded-2xl bg-[#0D111A]/95 backdrop-blur-xl border ${config.borderColor} shadow-[0_12px_40px_rgba(0,0,0,0.6)]`}
             >
               <div className={`p-1.5 rounded-xl ${config.iconBg} ${config.iconColor} shrink-0 mt-0.5`}>
