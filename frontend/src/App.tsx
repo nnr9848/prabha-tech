@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar } from './components/layout/Navbar';
@@ -24,6 +24,19 @@ const queryClient = new QueryClient({
   },
 });
 
+// Layout wrapper for all public marketing pages
+const PublicLayout: React.FC = () => {
+  return (
+    <div className="min-h-screen flex flex-col bg-[#07090E] text-white selection:bg-[#9873ff] selection:text-black">
+      <Navbar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
 // Protected Route Wrapper for Admin CMS
 const ProtectedAdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -38,38 +51,36 @@ export const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <BrowserRouter>
-          <div className="min-h-screen flex flex-col bg-[#07090E] text-white selection:bg-[#9873ff] selection:text-black">
-            <Navbar />
-            <main className="flex-1">
-              <Routes>
-                {/* Public UXDA Clone Routes */}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/case-studies" element={<CaseStudiesPage />} />
-                <Route path="/case-studies/:slug" element={<CaseStudyDetailPage />} />
-                <Route path="/services" element={<ServicesPage />} />
-                <Route path="/philosophy" element={<PhilosophyPage />} />
-                <Route path="/insights" element={<InsightsPage />} />
-                <Route path="/insights/:slug" element={<InsightDetailPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/contact" element={<HomePage />} />
+          <Routes>
+            {/* Public UXDA Marketing Website Layout */}
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/case-studies" element={<CaseStudiesPage />} />
+              <Route path="/case-studies/:slug" element={<CaseStudyDetailPage />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/philosophy" element={<PhilosophyPage />} />
+              <Route path="/insights" element={<InsightsPage />} />
+              <Route path="/insights/:slug" element={<InsightDetailPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<HomePage />} />
+            </Route>
 
-                {/* Admin CMS Routes */}
-                <Route path="/admin" element={<AdminLoginPage />} />
-                <Route
-                  path="/admin/dashboard"
-                  element={
-                    <ProtectedAdminRoute>
-                      <AdminDashboardPage />
-                    </ProtectedAdminRoute>
-                  }
-                />
+            {/* Admin CMS Authentication Route */}
+            <Route path="/admin" element={<AdminLoginPage />} />
 
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
+            {/* Enterprise Admin CMS Workspace */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <ProtectedAdminRoute>
+                  <AdminDashboardPage />
+                </ProtectedAdminRoute>
+              }
+            />
+
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
         </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>
