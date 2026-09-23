@@ -6,24 +6,23 @@ import { ArrowRight, Award } from 'lucide-react';
 export const HeroSection: React.FC = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden bg-[#050608]">
-      {/* Background Holographic 3D Loop Video / Overlay */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 mix-blend-screen">
+      {/* Background Holographic 3D Video / Overlay matching theuxda.com */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <video
           autoPlay
-          loop
           muted
           playsInline
-          poster="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80"
-          className="w-full h-full object-cover"
+          poster="https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.jpg"
+          className="w-full h-full object-cover object-right md:object-center opacity-100"
         >
           <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-screens-with-charts-and-data-31913-large.mp4"
+            src="https://www.theuxda.com/storage/app/media/background-video/UXDA-bg-X-desktop.mp4"
             type="video/mp4"
           />
         </video>
-        {/* Dark Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050608] via-[#050608]/70 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-transparent to-[#050608]/80"></div>
+        {/* Subtle Dark Left Vignette for Typography Legibility while Keeping 3D X Crystal Bright */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050608]/90 via-[#050608]/30 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-transparent to-[#050608]/60"></div>
       </div>
 
       <div className="max-w-[1600px] mx-auto px-8 sm:px-16 lg:px-24 relative z-10 w-full">
