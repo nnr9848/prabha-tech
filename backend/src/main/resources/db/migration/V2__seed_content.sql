@@ -7,7 +7,7 @@ INSERT INTO users (username, email, password_hash, role, full_name)
 VALUES (
     'admin',
     'admin@prabhatech.com',
-    '$2a$10$Xo7cQ4JgWJ3iYp2eL.8xV.m2P5tXp8H6nZzC7Zq6LwQ8kY1Z8vN2e',
+    '$2a$10$NFBkSnN5RmBMzq9N3px9XOviyyf3WBVksf8g7rfdbDe6DSYyjHEMW',
     'ROLE_ADMIN',
     'PrabhaTech Lead Administrator'
 ) ON CONFLICT (username) DO UPDATE SET password_hash = EXCLUDED.password_hash;
