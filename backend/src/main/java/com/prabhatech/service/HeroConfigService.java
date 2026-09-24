@@ -55,7 +55,7 @@ public class HeroConfigService {
         config.setCtaText("Contact Our Experts");
         config.setCtaLink("/contact");
         config.setVideoUrl("/assets/video/hero-bg.mp4");
-        config.setPosterUrl("https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80");
+        config.setPosterUrl(null);
         return heroConfigRepository.save(config);
     }
 
