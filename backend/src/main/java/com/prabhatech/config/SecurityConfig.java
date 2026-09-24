@@ -53,10 +53,11 @@ public class SecurityConfig {
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // Allow CORS Preflight requests unconditionally
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Public Endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/v1/public/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/public/inquiries").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/public/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         // Admin Protected CMS Endpoints
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ROLE_ADMIN", "ADMIN")
