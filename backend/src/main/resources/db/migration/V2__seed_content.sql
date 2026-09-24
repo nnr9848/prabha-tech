@@ -34,10 +34,9 @@ INSERT INTO hero_section_config (
     'Contact Our Experts',
     '/contact',
     '/assets/video/hero-bg.mp4',
-    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80'
+    NULL
 ) ON CONFLICT (config_key) DO UPDATE SET
-    video_url = EXCLUDED.video_url,
-    poster_url = EXCLUDED.poster_url;
+    video_url = EXCLUDED.video_url;
 
 -- 3. Seed Official Social Links
 INSERT INTO social_links (platform_key, platform_name, url, bg_color, display_order, is_active)

@@ -106,7 +106,7 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
     ctaText: 'Contact Our Experts',
     ctaLink: '/contact',
     videoUrl: '/assets/video/hero-bg.mp4',
-    posterUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
+    posterUrl: '',
   });
 
   const [savedFeedback, setSavedFeedback] = useState(false);

@@ -15,7 +15,7 @@ export const DEFAULT_HERO_CONFIG: HeroConfig = {
   ctaText: 'Contact Our Experts',
   ctaLink: '/contact',
   videoUrl: '/assets/video/hero-bg.mp4',
-  posterUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
+  posterUrl: '',
 };
 
 // Centralized Framer Motion Transitions (Cinematic ease-out curve matching brand standard)
@@ -50,6 +50,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   isPreview = false,
   previewLayerMode = 'all',
 }) => {
+  const [isVideoLoaded, setIsVideoLoaded] = React.useState(false);
+
   const { data: fetchedConfig } = useQuery<HeroConfig>({
     queryKey: ['heroConfig'],
     queryFn: () => publicApi.getHeroConfig(),
@@ -78,15 +80,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     >
       {/* Background Holographic 3D Video / Fallback Poster Image / Pure Dark Vignette */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* 1. Video Layer */}
+        {/* 1. Video Layer with Silk Smooth Cross-fade */}
         {showVideo && (
           <video
             key={hero.videoUrl}
             autoPlay
             muted
+            loop
             playsInline
-            poster={hero.posterUrl}
-            className="w-full h-full object-cover object-center opacity-100 transition-opacity duration-500"
+            poster={hero.posterUrl || undefined}
+            onLoadedData={() => setIsVideoLoaded(true)}
+            className={`w-full h-full object-cover object-center transition-opacity duration-700 ease-out ${
+              isVideoLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
           >
             <source src={hero.videoUrl} type="video/mp4" />
           </video>
