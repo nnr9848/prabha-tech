@@ -25,12 +25,15 @@ spring:
 
 logging:
   level:
+    root: INFO
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
+    org.springframework.web.filter: DEBUG
     com.prabhatech: DEBUG
 
 server:
   port: 8080
+  forward-headers-strategy: framework
   servlet:
     context-path: /
 
