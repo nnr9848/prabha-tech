@@ -1,8 +1,8 @@
 -- =========================================================================
--- V2__seed_content.sql : Initial Seed Data for PrabhaTech Agency Content
+-- V2__seed_content.sql : Canonical Initial Seed Data for PrabhaTech Platform
 -- =========================================================================
 
--- Seed Default Admin (Password: 'admin123')
+-- 1. Seed Default Administrator (Password: 'admin123')
 INSERT INTO users (username, email, password_hash, role, full_name)
 VALUES (
     'admin',
@@ -10,9 +10,45 @@ VALUES (
     '$2a$10$NFBkSnN5RmBMzq9N3px9XOviyyf3WBVksf8g7rfdbDe6DSYyjHEMW',
     'ROLE_ADMIN',
     'PrabhaTech Lead Administrator'
-) ON CONFLICT (username) DO UPDATE SET password_hash = EXCLUDED.password_hash;
+) ON CONFLICT (username) DO UPDATE SET 
+    password_hash = EXCLUDED.password_hash,
+    full_name = EXCLUDED.full_name;
 
--- Seed PrabhaTech Award-Winning Case Studies
+-- 2. Seed Hero Section Configuration
+INSERT INTO hero_section_config (
+    config_key,
+    sub_headline,
+    headline_prefix,
+    headline_highlight,
+    headline_suffix,
+    cta_text,
+    cta_link,
+    video_url,
+    poster_url
+) VALUES (
+    'default_hero',
+    'We catalyze business growth by reimagining digital experiences that conquer complex challenges through innovation and agility.',
+    'Meet the',
+    'Digital Drivers',
+    'of Global Disruptors',
+    'Contact Our Experts',
+    '/contact',
+    '/assets/video/hero-bg.mp4',
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80'
+) ON CONFLICT (config_key) DO UPDATE SET
+    video_url = EXCLUDED.video_url,
+    poster_url = EXCLUDED.poster_url;
+
+-- 3. Seed Official Social Links
+INSERT INTO social_links (platform_key, platform_name, url, bg_color, display_order, is_active)
+VALUES
+    ('linkedin', 'LinkedIn', 'https://www.linkedin.com/company/prabhatechnologies/', '#0A66C2', 1, TRUE),
+    ('twitter_x', 'X (Twitter)', 'https://x.com/prabhanow', '#FFFFFF', 2, TRUE),
+    ('instagram', 'Instagram', 'https://www.instagram.com/prabhatec/', 'linear-gradient(to top right, #f09433, #dc2743, #cc2366, #bc1888)', 3, TRUE),
+    ('facebook', 'Facebook', 'https://www.facebook.com/PrabhaTech/', '#1877F2', 4, TRUE)
+ON CONFLICT (platform_key) DO NOTHING;
+
+-- 4. Seed Award-Winning Case Studies
 INSERT INTO case_studies (slug, title, subtitle, client_name, category, hero_image_url, thumbnail_url, video_url, summary, challenge, solution, results, awards, metrics, tags, featured, display_order)
 VALUES 
 (
@@ -74,7 +110,7 @@ VALUES
 )
 ON CONFLICT (slug) DO NOTHING;
 
--- Seed Services
+-- 5. Seed Services
 INSERT INTO services (slug, title, tagline, icon, short_description, full_description, deliverables, display_order)
 VALUES
 (
@@ -109,7 +145,7 @@ VALUES
 )
 ON CONFLICT (slug) DO NOTHING;
 
--- Seed Articles / Insights
+-- 6. Seed Articles / Insights
 INSERT INTO articles (slug, title, excerpt, content, cover_image_url, author_name, author_avatar, category, read_time, featured)
 VALUES
 (
