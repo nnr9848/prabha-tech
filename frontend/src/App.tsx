@@ -13,6 +13,7 @@ import { PhilosophyPage } from './pages/PhilosophyPage';
 import { InsightsPage } from './pages/InsightsPage';
 import { InsightDetailPage } from './pages/InsightDetailPage';
 import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 
@@ -64,7 +65,7 @@ export const App: React.FC = () => {
                 <Route path="/insights" element={<InsightsPage />} />
                 <Route path="/insights/:slug" element={<InsightDetailPage />} />
                 <Route path="/about" element={<AboutPage />} />
-                <Route path="/contact" element={<HomePage />} />
+                <Route path="/contact" element={<ContactPage />} />
               </Route>
 
               {/* Admin CMS Authentication Route */}
