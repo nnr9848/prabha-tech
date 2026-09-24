@@ -45,13 +45,17 @@ public class PublicController {
     // --- Hero Section Dynamic Config ---
     @GetMapping("/hero-config")
     public ResponseEntity<com.prabhatech.dto.HeroConfigDto.Response> getHeroConfig() {
-        return ResponseEntity.ok(heroConfigService.getHeroConfig());
+        return ResponseEntity.ok()
+                .cacheControl(org.springframework.http.CacheControl.maxAge(60, java.util.concurrent.TimeUnit.SECONDS).cachePublic().staleWhileRevalidate(300, java.util.concurrent.TimeUnit.SECONDS))
+                .body(heroConfigService.getHeroConfig());
     }
 
     // --- Social Links ---
     @GetMapping("/social-links")
     public ResponseEntity<List<SocialLinkDto>> getActiveSocialLinks() {
-        return ResponseEntity.ok(socialLinkService.getActiveSocialLinks());
+        return ResponseEntity.ok()
+                .cacheControl(org.springframework.http.CacheControl.maxAge(60, java.util.concurrent.TimeUnit.SECONDS).cachePublic().staleWhileRevalidate(300, java.util.concurrent.TimeUnit.SECONDS))
+                .body(socialLinkService.getActiveSocialLinks());
     }
 
     // --- Case Studies ---

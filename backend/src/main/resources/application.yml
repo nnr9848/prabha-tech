@@ -26,10 +26,10 @@ spring:
 logging:
   level:
     root: INFO
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.web.filter: DEBUG
-    com.prabhatech: DEBUG
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.springframework.web.filter: INFO
+    com.prabhatech: INFO
 
 server:
   port: 8080

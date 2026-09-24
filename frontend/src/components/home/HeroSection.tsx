@@ -55,6 +55,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const { data: fetchedConfig } = useQuery<HeroConfig>({
     queryKey: ['heroConfig'],
     queryFn: () => publicApi.getHeroConfig(),
+    initialData: DEFAULT_HERO_CONFIG,
     staleTime: 1000 * 60 * 5, // 5 minutes fresh
     enabled: !overrideConfig, // Skip remote query if override is provided (e.g. CMS live simulator)
   });
