@@ -33,22 +33,11 @@ public class AuthService {
 
     public AuthDto.LoginResponse login(AuthDto.LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found: " + request.getUsername()));
+                .orElseThrow(() -> new org.springframework.security.authentication.BadCredentialsException("Invalid username or password"));
 
-        System.out.println("=== DEBUG AUTH ===");
-        System.out.println("Submitted username: '" + request.getUsername() + "'");
-        System.out.println("Submitted password length: " + (request.getPassword() != null ? request.getPassword().length() : 0));
-        System.out.println("DB password_hash: '" + user.getPasswordHash() + "'");
-
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
-            System.out.println("Authentication SUCCESS for: " + request.getUsername());
-        } catch (Exception ex) {
-            System.err.println("Authentication failed for user: " + request.getUsername() + " -> " + ex.getClass().getName() + ": " + ex.getMessage());
-            throw new RuntimeException("Invalid credentials: " + ex.getMessage());
-        }
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtUtils.generateToken(userDetails);
