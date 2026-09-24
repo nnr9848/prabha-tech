@@ -87,7 +87,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             key={hero.videoUrl}
             autoPlay
             muted
-            loop
             playsInline
             poster={hero.posterUrl || undefined}
             onLoadedData={() => setIsVideoLoaded(true)}
