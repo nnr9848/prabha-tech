@@ -140,42 +140,39 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
   return (
     <div className="space-y-8">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#0D111A] border border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-bold text-white">Dynamic Hero Section CMS</h3>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[var(--brand-primary,#9873ff)]/20 text-[var(--brand-primary,#9873ff)] uppercase">
+            <h3 className="text-base font-bold text-slate-900">Dynamic Hero Section CMS</h3>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 uppercase tracking-wider">
               Live Synchronized
             </span>
           </div>
-          <p className="text-xs text-[#94A3B8]">
+          <p className="text-xs text-slate-500">
             Configure the homepage value proposition, typography, video background, and call-to-action button in real-time.
           </p>
         </div>
 
-        <PillButton
+        <button
           onClick={handleSubmit}
           disabled={isSaving}
-          isLoading={isSaving}
-          size="sm"
-          icon={<Save className="w-3.5 h-3.5 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-          iconPosition="left"
-          showDefaultIcon={false}
+          className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
         >
-          {savedFeedback ? 'Saved Successfully!' : 'Save Hero Config'}
-        </PillButton>
+          <Save className="w-3.5 h-3.5 text-slate-950" />
+          <span>{savedFeedback ? 'Saved Successfully!' : 'Save Hero Config'}</span>
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Form Editor (5 cols) */}
-        <form onSubmit={handleSubmit} className="lg:col-span-5 space-y-5 rounded-2xl bg-[#0D111A] border border-white/10 p-6">
-          <div className="flex items-center gap-2 pb-3 border-b border-white/10">
-            <Type className="w-4 h-4 text-[var(--brand-primary,#9873ff)]" />
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Hero Messaging & Copy</h4>
+        <form onSubmit={handleSubmit} className="lg:col-span-5 space-y-5 rounded-2xl bg-white border border-slate-200/80 p-6 shadow-2xs">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+            <Type className="w-4 h-4 text-amber-600" />
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">Hero Messaging & Copy</h4>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#94A3B8] mb-1">
+            <label className="block text-xs font-semibold text-slate-600 mb-1">
               Top Editorial Sub-Headline *
             </label>
             <textarea
@@ -183,13 +180,13 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
               required
               value={formData.subHeadline || ''}
               onChange={(e) => setFormData({ ...formData, subHeadline: e.target.value })}
-              className="w-full p-3 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs leading-relaxed resize-none focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+              className="w-full p-3 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs leading-relaxed resize-none focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
             />
           </div>
 
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold text-[#94A3B8] mb-1">
+              <label className="block text-xs font-semibold text-slate-600 mb-1">
                 Headline Prefix Line *
               </label>
               <input
@@ -197,25 +194,25 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
                 required
                 value={formData.headlinePrefix || ''}
                 onChange={(e) => setFormData({ ...formData, headlinePrefix: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[var(--brand-primary,#9873ff)] mb-1">
-                Headline Highlight (Brand Purple Word) *
+              <label className="block text-xs font-semibold text-amber-700 mb-1">
+                Headline Highlight (Brand Gold Word) *
               </label>
               <input
                 type="text"
                 required
                 value={formData.headlineHighlight || ''}
                 onChange={(e) => setFormData({ ...formData, headlineHighlight: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-[var(--brand-primary,#9873ff)]/40 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]"
+                className="w-full p-2.5 rounded-xl bg-amber-50/50 border border-amber-300 text-slate-900 text-xs font-semibold focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#94A3B8] mb-1">
+              <label className="block text-xs font-semibold text-slate-600 mb-1">
                 Headline Suffix Line *
               </label>
               <input
@@ -223,46 +220,46 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
                 required
                 value={formData.headlineSuffix || ''}
                 onChange={(e) => setFormData({ ...formData, headlineSuffix: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               />
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/10">
+          <div className="pt-3 border-t border-slate-100">
             <div className="flex items-center gap-2 pb-3">
-              <Link2 className="w-4 h-4 text-[var(--brand-primary,#9873ff)]" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-white">Call-To-Action Button</h4>
+              <Link2 className="w-4 h-4 text-amber-600" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">Call-To-Action Button</h4>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">CTA Label *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">CTA Label *</label>
                 <input
                   type="text"
                   required
                   value={formData.ctaText || ''}
                   onChange={(e) => setFormData({ ...formData, ctaText: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Target Route *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Target Route *</label>
                 <input
                   type="text"
                   required
                   value={formData.ctaLink || ''}
                   onChange={(e) => setFormData({ ...formData, ctaLink: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs font-mono focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/10">
+          <div className="pt-3 border-t border-slate-100">
             <div className="flex items-center gap-2 pb-3">
-              <Video className="w-4 h-4 text-[var(--brand-primary,#9873ff)]" />
-              <h4 className="text-xs font-bold uppercase tracking-wider text-white">Hero Media Stream & Poster</h4>
+              <Video className="w-4 h-4 text-amber-600" />
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">Hero Media Stream & Poster</h4>
             </div>
 
             {/* Video Background MediaPicker */}
@@ -288,40 +285,36 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
             />
           </div>
 
-          <div className="pt-4 border-t border-white/10 flex justify-end">
-            <PillButton
+          <div className="pt-4 border-t border-slate-100 flex justify-end">
+            <button
               type="submit"
               disabled={isSaving}
-              isLoading={isSaving}
-              size="md"
-              icon={<Save className="w-4 h-4 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-              iconPosition="left"
-              showDefaultIcon={false}
-              className="w-full"
+              className="w-full py-3 px-6 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              {isSaving ? 'Saving Changes...' : 'Save & Publish Live'}
-            </PillButton>
+              <Save className="w-4 h-4 text-slate-950" />
+              <span>{isSaving ? 'Saving Changes...' : 'Save & Publish Live'}</span>
+            </button>
           </div>
         </form>
 
         {/* Right Column: Interactive Real-Time Live Preview Card (7 cols) */}
         <div className="lg:col-span-7 space-y-4 sticky top-24">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
-            <div className="flex items-center gap-2 text-xs font-bold text-white uppercase tracking-wider">
-              <Eye className="w-4 h-4 text-[var(--brand-primary,#9873ff)]" />
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-900 uppercase tracking-wider">
+              <Eye className="w-4 h-4 text-amber-600" />
               <span>Real-Time Live Preview</span>
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
               {/* Layer Inspector Mode Switcher */}
-              <div className="flex items-center p-0.5 rounded-lg bg-[#05060A] border border-white/10 text-[10px]">
+              <div className="flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-[10px]">
                 <button
                   type="button"
                   onClick={() => setLayerMode('all')}
-                  className={`px-2 py-1 rounded font-medium transition-all ${
+                  className={`px-2 py-1 rounded font-medium transition-all cursor-pointer ${
                     layerMode === 'all'
-                      ? 'bg-[var(--brand-primary,#9873ff)] text-white shadow-sm'
-                      : 'text-[#94A3B8] hover:text-white'
+                      ? 'bg-amber-500 text-slate-950 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                   title="View full composition with active 3D video stream"
                 >
@@ -330,10 +323,10 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
                 <button
                   type="button"
                   onClick={() => setLayerMode('poster-only')}
-                  className={`px-2 py-1 rounded font-medium transition-all ${
+                  className={`px-2 py-1 rounded font-medium transition-all cursor-pointer ${
                     layerMode === 'poster-only'
-                      ? 'bg-[var(--brand-primary,#9873ff)] text-white shadow-sm'
-                      : 'text-[#94A3B8] hover:text-white'
+                      ? 'bg-amber-500 text-slate-950 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                   title="Inspect fallback poster image isolated without video"
                 >
@@ -342,10 +335,10 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
                 <button
                   type="button"
                   onClick={() => setLayerMode('gradient-only')}
-                  className={`px-2 py-1 rounded font-medium transition-all ${
+                  className={`px-2 py-1 rounded font-medium transition-all cursor-pointer ${
                     layerMode === 'gradient-only'
-                      ? 'bg-[var(--brand-primary,#9873ff)] text-white shadow-sm'
-                      : 'text-[#94A3B8] hover:text-white'
+                      ? 'bg-amber-500 text-slate-950 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                   title="Inspect clean dark gradient without any media"
                 >
@@ -357,10 +350,10 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
               <button
                 type="button"
                 onClick={handleReplayPreview}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[#94A3B8] hover:text-white text-[11px] font-medium transition-all group shadow-sm active:scale-95"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 text-[11px] font-medium transition-all group shadow-2xs active:scale-95 cursor-pointer"
                 title="Replay video stream and entrance animations from start"
               >
-                <RefreshCw className="w-3 h-3 text-[var(--brand-primary,#9873ff)] group-hover:rotate-180 transition-transform duration-500" />
+                <RefreshCw className="w-3 h-3 text-amber-600 group-hover:rotate-180 transition-transform duration-500" />
                 <span>Replay</span>
               </button>
 
@@ -368,7 +361,7 @@ export const HeroSectionManager: React.FC<HeroSectionManagerProps> = ({
               <button
                 type="button"
                 onClick={handleResetToSaved}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[#94A3B8] hover:text-white text-[11px] font-medium transition-all shadow-sm active:scale-95"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 text-[11px] font-medium transition-all shadow-2xs active:scale-95 cursor-pointer"
                 title="Reset form fields to last saved configuration"
               >
                 <span>Reset</span>

@@ -30,22 +30,20 @@ export const SocialLinksManager: React.FC<SocialLinksManagerProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Info */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#0D111A] border border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
         <div className="space-y-1">
-          <h3 className="text-base font-bold text-white">Dynamic Social Channels CMS</h3>
-          <p className="text-xs text-[#94A3B8]">
+          <h3 className="text-base font-bold text-slate-900">Dynamic Social Channels CMS</h3>
+          <p className="text-xs text-slate-500">
             Configure and manage the social channels that render in the Navigation Bar, Mobile Drawer, and Footer.
           </p>
         </div>
-        <PillButton
+        <button
           onClick={onOpenCreate}
-          size="sm"
-          icon={<Plus className="w-3.5 h-3.5 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-          iconPosition="left"
-          showDefaultIcon={false}
+          className="py-2 px-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
         >
-          Add Channel
-        </PillButton>
+          <Plus className="w-3.5 h-3.5 text-slate-950" />
+          <span>Add Channel</span>
+        </button>
       </div>
 
       {/* Grid of Social Links */}
@@ -59,55 +57,55 @@ export const SocialLinksManager: React.FC<SocialLinksManagerProps> = ({
           return (
             <div
               key={link.id || link.platformKey}
-              className="group rounded-2xl bg-[#0D111A] border border-white/10 hover:border-[var(--brand-primary,#9873ff)]/40 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl"
+              className="group rounded-2xl bg-white border border-slate-200/80 hover:border-amber-400 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-md shadow-2xs"
             >
               <div>
                 <div className="flex items-center justify-between mb-5">
                   <div
                     style={bgStyle}
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform"
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform"
                   >
                     {platform.icon}
                   </div>
                   <span
                     className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                       link.isActive
-                        ? 'bg-green-500/15 text-green-400 border border-green-500/20'
-                        : 'bg-red-500/15 text-red-400 border border-red-500/20'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : 'bg-red-50 text-red-600 border border-red-200'
                     }`}
                   >
                     {link.isActive ? 'Active' : 'Disabled'}
                   </span>
                 </div>
 
-                <h4 className="text-base font-bold text-white mb-1">{link.platformName}</h4>
+                <h4 className="text-base font-bold text-slate-900 mb-1">{link.platformName}</h4>
                 <a
                   href={link.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs text-[var(--brand-primary,#9873ff)] hover:underline font-mono break-all line-clamp-1 flex items-center gap-1"
+                  className="text-xs text-amber-700 hover:underline font-mono break-all line-clamp-1 flex items-center gap-1 font-medium"
                 >
                   <span>{link.url}</span>
                   <ExternalLink className="w-3 h-3 shrink-0" />
                 </a>
 
                 <div className="flex items-center gap-2 mt-4">
-                  <span className="text-[10px] font-bold text-[#64748B] uppercase">Order:</span>
-                  <span className="px-2 py-0.5 rounded bg-white/5 text-xs text-white font-mono">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Order:</span>
+                  <span className="px-2 py-0.5 rounded bg-slate-100 text-xs text-slate-700 font-mono">
                     {link.displayOrder || 0}
                   </span>
                 </div>
               </div>
 
-              <div className="pt-4 mt-6 border-t border-white/5 flex items-center justify-between">
+              <div className="pt-4 mt-6 border-t border-slate-100 flex items-center justify-between">
                 <button
                   onClick={() => onToggleActive(link)}
-                  className="text-xs text-[#94A3B8] hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="text-xs text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   {link.isActive ? (
-                    <ToggleRight className="w-5 h-5 text-green-400" />
+                    <ToggleRight className="w-5 h-5 text-emerald-600" />
                   ) : (
-                    <ToggleLeft className="w-5 h-5 text-[#64748B]" />
+                    <ToggleLeft className="w-5 h-5 text-slate-400" />
                   )}
                   <span>{link.isActive ? 'Deactivate' : 'Activate'}</span>
                 </button>
@@ -115,7 +113,7 @@ export const SocialLinksManager: React.FC<SocialLinksManagerProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => onOpenEdit(link)}
-                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-white transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 transition-colors cursor-pointer"
                     title="Edit Channel"
                   >
                     <Edit className="w-4 h-4" />
@@ -123,7 +121,7 @@ export const SocialLinksManager: React.FC<SocialLinksManagerProps> = ({
                   {link.id && (
                     <button
                       onClick={() => onDelete(link.id!)}
-                      className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
                       title="Delete Channel"
                     >
                       <Trash2 className="w-4 h-4" />

@@ -63,18 +63,18 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   const meta = TAB_TITLES[activeTab] || TAB_TITLES.overview;
 
   return (
-    <header className="sticky top-0 z-30 bg-[#07090E]/80 backdrop-blur-xl border-b border-white/10 px-6 sm:px-8 py-4">
+    <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 px-6 sm:px-8 py-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Breadcrumb & Section Title */}
         <div>
-          <div className="flex items-center gap-2 text-[11px] font-medium text-[#64748B] mb-1">
+          <div className="flex items-center gap-2 text-[11px] font-medium text-slate-500 mb-1">
             <span>Admin</span>
             <span>/</span>
-            <span className="text-[var(--brand-primary,#9873ff)]">{meta.category}</span>
+            <span className="text-amber-700 font-medium">{meta.category}</span>
             <span>/</span>
-            <span className="text-white font-semibold">{meta.title}</span>
+            <span className="text-slate-900 font-semibold">{meta.title}</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             {meta.title}
           </h1>
         </div>
@@ -83,63 +83,51 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
         <div className="flex items-center flex-wrap gap-3">
           {/* Quick Create Dropdown / Buttons based on tab context */}
           {activeTab === 'case-studies' && (
-            <PillButton
+            <button
               onClick={() => onQuickCreate('case')}
-              size="sm"
-              icon={<Plus className="w-3.5 h-3.5 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-              iconPosition="left"
-              showDefaultIcon={false}
+              className="py-2 px-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
             >
-              New Case Study
-            </PillButton>
+              <Plus className="w-3.5 h-3.5 text-slate-950" />
+              <span>New Case Study</span>
+            </button>
           )}
 
           {activeTab === 'articles' && (
-            <PillButton
+            <button
               onClick={() => onQuickCreate('article')}
-              size="sm"
-              icon={<Plus className="w-3.5 h-3.5 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-              iconPosition="left"
-              showDefaultIcon={false}
+              className="py-2 px-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
             >
-              New Article
-            </PillButton>
+              <Plus className="w-3.5 h-3.5 text-slate-950" />
+              <span>New Article</span>
+            </button>
           )}
 
           {activeTab === 'social-links' && (
-            <PillButton
+            <button
               onClick={() => onQuickCreate('social')}
-              size="sm"
-              icon={<Plus className="w-3.5 h-3.5 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-              iconPosition="left"
-              showDefaultIcon={false}
+              className="py-2 px-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
             >
-              Add Social Link
-            </PillButton>
+              <Plus className="w-3.5 h-3.5 text-slate-950" />
+              <span>Add Social Link</span>
+            </button>
           )}
 
           {activeTab === 'overview' && (
             <div className="flex items-center gap-2">
-              <PillButton
+              <button
                 onClick={() => onQuickCreate('case')}
-                variant="secondary"
-                size="sm"
-                icon={<Layers className="w-3.5 h-3.5" />}
-                iconPosition="left"
-                showDefaultIcon={false}
+                className="py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
               >
-                + Case
-              </PillButton>
-              <PillButton
+                <Layers className="w-3.5 h-3.5 text-slate-600" />
+                <span>+ Case</span>
+              </button>
+              <button
                 onClick={() => onQuickCreate('article')}
-                variant="secondary"
-                size="sm"
-                icon={<BookOpen className="w-3.5 h-3.5" />}
-                iconPosition="left"
-                showDefaultIcon={false}
+                className="py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
               >
-                + Article
-              </PillButton>
+                <BookOpen className="w-3.5 h-3.5 text-slate-600" />
+                <span>+ Article</span>
+              </button>
             </div>
           )}
 
@@ -148,36 +136,36 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
             <div
               className={`p-2 rounded-xl border transition-all ${
                 unreadInquiriesCount > 0
-                  ? 'bg-[var(--brand-primary,#9873ff)]/15 border-[var(--brand-primary,#9873ff)]/30 text-[var(--brand-primary,#9873ff)]'
-                  : 'bg-white/5 border-white/10 text-[#94A3B8]'
+                  ? 'bg-amber-50 border-amber-300 text-amber-800'
+                  : 'bg-slate-50 border-slate-200 text-slate-500'
               }`}
               title={`${unreadInquiriesCount} new unread inquiries`}
             >
               <Bell className="w-4 h-4" />
               {unreadInquiriesCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[var(--brand-primary,#9873ff)] text-white text-[9px] font-bold flex items-center justify-center animate-pulse">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-slate-950 text-[9px] font-bold flex items-center justify-center animate-pulse">
                   {unreadInquiriesCount}
                 </span>
               )}
             </div>
           </div>
 
-          <div className="h-6 w-[1px] bg-white/10 hidden sm:block"></div>
+          <div className="h-6 w-[1px] bg-slate-200 hidden sm:block"></div>
 
           {/* User Profile Pill & Logout */}
           <div className="flex items-center gap-2.5 pl-1">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[var(--brand-primary,#9873ff)] to-[#8054ff] text-white text-xs font-bold flex items-center justify-center shadow-sm">
+            <div className="w-8 h-8 rounded-full bg-amber-500 text-slate-950 text-xs font-bold flex items-center justify-center shadow-xs">
               {(user?.fullName || user?.username || 'A')[0].toUpperCase()}
             </div>
             <div className="hidden lg:block text-left">
-              <div className="text-xs font-semibold text-white leading-tight">
+              <div className="text-xs font-semibold text-slate-900 leading-tight">
                 {user?.fullName || user?.username || 'Admin User'}
               </div>
-              <div className="text-[10px] text-[var(--brand-primary,#9873ff)] font-medium">Administrator</div>
+              <div className="text-[10px] text-amber-700 font-medium">Administrator</div>
             </div>
             <button
               onClick={logout}
-              className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition-colors cursor-pointer ml-1"
+              className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer ml-1"
               title="Sign out of Admin Portal"
             >
               <LogOut className="w-3.5 h-3.5" />

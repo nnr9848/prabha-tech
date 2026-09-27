@@ -67,7 +67,7 @@ export const AdminDashboardPage: React.FC = () => {
     slug: '',
     subtitle: '',
     clientName: '',
-    category: 'Banking',
+    category: 'Enterprise Solutions',
     heroImageUrl: '',
     videoUrl: '',
     summary: '',
@@ -84,8 +84,8 @@ export const AdminDashboardPage: React.FC = () => {
     excerpt: '',
     content: '',
     coverImageUrl: '',
-    authorName: 'Alex Kreger',
-    category: 'Fintech Trends',
+    authorName: 'PrabhaTech Research Team',
+    category: 'AI & Enterprise Tech',
     readTime: '5 min read',
     featured: true,
   });
@@ -228,7 +228,7 @@ export const AdminDashboardPage: React.FC = () => {
   const newInquiriesCount = inquiries.filter((i) => !i.status || i.status === 'NEW').length;
 
   return (
-    <div className="min-h-screen bg-[#07090E] text-white flex">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex">
       {/* Collapsible Left Sidebar */}
       <AdminSidebar
         activeTab={activeTab}
@@ -334,15 +334,15 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* Case Study Modal */}
       {isCaseModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#0D111A] border border-white/10 rounded-2xl w-full max-w-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl">
-            <div className="flex justify-between items-center pb-4 border-b border-white/10">
-              <h3 className="text-xl font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+              <h3 className="text-xl font-bold text-slate-900">
                 {editingCase.id ? 'Edit Case Study' : 'Create New Case Study'}
               </h3>
               <button
                 onClick={() => setIsCaseModalOpen(false)}
-                className="p-1 rounded-lg hover:bg-white/10 text-[#94A3B8] hover:text-white"
+                className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -350,7 +350,7 @@ export const AdminDashboardPage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Title *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Title *</label>
                 <input
                   type="text"
                   value={editingCase.title || ''}
@@ -359,106 +359,102 @@ export const AdminDashboardPage: React.FC = () => {
                     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                     setEditingCase({ ...editingCase, title, slug: editingCase.id ? editingCase.slug : slug });
                   }}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Slug *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Slug *</label>
                 <input
                   type="text"
                   value={editingCase.slug || ''}
                   onChange={(e) => setEditingCase({ ...editingCase, slug: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Client Name *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Client Name *</label>
                 <input
                   type="text"
                   value={editingCase.clientName || ''}
                   onChange={(e) => setEditingCase({ ...editingCase, clientName: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Category *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Category *</label>
                 <select
-                  value={editingCase.category || 'Banking'}
+                  value={editingCase.category || 'Enterprise Solutions'}
                   onChange={(e) => setEditingCase({ ...editingCase, category: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 >
-                  <option value="Banking">Banking</option>
-                  <option value="Fintech">Fintech</option>
-                  <option value="Wealthtech">Wealthtech</option>
-                  <option value="Crypto">Crypto</option>
-                  <option value="SaaS">SaaS</option>
+                  <option value="Enterprise Solutions">Enterprise Solutions</option>
+                  <option value="AI & Analytics">AI & Analytics</option>
+                  <option value="Cloud Architecture">Cloud Architecture</option>
+                  <option value="Mobile Engineering">Mobile Engineering</option>
+                  <option value="Fintech & Banking">Fintech & Banking</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Hero Image URL *</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Hero Image URL *</label>
               <input
                 type="text"
                 value={editingCase.heroImageUrl || ''}
                 onChange={(e) => setEditingCase({ ...editingCase, heroImageUrl: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Video URL (Optional)</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Video URL (Optional)</label>
               <input
                 type="text"
                 value={editingCase.videoUrl || ''}
                 onChange={(e) => setEditingCase({ ...editingCase, videoUrl: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Executive Summary *</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Executive Summary *</label>
               <textarea
                 rows={3}
                 value={editingCase.summary || ''}
                 onChange={(e) => setEditingCase({ ...editingCase, summary: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs resize-none focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs resize-none focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               ></textarea>
             </div>
 
             <div className="flex items-center pt-2">
-              <label className="flex items-center gap-2 text-xs font-semibold text-white cursor-pointer">
+              <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={editingCase.featured !== false}
                   onChange={(e) => setEditingCase({ ...editingCase, featured: e.target.checked })}
-                  className="w-4 h-4 rounded bg-[#07090E] border-white/20 text-[var(--brand-primary,#9873ff)] focus:ring-0"
+                  className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-0"
                 />
                 <span>Feature on Homepage Portfolio</span>
               </label>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-              <PillButton
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+              <button
                 onClick={() => setIsCaseModalOpen(false)}
-                variant="secondary"
-                size="sm"
-                showDefaultIcon={false}
+                className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
               >
                 Cancel
-              </PillButton>
-              <PillButton
+              </button>
+              <button
                 onClick={() => saveCaseMutation.mutate(editingCase)}
-                size="sm"
-                icon={<Save className="w-4 h-4 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-                iconPosition="left"
-                showDefaultIcon={false}
+                className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
               >
-                Save Case Study
-              </PillButton>
+                <Save className="w-3.5 h-3.5 text-slate-950" />
+                <span>Save Case Study</span>
+              </button>
             </div>
           </div>
         </div>
@@ -466,15 +462,15 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* Article Modal */}
       {isArticleModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#0D111A] border border-white/10 rounded-2xl w-full max-w-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl">
-            <div className="flex justify-between items-center pb-4 border-b border-white/10">
-              <h3 className="text-xl font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+              <h3 className="text-xl font-bold text-slate-900">
                 {editingArticle.id ? 'Edit Article' : 'Create New Article'}
               </h3>
               <button
                 onClick={() => setIsArticleModalOpen(false)}
-                className="p-1 rounded-lg hover:bg-white/10 text-[#94A3B8] hover:text-white"
+                className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -482,7 +478,7 @@ export const AdminDashboardPage: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Title *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Title *</label>
                 <input
                   type="text"
                   value={editingArticle.title || ''}
@@ -491,89 +487,85 @@ export const AdminDashboardPage: React.FC = () => {
                     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                     setEditingArticle({ ...editingArticle, title, slug: editingArticle.id ? editingArticle.slug : slug });
                   }}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Slug *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Slug *</label>
                 <input
                   type="text"
                   value={editingArticle.slug || ''}
                   onChange={(e) => setEditingArticle({ ...editingArticle, slug: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Author Name *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Author Name *</label>
                 <input
                   type="text"
                   value={editingArticle.authorName || ''}
                   onChange={(e) => setEditingArticle({ ...editingArticle, authorName: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Category *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Category *</label>
                 <input
                   type="text"
                   value={editingArticle.category || ''}
                   onChange={(e) => setEditingArticle({ ...editingArticle, category: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Cover Image URL *</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Cover Image URL *</label>
               <input
                 type="text"
                 value={editingArticle.coverImageUrl || ''}
                 onChange={(e) => setEditingArticle({ ...editingArticle, coverImageUrl: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Excerpt / Summary *</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Excerpt / Summary *</label>
               <textarea
                 rows={3}
                 value={editingArticle.excerpt || ''}
                 onChange={(e) => setEditingArticle({ ...editingArticle, excerpt: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs resize-none focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs resize-none focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               ></textarea>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Full Body Content *</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Full Body Content *</label>
               <textarea
                 rows={6}
                 value={editingArticle.content || ''}
                 onChange={(e) => setEditingArticle({ ...editingArticle, content: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
               ></textarea>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-              <PillButton
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+              <button
                 onClick={() => setIsArticleModalOpen(false)}
-                variant="secondary"
-                size="sm"
-                showDefaultIcon={false}
+                className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
               >
                 Cancel
-              </PillButton>
-              <PillButton
+              </button>
+              <button
                 onClick={() => saveArticleMutation.mutate(editingArticle)}
-                size="sm"
-                icon={<Save className="w-4 h-4 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-                iconPosition="left"
-                showDefaultIcon={false}
+                className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
               >
-                Save Article
-              </PillButton>
+                <Save className="w-3.5 h-3.5 text-slate-950" />
+                <span>Save Article</span>
+              </button>
             </div>
           </div>
         </div>
@@ -581,15 +573,15 @@ export const AdminDashboardPage: React.FC = () => {
 
       {/* Social Modal */}
       {isSocialModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#0D111A] border border-white/10 rounded-2xl w-full max-w-lg p-6 sm:p-8 space-y-4 shadow-2xl">
-            <div className="flex justify-between items-center pb-4 border-b border-white/10">
-              <h3 className="text-xl font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg p-6 sm:p-8 space-y-4 shadow-2xl">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+              <h3 className="text-xl font-bold text-slate-900">
                 {editingSocial.id ? 'Edit Social Channel' : 'Add Social Channel'}
               </h3>
               <button
                 onClick={() => setIsSocialModalOpen(false)}
-                className="p-1 rounded-lg hover:bg-white/10 text-[#94A3B8] hover:text-white"
+                className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -597,7 +589,7 @@ export const AdminDashboardPage: React.FC = () => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Platform *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Platform *</label>
                 <select
                   value={editingSocial.platformKey || 'linkedin'}
                   onChange={(e) => {
@@ -612,7 +604,7 @@ export const AdminDashboardPage: React.FC = () => {
                     };
                     const colorMap: Record<string, string> = {
                       linkedin: '#0A66C2',
-                      twitter_x: '#FFFFFF',
+                      twitter_x: '#0F172A',
                       instagram: 'linear-gradient(to top right, #f09433, #dc2743, #cc2366, #bc1888)',
                       facebook: '#1877F2',
                       youtube: '#FF0000',
@@ -625,7 +617,7 @@ export const AdminDashboardPage: React.FC = () => {
                       bgColor: colorMap[key] || '#0A66C2',
                     });
                   }}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 >
                   <option value="linkedin">LinkedIn</option>
                   <option value="twitter_x">X (Twitter)</option>
@@ -637,29 +629,29 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Display Name *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Display Name *</label>
                 <input
                   type="text"
                   value={editingSocial.platformName || ''}
                   onChange={(e) => setEditingSocial({ ...editingSocial, platformName: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Target Profile URL *</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Target Profile URL *</label>
                 <input
                   type="url"
                   placeholder="https://..."
                   value={editingSocial.url || ''}
                   onChange={(e) => setEditingSocial({ ...editingSocial, url: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#94A3B8] mb-1">Display Order</label>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1">Display Order</label>
                   <input
                     type="number"
                     value={editingSocial.displayOrder || 1}
@@ -669,43 +661,39 @@ export const AdminDashboardPage: React.FC = () => {
                         displayOrder: parseInt(e.target.value, 10) || 1,
                       })
                     }
-                    className="w-full p-2.5 rounded-xl bg-[#07090E] border border-white/10 text-white text-xs focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+                    className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                   />
                 </div>
 
                 <div className="flex items-center pt-5">
-                  <label className="flex items-center gap-2 text-xs font-semibold text-white cursor-pointer">
+                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
                     <input
-                      type="checkbox"
-                      checked={editingSocial.isActive !== false}
-                      onChange={(e) => setEditingSocial({ ...editingSocial, isActive: e.target.checked })}
-                      className="w-4 h-4 rounded bg-[#07090E] border-white/20 text-[var(--brand-primary,#9873ff)] focus:ring-0"
-                    />
+                  type="checkbox"
+                  checked={editingSocial.isActive !== false}
+                  onChange={(e) => setEditingSocial({ ...editingSocial, isActive: e.target.checked })}
+                  className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-0"
+                />
                     <span>Active Channel</span>
                   </label>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
-              <PillButton
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+              <button
                 onClick={() => setIsSocialModalOpen(false)}
-                variant="secondary"
-                size="sm"
-                showDefaultIcon={false}
+                className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
               >
                 Cancel
-              </PillButton>
-              <PillButton
+              </button>
+              <button
                 onClick={() => saveSocialMutation.mutate(editingSocial)}
                 disabled={!editingSocial.url}
-                size="sm"
-                icon={<Save className="w-4 h-4 text-[var(--brand-primary,#9873ff)] group-hover:text-white transition-colors" />}
-                iconPosition="left"
-                showDefaultIcon={false}
+                className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
               >
-                Save Channel
-              </PillButton>
+                <Save className="w-3.5 h-3.5 text-slate-950" />
+                <span>Save Channel</span>
+              </button>
             </div>
           </div>
         </div>

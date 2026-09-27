@@ -51,13 +51,13 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
       {/* Search & Filter Header */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
             placeholder="Search by title, client, or category..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#0D111A] border border-white/10 text-white text-xs placeholder:text-[#64748B] focus:outline-none focus:border-[var(--brand-primary,#9873ff)]/50"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
           />
         </div>
 
@@ -70,8 +70,8 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
                 onClick={() => setCategoryFilter(cat)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   categoryFilter === cat
-                    ? 'bg-[var(--brand-primary,#9873ff)] text-white'
-                    : 'bg-[#0D111A] border border-white/10 text-[#94A3B8] hover:text-white'
+                    ? 'bg-amber-500 text-slate-950 shadow-xs'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
                 }`}
               >
                 {cat}
@@ -80,11 +80,11 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
           </div>
 
           {/* View Toggle */}
-          <div className="hidden sm:flex items-center p-1 rounded-xl bg-[#0D111A] border border-white/10">
+          <div className="hidden sm:flex items-center p-1 rounded-xl bg-white border border-slate-200 shadow-2xs">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-1.5 rounded-lg transition-colors ${
-                viewMode === 'grid' ? 'bg-white/10 text-white' : 'text-[#64748B] hover:text-white'
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                viewMode === 'grid' ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-slate-700'
               }`}
               title="Grid View"
             >
@@ -92,8 +92,8 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
             </button>
             <button
               onClick={() => setViewMode('table')}
-              className={`p-1.5 rounded-lg transition-colors ${
-                viewMode === 'table' ? 'bg-white/10 text-white' : 'text-[#64748B] hover:text-white'
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                viewMode === 'table' ? 'bg-slate-100 text-slate-900' : 'text-slate-400 hover:text-slate-700'
               }`}
               title="Table View"
             >
@@ -109,21 +109,21 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
           {filteredStudies.map((study) => (
             <div
               key={study.id || study.slug}
-              className="group rounded-2xl bg-[#0D111A] border border-white/10 hover:border-[var(--brand-primary,#9873ff)]/40 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-xl"
+              className="group rounded-2xl bg-white border border-slate-200/80 hover:border-amber-400 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-md shadow-2xs"
             >
               <div>
-                <div className="relative overflow-hidden rounded-xl mb-4 h-40 bg-[#07090E]">
+                <div className="relative overflow-hidden rounded-xl mb-4 h-40 bg-slate-100">
                   <img
                     src={study.heroImageUrl}
                     alt={study.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#07090E]/80 backdrop-blur-md text-[var(--brand-primary,#9873ff)] border border-white/10">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 backdrop-blur-md text-amber-800 border border-slate-200 shadow-xs">
                       {study.category}
                     </span>
                     {study.featured && (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-400 text-black flex items-center gap-1 shadow-md">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 flex items-center gap-1 shadow-xs">
                         <Star className="w-3 h-3 fill-current" />
                         <span>Featured</span>
                       </span>
@@ -131,18 +131,18 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
                   </div>
                 </div>
 
-                <h3 className="text-base font-bold text-white mb-1 group-hover:text-[var(--brand-primary,#9873ff)] transition-colors">
+                <h3 className="text-base font-bold text-slate-900 mb-1 group-hover:text-amber-700 transition-colors">
                   {study.title}
                 </h3>
-                <p className="text-xs text-[#64748B] mb-2 font-medium">Client: {study.clientName}</p>
-                <p className="text-xs text-[#94A3B8] line-clamp-2 leading-relaxed">{study.summary}</p>
+                <p className="text-xs text-slate-500 mb-2 font-medium">Client: {study.clientName}</p>
+                <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{study.summary}</p>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-white/5 flex items-center justify-between">
+              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
                 <Link
                   to={`/cases/${study.slug}`}
                   target="_blank"
-                  className="text-[11px] font-mono text-[var(--brand-primary,#9873ff)] hover:underline flex items-center gap-1"
+                  className="text-[11px] font-mono text-amber-700 hover:underline flex items-center gap-1 font-semibold"
                 >
                   <span>/{study.slug}</span>
                   <ExternalLink className="w-3 h-3" />
@@ -151,7 +151,7 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => onOpenEdit(study)}
-                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-white transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 transition-colors cursor-pointer"
                     title="Edit Case Study"
                   >
                     <Edit className="w-4 h-4" />
@@ -159,7 +159,7 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
                   {study.id && (
                     <button
                       onClick={() => onDelete(study.id!)}
-                      className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
                       title="Delete Case Study"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -174,10 +174,10 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
 
       {/* Table View */}
       {viewMode === 'table' && (
-        <div className="rounded-2xl bg-[#0D111A] border border-white/10 overflow-hidden shadow-xl">
+        <div className="rounded-2xl bg-white border border-slate-200/80 overflow-hidden shadow-2xs">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-[#94A3B8]">
-              <thead className="bg-[#07090E] text-white uppercase tracking-wider text-[11px] border-b border-white/10">
+            <table className="w-full text-left text-xs text-slate-600">
+              <thead className="bg-slate-50 text-slate-700 uppercase tracking-wider text-[11px] border-b border-slate-200">
                 <tr>
                   <th className="p-4">Case Study</th>
                   <th className="p-4">Category</th>
@@ -187,9 +187,9 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
                   <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-100">
                 {filteredStudies.map((study) => (
-                  <tr key={study.id || study.slug} className="hover:bg-white/5 transition-colors">
+                  <tr key={study.id || study.slug} className="hover:bg-slate-50 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <img
@@ -197,37 +197,37 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
                           alt={study.title}
                           className="w-10 h-10 rounded-lg object-cover"
                         />
-                        <div className="font-bold text-white max-w-xs truncate">{study.title}</div>
+                        <div className="font-bold text-slate-900 max-w-xs truncate">{study.title}</div>
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-[var(--brand-primary,#9873ff)]/15 text-[var(--brand-primary,#9873ff)]">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-800 border border-amber-200">
                         {study.category}
                       </span>
                     </td>
-                    <td className="p-4 text-white font-medium">{study.clientName}</td>
-                    <td className="p-4 font-mono text-[11px] text-[#64748B]">/{study.slug}</td>
+                    <td className="p-4 text-slate-900 font-medium">{study.clientName}</td>
+                    <td className="p-4 font-mono text-[11px] text-slate-500">/{study.slug}</td>
                     <td className="p-4">
                       {study.featured ? (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-400/20 text-yellow-400">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
                           Featured
                         </span>
                       ) : (
-                        <span className="text-[#64748B] text-[11px]">Standard</span>
+                        <span className="text-slate-400 text-[11px]">Standard</span>
                       )}
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => onOpenEdit(study)}
-                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-white transition-colors"
+                          className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 transition-colors cursor-pointer"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         {study.id && (
                           <button
                             onClick={() => onDelete(study.id!)}
-                            className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                            className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

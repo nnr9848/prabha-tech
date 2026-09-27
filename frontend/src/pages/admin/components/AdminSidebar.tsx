@@ -106,32 +106,32 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
   return (
     <aside
-      className={`fixed top-0 left-0 bottom-0 z-40 bg-[#0A0D14]/90 backdrop-blur-xl border-r border-white/10 flex flex-col justify-between transition-all duration-300 ease-in-out ${
+      className={`fixed top-0 left-0 bottom-0 z-40 bg-white border-r border-slate-200 flex flex-col justify-between transition-all duration-300 ease-in-out shadow-sm ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
       {/* Brand Header */}
       <div>
-        <div className="h-20 flex items-center justify-between px-5 border-b border-white/10">
+        <div className="h-20 flex items-center justify-between px-5 border-b border-slate-100">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-10 h-10 min-w-[2.5rem] rounded-xl bg-[var(--brand-primary,#9873ff)]/15 border border-[var(--brand-primary,#9873ff)]/30 text-[var(--brand-primary,#9873ff)] flex items-center justify-center shadow-[0_0_15px_rgba(152,115,255,0.2)]">
+            <div className="w-10 h-10 min-w-[2.5rem] rounded-xl bg-amber-50 border border-amber-200/80 text-amber-700 flex items-center justify-center shadow-sm">
               <Shield className="w-5 h-5" />
             </div>
             {!isCollapsed && (
               <div className="transition-opacity duration-200">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-bold text-white tracking-wide">PRABHATECH</span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[var(--brand-primary,#9873ff)]/20 text-[var(--brand-primary,#9873ff)] uppercase tracking-wider">
+                  <span className="text-sm font-bold text-slate-900 tracking-wide">PRABHATECH</span>
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-800 uppercase tracking-wider">
                     CMS
                   </span>
                 </div>
-                <p className="text-[10px] text-[#64748B] font-mono">v2.4 Enterprise</p>
+                <p className="text-[10px] text-slate-400 font-mono">v2.4 Enterprise</p>
               </div>
             )}
           </div>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden md:flex p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white transition-colors cursor-pointer"
+            className="hidden md:flex p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer border border-slate-200"
             title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
           >
             {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -143,7 +143,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           {navItems.map((section, idx) => (
             <div key={idx} className="space-y-1.5">
               {!isCollapsed && (
-                <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
+                <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   {section.group}
                 </div>
               )}
@@ -156,16 +156,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     title={isCollapsed ? item.label : undefined}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer group ${
                       isActive
-                        ? 'bg-[var(--brand-primary,#9873ff)]/15 text-white border border-[var(--brand-primary,#9873ff)]/30 shadow-[0_0_12px_rgba(152,115,255,0.15)]'
-                        : 'text-[#94A3B8] hover:text-white hover:bg-white/5 border border-transparent'
+                        ? 'bg-amber-50 text-amber-900 border border-amber-200/80 shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`transition-colors ${
                           isActive
-                            ? 'text-[var(--brand-primary,#9873ff)]'
-                            : 'text-[#64748B] group-hover:text-white'
+                            ? 'text-amber-600'
+                            : 'text-slate-400 group-hover:text-slate-600'
                         }`}
                       >
                         {item.icon}
@@ -176,7 +176,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     {!isCollapsed && (
                       <div className="flex items-center gap-1.5">
                         {item.highlightBadge && (
-                          <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[var(--brand-primary,#9873ff)] text-white shadow-sm animate-pulse">
+                          <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 shadow-xs">
                             {item.highlightBadge}
                           </span>
                         )}
@@ -184,8 +184,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                           <span
                             className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
                               isActive
-                                ? 'bg-white/10 text-white'
-                                : 'bg-white/5 text-[#64748B] group-hover:text-white'
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-slate-100 text-slate-500 group-hover:text-slate-700'
                             }`}
                           >
                             {item.badge}
@@ -202,23 +202,23 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
       </div>
 
       {/* Sidebar Footer */}
-      <div className="p-3 border-t border-white/10 space-y-2">
+      <div className="p-3 border-t border-slate-100 space-y-2">
         <Link
           to="/"
           target="_blank"
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
           title="Open Public Site"
         >
-          <ExternalLink className="w-4 h-4 text-[#64748B]" />
+          <ExternalLink className="w-4 h-4 text-slate-400" />
           {!isCollapsed && <span>Public Website</span>}
         </Link>
         {!isCollapsed && (
-          <div className="p-3 rounded-xl bg-gradient-to-br from-[var(--brand-primary,#9873ff)]/10 to-transparent border border-[var(--brand-primary,#9873ff)]/20">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-white mb-1">
-              <Sparkles className="w-3.5 h-3.5 text-[var(--brand-primary,#9873ff)]" />
+          <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200/50">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-amber-900 mb-0.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
               <span>System Live</span>
             </div>
-            <p className="text-[10px] text-[#94A3B8] leading-tight">
+            <p className="text-[10px] text-slate-500 leading-tight">
               PostgreSQL & REST APIs operational.
             </p>
           </div>
