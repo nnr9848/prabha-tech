@@ -259,17 +259,22 @@ export const HomePage: React.FC = () => {
       {/* 3. FLAGSHIP PRODUCT: AI SMART BEMS */}
       {/* ========================================================= */}
       <section className="relative py-24 bg-white border-b border-slate-200 overflow-hidden">
-        {/* Modern Glass Corporate Office Architecture strictly in the RIGHT area on Desktop */}
-        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[48%] z-0 pointer-events-none overflow-hidden">
+        {/* Modern Glass Corporate Office Architecture starting early from center-left across the right side */}
+        <div 
+          className="absolute right-0 top-0 bottom-0 w-full lg:w-[70%] z-0 pointer-events-none overflow-hidden"
+          style={{
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 18%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.95) 65%, black 100%)',
+            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 18%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.95) 65%, black 100%)'
+          }}
+        >
           <img
             src="/assets/images/glass-office-building.jpeg"
             alt="Smart Glass Commercial Office Architecture"
-            className="w-full h-full object-cover object-[center_right] opacity-90 scale-100"
+            className="w-full h-full object-cover object-right opacity-95 scale-100"
           />
-          {/* Smooth left-edge gradient dissolving into solid white */}
-          <div className="hidden lg:block absolute inset-y-0 left-0 w-48 sm:w-60 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
-          {/* Subtle bottom/top border blending */}
-          <div className="hidden lg:block absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent"></div>
+          {/* Subtle bottom/top edge feathering */}
+          <div className="hidden lg:block absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white via-white/40 to-transparent pointer-events-none"></div>
+          <div className="hidden lg:block absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white via-white/30 to-transparent pointer-events-none"></div>
           {/* Mobile/Tablet readability gradient */}
           <div className="lg:hidden absolute inset-0 bg-gradient-to-r from-white via-white/95 to-transparent"></div>
         </div>
@@ -525,22 +530,32 @@ export const HomePage: React.FC = () => {
       {/* ========================================================= */}
       {/* 5. SPOTLIGHT: INDUSTRIAL IOT BANNER (Deep Navy Accent) */}
       {/* ========================================================= */}
-      <section className="py-20 bg-[#020E26] text-white overflow-hidden relative">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
+      <section className="py-24 bg-[#020E26] text-white overflow-hidden relative">
+        {/* Left-anchored Industrial IoT visual with smooth progressive fade into deep navy */}
+        <div 
+          className="absolute left-0 top-0 bottom-0 w-full lg:w-[58%] z-0 pointer-events-none overflow-hidden"
+          style={{
+            WebkitMaskImage: 'linear-gradient(to right, black 0%, rgba(0,0,0,0.95) 45%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.15) 88%, transparent 100%)',
+            maskImage: 'linear-gradient(to right, black 0%, rgba(0,0,0,0.95) 45%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.15) 88%, transparent 100%)'
+          }}
+        >
+          <img
+            src="/assets/images/indistrial-iot.jpg"
+            alt="Industrial Engineer with IoT Holographic Smart Factory Interface"
+            className="w-full h-full object-cover object-[center_left] opacity-90 scale-100"
+          />
+          {/* Subtle top & bottom edge blend into deep navy */}
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#020E26] via-[#020E26]/40 to-transparent pointer-events-none"></div>
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#020E26] via-[#020E26]/40 to-transparent pointer-events-none"></div>
+        </div>
+
+        <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Industrial Visual with Engineer & Tablet */}
-            <div className="lg:col-span-6 relative">
-              <div className="rounded-2xl overflow-hidden shadow-2xl border border-slate-700 aspect-[16/10]">
-                <img
-                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1400&q=80"
-                  alt="Industrial Engineer on Floor"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+            {/* Left Spacer on Desktop to give breathing room for the visual */}
+            <div className="hidden lg:block lg:col-span-5"></div>
 
             {/* Right Industrial IoT Content */}
-            <div className="lg:col-span-6 space-y-6">
+            <div className="lg:col-span-7 space-y-6 lg:pl-6">
               <SectionHeading
                 theme="dark"
                 size="section"
@@ -620,13 +635,17 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Screen Device Mockups */}
-            <div className="lg:col-span-7">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-xl">
+            {/* Right Multi-Device Floating Showcase (Unboxed, Enterprise Depth) */}
+            <div className="lg:col-span-7 relative flex items-center justify-center">
+              {/* Subtle ambient warm gold & navy depth glow behind the devices */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#E5A93C]/15 via-blue-500/10 to-transparent rounded-full filter blur-3xl opacity-70 transform -translate-y-2 pointer-events-none"></div>
+
+              {/* Floating Multi-Device Image without constraining box */}
+              <div className="relative z-10 w-full flex items-center justify-center">
                 <img
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
-                  alt="Enterprise Dashboard Analytics"
-                  className="rounded-xl w-full h-auto object-cover shadow-sm"
+                  src="/assets/images/enterprise-software.png"
+                  alt="Prabha Technologies Enterprise Software Multi-Device Platform"
+                  className="w-full h-auto max-w-[700px] lg:max-w-none object-contain drop-shadow-[0_24px_48px_rgba(2,14,38,0.12)] hover:scale-[1.01] transition-transform duration-500 ease-out"
                 />
               </div>
             </div>
