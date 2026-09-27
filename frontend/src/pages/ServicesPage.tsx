@@ -18,6 +18,7 @@ import {
   Globe2,
   Award,
   ThumbsUp,
+  Box,
 } from 'lucide-react';
 import { SectionHeading } from '../components/common/SectionHeading';
 import { BrandButton } from '../components/common/BrandButton';
@@ -31,6 +32,7 @@ export const ServicesPage: React.FC = () => {
     { label: 'Mobile Applications', icon: <Smartphone className="w-3.5 h-3.5" /> },
     { label: 'AI & Analytics', icon: <Cpu className="w-3.5 h-3.5" /> },
     { label: 'Industrial IoT', icon: <Radio className="w-3.5 h-3.5" /> },
+    { label: 'Metaverse Development', icon: <Box className="w-3.5 h-3.5" /> },
     { label: 'Managed IT Services', icon: <Headphones className="w-3.5 h-3.5" /> },
     { label: 'Consulting', icon: <Users2 className="w-3.5 h-3.5" /> },
   ];
@@ -49,6 +51,7 @@ export const ServicesPage: React.FC = () => {
       ],
       img: '/assets/images/enterprise-software.png',
       isTransparentAsset: true,
+      link: '/services/custom-software-development',
     },
     {
       category: 'Mobile Applications',
@@ -62,6 +65,7 @@ export const ServicesPage: React.FC = () => {
         'App Maintenance',
       ],
       img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
+      link: '/services/mobile-apps',
     },
     {
       category: 'AI & Analytics',
@@ -75,6 +79,7 @@ export const ServicesPage: React.FC = () => {
         'Business Intelligence Dashboards',
       ],
       img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
+      link: '/services/ai-analytics',
     },
     {
       category: 'Industrial IoT',
@@ -88,6 +93,21 @@ export const ServicesPage: React.FC = () => {
         'Vertical Farming Solutions',
       ],
       img: '/assets/images/indistrial-iot.jpg',
+      link: '/services/iiot-automation',
+    },
+    {
+      category: 'Metaverse Development',
+      icon: <Box className="w-5 h-5 text-white" />,
+      title: 'Metaverse & Web3 Development',
+      desc: '3D virtual environments, digital twins, and immersive AR/VR applications.',
+      features: [
+        'Virtual Business Spaces',
+        'Industrial Digital Twin',
+        'VR Training & Simulation',
+        'Metaverse Commerce & Showrooms',
+      ],
+      img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=800&q=80',
+      link: '/services/metaverse',
     },
     {
       category: 'Managed IT Services',
@@ -101,6 +121,7 @@ export const ServicesPage: React.FC = () => {
         'Data Center Construction',
       ],
       img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
+      link: '/services/managed-it-services',
     },
     {
       category: 'Consulting',
@@ -114,6 +135,7 @@ export const ServicesPage: React.FC = () => {
         'Technology Advisory',
       ],
       img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+      link: '/services/staffing-recruitment',
     },
   ];
 
@@ -244,7 +266,7 @@ export const ServicesPage: React.FC = () => {
                   </div>
 
                   <Link
-                    to="/contact"
+                    to={service.link || '/contact'}
                     className="pt-4 border-t border-slate-100 flex items-center text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] transition-colors"
                   >
                     <span>Learn More</span>
