@@ -4,7 +4,7 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/prabhatech_db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/prabhatech_db}
     username: ${SPRING_DATASOURCE_USERNAME:prabhatech_user}
     password: ${SPRING_DATASOURCE_PASSWORD:prabhatech_pass}
     driver-class-name: org.postgresql.Driver
