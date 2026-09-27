@@ -38,3 +38,5 @@ lerna-debug.log*
 *.class
 *.iml
 .mvn/.extracted/
+*.tsbuildinfo
+prabhatech1/

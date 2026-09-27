@@ -2,22 +2,38 @@
 
 @layer base {
   :root {
-    --font-brand: 'Lato', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-brand: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-    /* PrabhaTech Official Violet Luxury Palette */
-    --brand-primary: #9873ff;
-    --brand-primary-light: #b499ff;
-    --brand-primary-dark: #7c4dff;
-    --brand-primary-muted: rgba(152, 115, 255, 0.15);
-    --brand-primary-border: rgba(152, 115, 255, 0.35);
-    --brand-primary-glow: rgba(152, 115, 255, 0.4);
+    /* Prabha Technologies GCC Enterprise Identity - Extracted Directly from Brand Logo */
+    --brand-navy-deep: #000B1E;     /* Logo deep base midnight background */
+    --brand-navy: #020E26;          /* Logo primary midnight navy */
+    --brand-navy-light: #0A1C3E;    /* Elevated navy cards / subtle borders */
+    
+    --brand-gold: #E5A93C;          /* Logo imperial warm gold (bevels, accents, underline) */
+    --brand-gold-hover: #D4972B;    /* Slightly deeper gold for active/hover */
+    --brand-gold-dark: #B88328;     /* Logo prism bronze gold facet */
+    --brand-gold-light: #FFF9ED;    /* Soft gold badge tint */
+    --brand-gold-muted: rgba(229, 169, 60, 0.12);
+    --brand-gold-border: rgba(229, 169, 60, 0.35);
 
-    --brand-bg: #050608;
-    --brand-surface: #0A0C10;
-    --brand-card: #0E1118;
-    --brand-text: #FFFFFF;
-    --brand-text-muted: #8E9BAE;
-    --brand-border: rgba(255, 255, 255, 0.12);
+    --brand-platinum: #EDEDF2;      /* Logo metallic titanium letter face */
+    --brand-silver: #8C9BB0;        /* Logo subtle metallic reflection & subtitle */
+
+    /* Universal Mappings */
+    --brand-primary: #E5A93C;
+    --brand-primary-hover: #D4972B;
+    --brand-primary-light: #FFF9ED;
+    --brand-primary-dark: #B88328;
+    --brand-primary-muted: rgba(229, 169, 60, 0.12);
+    --brand-primary-border: rgba(229, 169, 60, 0.35);
+    --brand-primary-glow: rgba(229, 169, 60, 0.4);
+
+    --brand-bg: #FFFFFF;
+    --brand-surface: #F8FAFC;
+    --brand-card: #FFFFFF;
+    --brand-text: #020E26;
+    --brand-text-muted: #64748B;
+    --brand-border: #E2E8F0;
   }
 
   body {
@@ -52,76 +68,59 @@
 
 .btn-brand {
   background-color: var(--brand-primary);
-  color: #050608;
+  color: #000B1E;
   font-weight: 700;
   transition: all 0.3s ease;
-  box-shadow: 0 0 25px var(--brand-primary-glow);
+  box-shadow: 0 4px 14px var(--brand-primary-glow);
 }
 
 .btn-brand:hover {
-  background-color: #FFFFFF;
-  color: #050608;
-  box-shadow: 0 0 35px rgba(255, 255, 255, 0.6);
+  background-color: var(--brand-primary-hover);
+  color: #000B1E;
+  box-shadow: 0 6px 20px rgba(229, 169, 60, 0.55);
 }
 
-/* Authentic Brand Pill CTA Button with Left-to-Right Fill Animation */
-.brand-pill-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  background: rgba(10, 12, 18, 0.4);
-  border: 1.5px solid rgba(152, 115, 255, 0.55);
-  color: #FFFFFF;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-/* Background Color Fill Sliding from Left to Right */
-.brand-pill-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, #9873ff 0%, #7c4dff 100%);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.65s cubic-bezier(0.25, 1, 0.35, 1);
-  z-index: -1;
-}
-
-.brand-pill-btn:hover::before {
-  transform: scaleX(1);
-}
-
-.brand-pill-btn:hover {
-  border-color: rgba(152, 115, 255, 0.9);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(152, 115, 255, 0.35);
-}
-
-.brand-pill-btn span,
-.brand-pill-btn svg {
-  position: relative;
-  z-index: 2;
-  transition: transform 0.45s cubic-bezier(0.25, 1, 0.35, 1), color 0.4s ease;
-}
-
-.brand-pill-btn:hover svg {
-  color: #FFFFFF;
-  transform: translateX(3px);
-}
-
-/* Gradient Text Highlight */
-.brand-purple-gradient {
-  background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 50%, #6D28D9 100%);
+/* Brand Gold Metallic Gradient */
+.brand-gold-gradient {
+  background: linear-gradient(135deg, #F9D976 0%, #E5A93C 50%, #B88328 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* Shining Metallic Gold Gradient Text with Specular Highlight */
+.text-gold-shimmer {
+  background: linear-gradient(135deg, #FFF4D4 0%, #FCE09B 25%, #E5A93C 55%, #D4972B 75%, #B88328 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Brand Navy Metallic Gradient */
+.brand-navy-gradient {
+  background: linear-gradient(135deg, #020E26 0%, #0A1C3E 100%);
+}
+
+/* Centralized Heading Typography Tokens */
+.heading-hero {
+  font-size: clamp(2.5rem, 5vw, 4.125rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.heading-section {
+  font-size: clamp(2rem, 3.5vw, 2.875rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.heading-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brand-gold);
+}
+
+

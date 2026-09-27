@@ -3,84 +3,93 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, Award, Globe2, Shield } from 'lucide-react';
 import logoImg from '../../assets/prabhatech-logo.png';
 import { SocialIconsGroup } from '../common/SocialIconsGroup';
+import { BrandButton } from '../common/BrandButton';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#020306] border-t border-white/8 pt-24 pb-12 text-[#94A3B8]">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 border-b border-white/5">
+    <footer className="bg-[#000B1E] text-slate-300 pt-20 pb-12 border-t border-[#0A1C3E]">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
+        {/* Top Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 border-b border-[#0A1C3E]/80">
           {/* Col 1: Brand & Mission */}
-          <div className="lg:col-span-2 space-y-6">
-            <Link to="/" className="flex items-center gap-3 group">
+          <div className="lg:col-span-1 space-y-4">
+            <Link to="/" className="inline-block">
               <img
                 src={logoImg}
-                alt="PrabhaTech Logo"
-                className="h-9 w-auto object-contain brightness-0 invert transition-opacity group-hover:opacity-80"
+                alt="Prabha Technologies Logo"
+                className="h-10 w-auto object-contain brightness-0 invert"
               />
             </Link>
-            <p className="text-sm leading-relaxed text-[#94A3B8] max-w-sm font-normal">
-              The world's leading Financial UX design agency. We architect intuitive digital banking, crypto ecosystems, and wealthtech platforms across 37+ countries.
+            <p className="text-xs leading-relaxed text-slate-400">
+              Prabha Technologies is an AI innovation hub delivering enterprise software, mobile applications, industrial IoT and managed IT services for a smarter tomorrow.
             </p>
-            <div className="flex items-center gap-4 text-xs">
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#9873ff]/10 border border-[#9873ff]/20 text-[#9873ff] font-semibold">
-                <Award className="w-3.5 h-3.5" />
-                Red Dot Award Winners
-              </span>
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white font-medium">
-                <Globe2 className="w-3.5 h-3.5 text-[#9873ff]" />
-                Global Clients
-              </span>
+            <div className="pt-2">
+              <SocialIconsGroup size="md" />
             </div>
           </div>
 
-          {/* Col 2: Navigation */}
+          {/* Col 2: Quick Links */}
           <div>
-            <h4 className="font-display text-white font-bold text-xs uppercase tracking-[0.15em] mb-4">Navigation</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><Link to="/case-studies" className="hover:text-[#9873ff] transition-colors">Case Studies</Link></li>
-              <li><Link to="/services" className="hover:text-[#9873ff] transition-colors">Services & UX Audit</Link></li>
-              <li><Link to="/philosophy" className="hover:text-[#9873ff] transition-colors">FXD Methodology</Link></li>
-              <li><Link to="/insights" className="hover:text-[#9873ff] transition-colors">Fintech Blog & Reports</Link></li>
-              <li><Link to="/about" className="hover:text-[#9873ff] transition-colors">About Agency</Link></li>
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Quick Links</h4>
+            <ul className="space-y-2.5 text-xs text-slate-400">
+              <li><Link to="/" className="hover:text-[#E5A93C] transition-colors">Home</Link></li>
+              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Services</Link></li>
+              <li><Link to="/case-studies" className="hover:text-[#E5A93C] transition-colors">Solutions</Link></li>
+              <li><Link to="/case-studies" className="hover:text-[#E5A93C] transition-colors">Portfolio</Link></li>
+              <li><Link to="/about" className="hover:text-[#E5A93C] transition-colors">About Us</Link></li>
+              <li><Link to="/insights" className="hover:text-[#E5A93C] transition-colors">Insights</Link></li>
+              <li><Link to="/contact" className="hover:text-[#E5A93C] transition-colors">Contact</Link></li>
             </ul>
           </div>
 
-          {/* Col 3: Expertise */}
+          {/* Col 3: Our Services */}
           <div>
-            <h4 className="font-display text-white font-bold text-xs uppercase tracking-[0.15em] mb-4">Expertise</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><span className="text-white/80">Digital Banking UX</span></li>
-              <li><span className="text-white/80">Wealthtech & AI Coaching</span></li>
-              <li><span className="text-white/80">Crypto & Web3 Interfaces</span></li>
-              <li><span className="text-white/80">B2B SaaS & Treasury</span></li>
-              <li><span className="text-white/80">Enterprise Design Systems</span></li>
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Our Services</h4>
+            <ul className="space-y-2.5 text-xs text-slate-400">
+              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Enterprise Software</Link></li>
+              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Mobile Applications</Link></li>
+              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">AI & Analytics</Link></li>
+              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Industrial IoT</Link></li>
+              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Smart Buildings (BEMS)</Link></li>
+              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Cloud & DevOps</Link></li>
+              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Managed IT Services</Link></li>
             </ul>
           </div>
 
-          {/* Col 4: Contact & Office */}
+          {/* Col 4: Industries */}
           <div>
-            <h4 className="font-display text-white font-bold text-xs uppercase tracking-[0.15em] mb-4">Connect</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><a href="mailto:info@prabhatech.com" className="text-white hover:text-[#9873ff] transition-colors flex items-center gap-1">info@prabhatech.com <ArrowUpRight className="w-3.5 h-3.5" /></a></li>
-              <li><a href="tel:+971543255456" className="text-white hover:text-[#9873ff] transition-colors">+971 54 325 5456</a></li>
-              <li><Link to="/contact" className="hover:text-[#9873ff] transition-colors">Request Consultation</Link></li>
-              <li><Link to="/admin" className="text-xs text-[#64748B] hover:text-[#9873ff] flex items-center gap-1 mt-3"><Shield className="w-3 h-3" /> Admin CMS Login</Link></li>
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Industries</h4>
+            <ul className="space-y-2.5 text-xs text-slate-400">
+              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Manufacturing</span></li>
+              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Construction</span></li>
+              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Real Estate</span></li>
+              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Healthcare</span></li>
+              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Retail & Hospitality</span></li>
+              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Logistics & Transport</span></li>
+              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Agriculture</span></li>
             </ul>
+          </div>
 
-            {/* Social Icons Row */}
-            <div className="mt-5">
-              <SocialIconsGroup size="sm" />
-            </div>
+          {/* Col 5: Let's Connect */}
+          <div className="space-y-4">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Let's Connect</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Discuss your project with our team and explore new possibilities.
+            </p>
+            <BrandButton to="/contact" variant="gold" size="sm">
+              LET'S TALK
+            </BrandButton>
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#64748B] gap-4">
-          <p>© {new Date().getFullYear()} Prabha Technologies. All Rights Reserved.</p>
+        {/* Bottom Bar */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} Prabha Technologies. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-white transition-colors cursor-pointer">Terms of Service</span>
-            <span className="hover:text-white transition-colors cursor-pointer">Security Standards</span>
+            <a href="#" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-slate-400 transition-colors">Terms of Service</a>
           </div>
+          <p>Crafted & Designed by Prabha Technologies</p>
         </div>
       </div>
     </footer>

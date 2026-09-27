@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ShieldCheck } from 'lucide-react';
 import logoImg from '../../assets/prabhatech-logo.png';
 import { SocialIconsGroup } from '../common/SocialIconsGroup';
-import { PillButton } from '../common/PillButton';
+import { BrandButton } from '../common/BrandButton';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,11 +32,13 @@ export const Navbar: React.FC = () => {
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { name: 'Why us', path: '/philosophy' },
-    { name: 'Portfolio', path: '/case-studies' },
-    { name: 'Team', path: '/about' },
-    { name: 'Blog', path: '/insights' },
-    { name: 'Contact us', path: '/contact' },
+    { name: 'Home', path: '/' },
+    { name: 'Who We Are', path: '/about' },
+    { name: 'Solutions', path: '/case-studies' },
+    { name: 'Industries', path: '/services' },
+    { name: 'Insights', path: '/insights' },
+    { name: 'Careers', path: '/about' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   return (
@@ -44,63 +46,67 @@ export const Navbar: React.FC = () => {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-40 transition-[background-color,padding,border-color] duration-300 ${
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'py-4 bg-[#050608]/90 backdrop-blur-md border-b border-white/5'
-            : 'py-6 bg-transparent'
+            ? 'py-3.5 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100'
+            : 'py-4 bg-white border-b border-slate-100'
         }`}
       >
-        <div className="max-w-[1600px] mx-auto px-8 sm:px-16 lg:px-24 flex items-center justify-between">
-          {/* Authentic Logo Image */}
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 flex items-center justify-between">
+          {/* Authentic Bilingual Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <img
               src={logoImg}
-              alt="PrabhaTech Logo"
-              className="h-8 sm:h-9 w-auto object-contain brightness-0 invert transition-opacity duration-200 group-hover:opacity-80"
+              alt="Prabha Technologies Logo"
+              className="h-10 sm:h-11 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.01]"
             />
           </Link>
 
-          {/* Center Navigation Links (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-10">
+          {/* Center Navigation Links (Desktop) matching screenshot 2 exactly */}
+          <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`text-[15.5px] font-medium tracking-[0.015em] transition-colors duration-200 ${
-                    isActive ? 'text-[#9873ff] font-semibold' : 'text-white hover:text-[#9873ff]'
+                  className={`text-[14px] tracking-tight transition-all duration-150 relative py-1 ${
+                    isActive
+                      ? 'text-[#020E26] font-bold'
+                      : 'text-[#020E26]/85 hover:text-[#020E26] font-semibold'
                   }`}
                 >
                   {link.name}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNavIndicator"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#E5A93C] rounded-full"
+                    />
+                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Social & CMS Icons (Desktop) */}
-          <div className="hidden md:flex items-center gap-3">
-            <PillButton
+          {/* Right Section: LET'S TALK -> Exact Dark Navy Enterprise Button */}
+          <div className="hidden lg:flex items-center gap-3">
+            <Link
               to="/admin"
-              size="sm"
-              variant="secondary"
-              icon={<ShieldCheck className="w-3.5 h-3.5 text-[#9873ff]" />}
-              iconPosition="left"
-              showDefaultIcon={false}
-              className="mr-1 py-1.5 px-3.5 text-xs font-medium"
+              className="text-xs text-slate-400 hover:text-[#020E26] transition-colors px-2 py-1"
+              title="Admin CMS"
             >
               CMS
-            </PillButton>
-
-            {/* Official Pixel-Perfect Brand SVG Badges */}
-            <SocialIconsGroup size="md" />
+            </Link>
+            <BrandButton to="/contact" variant="dark" size="sm">
+              LET'S TALK
+            </BrandButton>
           </div>
 
           {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="lg:hidden p-2 rounded-lg text-white hover:bg-white/5 transition-colors focus:outline-none"
+            className="lg:hidden p-2 rounded-lg text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none"
             aria-label="Open Navigation Menu"
           >
             <Menu className="w-6 h-6" />
@@ -170,17 +176,16 @@ export const Navbar: React.FC = () => {
                 transition={{ delay: 0.55, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className="pt-4"
               >
-                <PillButton
+                <BrandButton
                   to="/admin"
                   onClick={() => setMobileMenuOpen(false)}
                   size="sm"
-                  variant="secondary"
-                  icon={<ShieldCheck className="w-4 h-4 text-[#9873ff]" />}
-                  iconPosition="left"
-                  showDefaultIcon={false}
+                  variant="outline"
+                  icon={<ShieldCheck className="w-4 h-4 text-[#E5A93C]" />}
+                  showArrow={false}
                 >
                   Admin CMS
-                </PillButton>
+                </BrandButton>
               </motion.div>
             </nav>
 
