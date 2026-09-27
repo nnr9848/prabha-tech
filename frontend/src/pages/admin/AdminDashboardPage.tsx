@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../../api/client';
-import { CaseStudy, Article, LeadInquiry, SocialLink, HeroConfig } from '../../types';
+import { CaseStudy, Article, LeadInquiry, SocialLink } from '../../types';
 import { AdminSidebar, AdminTab } from './components/AdminSidebar';
 import { AdminHeader } from './components/AdminHeader';
 import { AdminOverview } from './components/AdminOverview';
-import { HeroSectionManager } from './components/HeroSectionManager';
 import { CaseStudiesManager } from './components/CaseStudiesManager';
 import { ArticlesManager } from './components/ArticlesManager';
 import { InquiriesManager } from './components/InquiriesManager';
@@ -41,23 +40,6 @@ export const AdminDashboardPage: React.FC = () => {
   const { data: socialLinks = [] } = useQuery<SocialLink[]>({
     queryKey: ['adminSocialLinks'],
     queryFn: () => adminApi.getAllSocialLinks(),
-  });
-
-  const { data: heroConfig = null } = useQuery<HeroConfig>({
-    queryKey: ['adminHeroConfig'],
-    queryFn: () => adminApi.getHeroConfig(),
-  });
-
-  const saveHeroConfigMutation = useMutation({
-    mutationFn: (data: Partial<HeroConfig>) => adminApi.updateHeroConfig(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['adminHeroConfig'] });
-      queryClient.invalidateQueries({ queryKey: ['heroConfig'] });
-      toast.success('Hero Section Updated', 'Homepage value proposition & background live synchronized.');
-    },
-    onError: (err: any) => {
-      toast.error('Failed to update Hero Section', err.response?.data?.message || 'Server error occurred.');
-    },
   });
 
   // Modal States
@@ -271,14 +253,6 @@ export const AdminDashboardPage: React.FC = () => {
                 setSelectedInquiry(inq);
                 setActiveTab('inquiries');
               }}
-            />
-          )}
-
-          {activeTab === 'hero-section' && (
-            <HeroSectionManager
-              heroConfig={heroConfig}
-              onSave={(data) => saveHeroConfigMutation.mutate(data)}
-              isSaving={saveHeroConfigMutation.isPending}
             />
           )}
 

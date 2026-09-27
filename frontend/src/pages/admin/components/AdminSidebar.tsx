@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export type AdminTab = 'overview' | 'hero-section' | 'case-studies' | 'articles' | 'inquiries' | 'social-links';
+export type AdminTab = 'overview' | 'case-studies' | 'articles' | 'inquiries' | 'social-links';
 
 interface AdminSidebarProps {
   activeTab: AdminTab;
@@ -64,12 +64,6 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     {
       group: 'Content & CMS',
       items: [
-        {
-          id: 'hero-section',
-          label: 'Hero Section',
-          icon: <Sparkles className="w-4 h-4" />,
-          badge: null,
-        },
         {
           id: 'case-studies',
           label: 'Case Studies',
