@@ -17,29 +17,29 @@ export const CaseStudyDetailPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen pt-36 pb-20 flex items-center justify-center text-white">
-        <div className="w-8 h-8 rounded-full border-2 border-[#9873ff] border-t-transparent animate-spin"></div>
+        <div className="w-8 h-8 rounded-full border-2 border-[#E5A93C] border-t-transparent animate-spin"></div>
       </div>
     );
   }
 
   if (isError || !study) {
     return (
-      <div className="min-h-screen pt-36 pb-20 max-w-4xl mx-auto px-6 text-center text-white">
-        <h2 className="text-3xl font-bold mb-4">Case Study Not Found</h2>
-        <Link to="/case-studies" className="text-[#9873ff] underline">
-          Back to Case Studies
+      <div className="min-h-screen pt-36 pb-20 max-w-4xl mx-auto px-6 text-center text-slate-900">
+        <h2 className="text-3xl font-bold mb-4 text-[#020E26]">Case Study Not Found</h2>
+        <Link to="/portfolio" className="text-[#E5A93C] hover:underline font-bold">
+          Back to Portfolio
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="pt-28 pb-24">
+    <div className="pt-28 pb-24 bg-white text-slate-900">
       {/* Back button */}
       <div className="max-w-6xl mx-auto px-6 sm:px-8 mb-8">
         <Link
-          to="/case-studies"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#94A3B8] hover:text-[#9873ff] transition-colors"
+          to="/portfolio"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#E5A93C] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>All Case Studies</span>
@@ -49,20 +49,20 @@ export const CaseStudyDetailPage: React.FC = () => {
       {/* Header */}
       <div className="max-w-6xl mx-auto px-6 sm:px-8 mb-12">
         <div className="flex flex-wrap items-center gap-3 mb-4">
-          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#9873ff]/15 border border-[#9873ff]/30 text-[#9873ff]">
+          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E5A93C]/10 border border-[#E5A93C]/30 text-[#E5A93C]">
             {study.category}
           </span>
-          <span className="text-xs text-[#94A3B8] flex items-center gap-1">
+          <span className="text-xs text-slate-500 flex items-center gap-1">
             <Building className="w-3.5 h-3.5" />
             Client: {study.clientName}
           </span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#020E26] tracking-tight leading-tight mb-6">
           {study.title}
         </h1>
         {study.subtitle && (
-          <p className="text-lg sm:text-xl text-[#94A3B8] max-w-4xl leading-relaxed">
+          <p className="text-lg sm:text-xl text-slate-600 max-w-4xl leading-relaxed">
             {study.subtitle}
           </p>
         )}
@@ -70,7 +70,7 @@ export const CaseStudyDetailPage: React.FC = () => {
 
       {/* Hero Media Video/Image */}
       <div className="max-w-6xl mx-auto px-6 sm:px-8 mb-16">
-        <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#0D111A] shadow-2xl">
+        <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-2xl">
           {study.videoUrl ? (
             <video
               autoPlay
@@ -95,11 +95,11 @@ export const CaseStudyDetailPage: React.FC = () => {
       {/* Metrics Banner */}
       {study.metrics && study.metrics.length > 0 && (
         <div className="max-w-6xl mx-auto px-6 sm:px-8 mb-20">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-8 rounded-2xl bg-[#0D111A] border border-white/10">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-8 rounded-2xl bg-slate-50 border border-slate-200">
             {study.metrics.map((m, idx) => (
               <div key={idx} className="text-center sm:text-left">
-                <div className="text-3xl sm:text-4xl font-extrabold text-[#9873ff] mb-1">{m.label}</div>
-                <div className="text-xs uppercase tracking-wider text-[#94A3B8]">{m.description}</div>
+                <div className="text-3xl sm:text-4xl font-extrabold text-[#E5A93C] mb-1 font-mono">{m.label}</div>
+                <div className="text-xs uppercase tracking-wider text-slate-600">{m.description}</div>
               </div>
             ))}
           </div>
@@ -107,39 +107,39 @@ export const CaseStudyDetailPage: React.FC = () => {
       )}
 
       {/* Main Study Details */}
-      <div className="max-w-4xl mx-auto px-6 sm:px-8 space-y-16 text-white">
+      <div className="max-w-4xl mx-auto px-6 sm:px-8 space-y-16 text-slate-800">
         {/* Summary */}
         <div>
-          <h3 className="text-xs uppercase tracking-widest font-semibold text-[#9873ff] mb-3">
+          <h3 className="text-xs uppercase tracking-widest font-semibold text-[#E5A93C] mb-3">
             Executive Summary
           </h3>
-          <p className="text-lg text-[#94A3B8] leading-relaxed">{study.summary}</p>
+          <p className="text-lg text-slate-600 leading-relaxed">{study.summary}</p>
         </div>
 
         {/* Challenge */}
         {study.challenge && (
-          <div className="p-8 rounded-2xl bg-[#0D111A] border border-white/10">
-            <h3 className="text-2xl font-bold text-white mb-4">The Challenge</h3>
-            <p className="text-base text-[#94A3B8] leading-relaxed">{study.challenge}</p>
+          <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200">
+            <h3 className="text-2xl font-bold text-[#020E26] mb-4">The Challenge</h3>
+            <p className="text-base text-slate-600 leading-relaxed">{study.challenge}</p>
           </div>
         )}
 
         {/* Solution */}
         {study.solution && (
           <div>
-            <h3 className="text-2xl font-bold text-white mb-4">The Financial Experience Architecture</h3>
-            <p className="text-base text-[#94A3B8] leading-relaxed">{study.solution}</p>
+            <h3 className="text-2xl font-bold text-[#020E26] mb-4">The Solution Architecture</h3>
+            <p className="text-base text-slate-600 leading-relaxed">{study.solution}</p>
           </div>
         )}
 
         {/* Results */}
         {study.results && (
-          <div className="p-8 rounded-2xl bg-gradient-to-br from-[#0D111A] to-[#121824] border border-[#9873ff]/30">
+          <div className="p-8 rounded-2xl bg-[#000B1E] text-white border border-slate-800">
             <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-              <TrendingUp className="w-6 h-6 text-[#9873ff]" />
+              <TrendingUp className="w-6 h-6 text-[#E5A93C]" />
               Business Impact & Results
             </h3>
-            <p className="text-base text-[#94A3B8] leading-relaxed">{study.results}</p>
+            <p className="text-base text-slate-300 leading-relaxed">{study.results}</p>
           </div>
         )}
 

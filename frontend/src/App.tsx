@@ -10,7 +10,6 @@ import { HomePage } from './pages/HomePage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { CaseStudyDetailPage } from './pages/CaseStudyDetailPage';
 import { ServicesPage } from './pages/ServicesPage';
-import { PhilosophyPage } from './pages/PhilosophyPage';
 import { InsightsPage } from './pages/InsightsPage';
 import { InsightDetailPage } from './pages/InsightDetailPage';
 import { AboutPage } from './pages/AboutPage';
@@ -40,7 +39,7 @@ const queryClient = new QueryClient({
 // Layout wrapper for all public marketing pages
 const PublicLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#07090E] text-white selection:bg-[#9873ff] selection:text-black">
+    <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-[#E5A93C]/30 selection:text-black">
       <Navbar />
       <main className="flex-1">
         <Outlet />
@@ -90,7 +89,6 @@ export const App: React.FC = () => {
                 <Route path="/services/recruitment-and-staffing" element={<StaffingRecruitmentPage />} />
                 <Route path="/services/staffing-recruitment" element={<StaffingRecruitmentPage />} />
                 <Route path="/services/consulting" element={<StaffingRecruitmentPage />} />
-                <Route path="/philosophy" element={<PhilosophyPage />} />
                 <Route path="/insights" element={<InsightsPage />} />
                 <Route path="/insights/:slug" element={<InsightDetailPage />} />
                 <Route path="/about" element={<AboutPage />} />

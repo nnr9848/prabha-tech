@@ -52,7 +52,7 @@ export const AdminLoginPage: React.FC = () => {
     <div className="min-h-screen pt-32 pb-20 flex items-center justify-center px-6">
       <div className="w-full max-w-md p-8 sm:p-10 rounded-2xl bg-[#0D111A] border border-white/10 shadow-2xl">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-[#9873ff]/15 border border-[#9873ff]/30 text-[#9873ff] flex items-center justify-center mx-auto mb-4 shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-[#E5A93C]/15 border border-[#E5A93C]/30 text-[#E5A93C] flex items-center justify-center mx-auto mb-4 shadow-sm">
             <ShieldCheck className="w-6 h-6" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-1">PrabhaTech CMS Admin</h1>
@@ -77,7 +77,7 @@ export const AdminLoginPage: React.FC = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#E5A93C] focus:outline-none text-sm transition-colors"
               />
             </div>
           </div>
@@ -93,7 +93,7 @@ export const AdminLoginPage: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#9873ff] focus:outline-none text-sm transition-colors"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#07090E] border border-white/10 text-white placeholder-[#64748B] focus:border-[#E5A93C] focus:outline-none text-sm transition-colors"
               />
             </div>
           </div>
