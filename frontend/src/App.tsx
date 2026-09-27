@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
+import { ScrollToTop } from './components/common/ScrollToTop';
 import { HomePage } from './pages/HomePage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { CaseStudyDetailPage } from './pages/CaseStudyDetailPage';
@@ -13,6 +14,9 @@ import { PhilosophyPage } from './pages/PhilosophyPage';
 import { InsightsPage } from './pages/InsightsPage';
 import { InsightDetailPage } from './pages/InsightDetailPage';
 import { AboutPage } from './pages/AboutPage';
+import { CareersPage } from './pages/CareersPage';
+import { JobApplicationPage } from './pages/JobApplicationPage';
+import { IndustriesPage } from './pages/IndustriesPage';
 import { ContactPage } from './pages/ContactPage';
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
@@ -54,17 +58,23 @@ export const App: React.FC = () => {
       <AuthProvider>
         <ToastProvider>
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               {/* Public PrabhaTech Marketing Website Layout */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/case-studies" element={<CaseStudiesPage />} />
+                <Route path="/portfolio" element={<CaseStudiesPage />} />
+                <Route path="/portfolio/:slug" element={<CaseStudyDetailPage />} />
+                <Route path="/case-studies" element={<Navigate to="/portfolio" replace />} />
                 <Route path="/case-studies/:slug" element={<CaseStudyDetailPage />} />
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/philosophy" element={<PhilosophyPage />} />
                 <Route path="/insights" element={<InsightsPage />} />
                 <Route path="/insights/:slug" element={<InsightDetailPage />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/careers" element={<CareersPage />} />
+                <Route path="/careers/apply" element={<JobApplicationPage />} />
+                <Route path="/industries" element={<IndustriesPage />} />
                 <Route path="/contact" element={<ContactPage />} />
               </Route>
 

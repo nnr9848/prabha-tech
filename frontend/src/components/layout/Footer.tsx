@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Award, Globe2, Shield } from 'lucide-react';
-import logoImg from '../../assets/prabhatech-logo.png';
+import logoImg from '../../assets/prabhatech-white-logo.png';
 import { SocialIconsGroup } from '../common/SocialIconsGroup';
 import { BrandButton } from '../common/BrandButton';
 
@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
               <img
                 src={logoImg}
                 alt="Prabha Technologies Logo"
-                className="h-10 w-auto object-contain brightness-0 invert"
+                className="h-10 w-auto object-contain"
               />
             </Link>
             <p className="text-xs leading-relaxed text-slate-400">
@@ -34,9 +34,10 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li><Link to="/" className="hover:text-[#E5A93C] transition-colors">Home</Link></li>
               <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Services</Link></li>
-              <li><Link to="/case-studies" className="hover:text-[#E5A93C] transition-colors">Solutions</Link></li>
-              <li><Link to="/case-studies" className="hover:text-[#E5A93C] transition-colors">Portfolio</Link></li>
+              <li><Link to="/portfolio" className="hover:text-[#E5A93C] transition-colors">Portfolio</Link></li>
+              <li><Link to="/industries" className="hover:text-[#E5A93C] transition-colors">Industries</Link></li>
               <li><Link to="/about" className="hover:text-[#E5A93C] transition-colors">About Us</Link></li>
+              <li><Link to="/careers" className="hover:text-[#E5A93C] transition-colors">Careers</Link></li>
               <li><Link to="/insights" className="hover:text-[#E5A93C] transition-colors">Insights</Link></li>
               <li><Link to="/contact" className="hover:text-[#E5A93C] transition-colors">Contact</Link></li>
             </ul>

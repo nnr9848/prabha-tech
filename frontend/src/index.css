@@ -19,6 +19,10 @@
     --brand-platinum: #EDEDF2;      /* Logo metallic titanium letter face */
     --brand-silver: #8C9BB0;        /* Logo subtle metallic reflection & subtitle */
 
+    --brand-sapphire: #103875;      /* Logo 3D letter metallic royal reflection */
+    --brand-sapphire-light: #1D5BB5;/* Luminous sapphire for charts, active indicators */
+    --brand-sapphire-muted: rgba(16, 56, 117, 0.12);
+
     /* Universal Mappings */
     --brand-primary: #E5A93C;
     --brand-primary-hover: #D4972B;
@@ -123,4 +127,32 @@
   color: var(--brand-gold);
 }
 
+/* Infinite Smooth Logo Marquee */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
 
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Hide scrollbar for Chrome, Safari, Opera, Edge, Firefox */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

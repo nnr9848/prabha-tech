@@ -17,6 +17,8 @@ import {
   Server,
   Layers,
 } from 'lucide-react';
+import { SectionHeading } from '../components/common/SectionHeading';
+import { BrandButton } from '../components/common/BrandButton';
 
 export const CaseStudiesPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -141,50 +143,53 @@ export const CaseStudiesPage: React.FC = () => {
       {/* ========================================================= */}
       {/* 1. PORTFOLIO HERO: Daylight Clean Luxury Header */}
       {/* ========================================================= */}
-      <section className="relative pt-36 pb-20 border-b border-slate-100 overflow-hidden">
+      <section className="relative pt-36 pb-20 border-b border-slate-100 overflow-hidden bg-white">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-6 space-y-6">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#E5A93C]">
-                Our Portfolio
+              <span className="heading-eyebrow block">
+                OUR PORTFOLIO
               </span>
-              <h1 className="text-4xl sm:text-6xl font-extrabold text-[#020E26] tracking-tight leading-[1.1]">
+              <h1 className="heading-hero text-[#020E26]">
                 Building Impact <br />
-                <span className="text-[#E5A93C]">Through Technology</span>
+                <span className="text-[#E5A93C] font-light">Through Technology</span>
               </h1>
               <p className="text-base text-slate-600 leading-relaxed max-w-lg">
                 AI-powered software, mobile applications, and enterprise solutions that help businesses innovate, scale, and lead across industries.
               </p>
 
-              {/* Stats Band */}
-              <div className="grid grid-cols-4 gap-4 pt-4 border-t border-slate-200">
+              {/* Stats Band with Light Luxury Typography */}
+              <div className="grid grid-cols-4 gap-4 pt-6 border-t border-slate-200">
                 <div>
-                  <div className="text-2xl font-extrabold text-[#020E26]">100+</div>
-                  <div className="text-[11px] font-bold text-slate-500 uppercase mt-0.5">Projects</div>
+                  <div className="text-3xl font-light text-gold-shimmer leading-none">100+</div>
+                  <div className="text-[11px] font-bold text-slate-500 uppercase mt-1">Projects</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-extrabold text-[#020E26]">10+</div>
-                  <div className="text-[11px] font-bold text-slate-500 uppercase mt-0.5">Years</div>
+                  <div className="text-3xl font-light text-gold-shimmer leading-none">10+</div>
+                  <div className="text-[11px] font-bold text-slate-500 uppercase mt-1">Years</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-extrabold text-[#020E26]">GCC</div>
-                  <div className="text-[11px] font-bold text-slate-500 uppercase mt-0.5">Footprint</div>
+                  <div className="text-3xl font-light text-gold-shimmer leading-none">GCC</div>
+                  <div className="text-[11px] font-bold text-slate-500 uppercase mt-1">Footprint</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-extrabold text-[#020E26]">Global</div>
-                  <div className="text-[11px] font-bold text-slate-500 uppercase mt-0.5">Enterprises</div>
+                  <div className="text-3xl font-light text-gold-shimmer leading-none">Global</div>
+                  <div className="text-[11px] font-bold text-slate-500 uppercase mt-1">Enterprises</div>
                 </div>
               </div>
             </div>
 
-            {/* Right Multi-Device Visual Mockup */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-2xl overflow-hidden p-6 bg-slate-50 border border-slate-200 shadow-xl">
+            {/* Right Multi-Device Visual Showcase (Unboxed, Enterprise Depth) */}
+            <div className="lg:col-span-6 relative flex items-center justify-center">
+              {/* Subtle ambient gold & blue glow behind devices */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#E5A93C]/15 via-blue-500/10 to-transparent rounded-full filter blur-3xl opacity-70 pointer-events-none"></div>
+
+              <div className="relative z-10 w-full flex items-center justify-center">
                 <img
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
-                  alt="Portfolio Showcase Dashboard"
-                  className="rounded-xl w-full h-auto object-cover"
+                  src="/assets/images/enterprise-software.png"
+                  alt="Portfolio Multi-Device Platform"
+                  className="w-full h-auto max-w-[620px] lg:max-w-none object-contain drop-shadow-[0_24px_48px_rgba(2,14,38,0.12)] hover:scale-[1.01] transition-transform duration-500 ease-out"
                 />
               </div>
             </div>
@@ -198,28 +203,31 @@ export const CaseStudiesPage: React.FC = () => {
       <section className="py-20 bg-slate-50 border-b border-slate-200">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
           {/* Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-14 no-scrollbar">
-            {filterCategories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-200 ${
-                  activeCategory === cat
-                    ? 'bg-[#020E26] text-white shadow'
-                    : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-4 mb-14 no-scrollbar">
+            {filterCategories.map((cat) => {
+              const isSelected = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-6 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 shadow-sm ${
+                    isSelected
+                      ? 'bg-[#020E26] text-white shadow-md border border-[#020E26]'
+                      : 'bg-white text-slate-600 hover:text-[#020E26] border border-slate-200 hover:border-slate-300 hover:shadow'
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
           </div>
 
-          {/* 2-Column Luxury Cards matching Screenshot 3 */}
+          {/* 2-Column Luxury Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {filteredItems.map((item, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E5A93C]/50 transition-all duration-300 flex flex-col group"
+                className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E5A93C]/50 transition-all duration-300 flex flex-col group"
               >
                 {/* Visual Thumbnail */}
                 <div className="aspect-[16/9] bg-slate-100 overflow-hidden relative">
@@ -228,7 +236,7 @@ export const CaseStudiesPage: React.FC = () => {
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute top-4 left-4 px-3 py-1 rounded bg-[#020E26]/80 backdrop-blur-sm text-[10px] font-bold uppercase tracking-wider text-[#E5A93C]">
+                  <div className="absolute top-4 left-4 px-3 py-1 rounded-md bg-[#020E26]/85 backdrop-blur-sm text-[10px] font-bold uppercase tracking-wider text-[#E5A93C] border border-slate-700/60 shadow">
                     {item.badge}
                   </div>
                 </div>
@@ -236,7 +244,7 @@ export const CaseStudiesPage: React.FC = () => {
                 {/* Content Details */}
                 <div className="p-7 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-xl font-extrabold text-[#020E26] mb-2 group-hover:text-[#E5A93C] transition-colors">
+                    <h3 className="text-xl font-bold text-[#020E26] mb-2 group-hover:text-[#E5A93C] transition-colors">
                       {item.title}
                     </h3>
                     <p className="text-xs text-slate-600 leading-relaxed mb-6">
@@ -246,15 +254,12 @@ export const CaseStudiesPage: React.FC = () => {
 
                   {/* Dual Action Buttons */}
                   <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                    <Link
-                      to={`/case-studies/${item.slug}`}
-                      className="px-5 py-2 rounded-full bg-[#020E26] hover:bg-[#122847] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
-                    >
-                      Case Study →
-                    </Link>
+                    <BrandButton to={`/portfolio/${item.slug}`} variant="dark" size="sm">
+                      Case Study
+                    </BrandButton>
                     <Link
                       to="/contact"
-                      className="px-5 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold uppercase tracking-wider transition-colors"
+                      className="px-5 py-2.5 rounded-md bg-slate-100 hover:bg-slate-200 text-[#020E26] text-xs font-semibold uppercase tracking-wider transition-colors"
                     >
                       Explore →
                     </Link>
@@ -267,28 +272,39 @@ export const CaseStudiesPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 3. BOTTOM CTA BANNER */}
+      {/* 3. BOTTOM CTA BANNER (Panorama Skyline with Clean Left Fade) */}
       {/* ========================================================= */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 flex flex-col md:flex-row items-center justify-between gap-8 p-12 rounded-3xl bg-slate-900 text-white shadow-2xl">
+      <section className="relative py-20 bg-[#000B1E] text-white overflow-hidden border-t border-slate-800">
+        {/* Right-anchored Skyline visual with smooth progressive fade into deep navy */}
+        <div 
+          className="absolute right-0 top-0 bottom-0 w-full lg:w-[58%] z-0 pointer-events-none overflow-hidden"
+          style={{
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 20%, rgba(0,0,0,0.7) 48%, black 75%)',
+            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 20%, rgba(0,0,0,0.7) 48%, black 75%)'
+          }}
+        >
+          <img
+            src="/assets/images/dubai-hero-rings.jpg"
+            alt="Dubai Golden Skyline Innovation Hub at Night"
+            className="w-full h-full object-cover object-[center_right] opacity-95 scale-100"
+          />
+        </div>
+
+        <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#E5A93C] block mb-2">
-              Let's Build Together
+            <span className="heading-eyebrow block mb-2">
+              LET'S BUILD TOGETHER
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            <h2 className="heading-section text-white">
               Turn Your Vision Into Real Business Impact
             </h2>
-            <p className="text-sm text-slate-400 mt-2 max-w-xl">
+            <p className="text-sm text-slate-300 mt-2 max-w-xl">
               Partner with Prabha Technologies to build innovative and scalable digital solutions for a smarter tomorrow.
             </p>
           </div>
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#E5A93C] hover:bg-[#D4972B] text-[#020E26] text-xs font-bold uppercase tracking-wider transition-colors shadow-lg shrink-0"
-          >
-            <span>Let's Talk</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          <BrandButton to="/contact" variant="gold" size="lg">
+            Let's Talk
+          </BrandButton>
         </div>
       </section>
     </div>
