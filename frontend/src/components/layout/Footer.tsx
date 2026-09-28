@@ -13,11 +13,11 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 border-b border-[#0A1C3E]/80">
           {/* Col 1: Brand & Mission */}
           <div className="lg:col-span-1 space-y-4">
-            <Link to="/" className="inline-block">
+            <Link to="/" className="inline-block group">
               <img
                 src={logoImg}
                 alt="Prabha Technologies Logo"
-                className="h-10 w-auto object-contain"
+                className="h-10 sm:h-11 lg:h-14 xl:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.01]"
               />
             </Link>
             <p className="text-xs leading-relaxed text-slate-400">
