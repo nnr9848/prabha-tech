@@ -47,13 +47,13 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Our Services</h4>
             <ul className="space-y-2.5 text-xs text-slate-400">
-              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Enterprise Software</Link></li>
-              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Mobile Applications</Link></li>
-              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">AI & Analytics</Link></li>
-              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Industrial IoT</Link></li>
-              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Smart Buildings (BEMS)</Link></li>
-              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Cloud & DevOps</Link></li>
-              <li><Link to="/services" className="hover:text-[#E5A93C] transition-colors">Managed IT Services</Link></li>
+              <li><Link to="/services/custom-software-development" className="hover:text-[#E5A93C] transition-colors">Enterprise Software</Link></li>
+              <li><Link to="/services/mobile-app-development" className="hover:text-[#E5A93C] transition-colors">Mobile Applications</Link></li>
+              <li><Link to="/services/ai-analytics" className="hover:text-[#E5A93C] transition-colors">AI & Analytics</Link></li>
+              <li><Link to="/services/iiot-automation" className="hover:text-[#E5A93C] transition-colors">Industrial IoT & BEMS</Link></li>
+              <li><Link to="/services/metaverse-development" className="hover:text-[#E5A93C] transition-colors">Metaverse & Web3</Link></li>
+              <li><Link to="/services/managed-it-services" className="hover:text-[#E5A93C] transition-colors">Managed IT Services</Link></li>
+              <li><Link to="/services/staffing-recruitment" className="hover:text-[#E5A93C] transition-colors">IT Consulting & Staffing</Link></li>
             </ul>
           </div>
 
@@ -61,13 +61,13 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Industries</h4>
             <ul className="space-y-2.5 text-xs text-slate-400">
-              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Manufacturing</span></li>
-              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Construction</span></li>
-              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Real Estate</span></li>
-              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Healthcare</span></li>
-              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Retail & Hospitality</span></li>
-              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Logistics & Transport</span></li>
-              <li><span className="hover:text-[#E5A93C] transition-colors cursor-pointer">Agriculture</span></li>
+              <li><Link to="/industries" className="hover:text-[#E5A93C] transition-colors">Manufacturing</Link></li>
+              <li><Link to="/industries" className="hover:text-[#E5A93C] transition-colors">Construction</Link></li>
+              <li><Link to="/industries" className="hover:text-[#E5A93C] transition-colors">Real Estate</Link></li>
+              <li><Link to="/industries" className="hover:text-[#E5A93C] transition-colors">Healthcare</Link></li>
+              <li><Link to="/industries" className="hover:text-[#E5A93C] transition-colors">Retail & Hospitality</Link></li>
+              <li><Link to="/industries" className="hover:text-[#E5A93C] transition-colors">Logistics & Transport</Link></li>
+              <li><Link to="/industries" className="hover:text-[#E5A93C] transition-colors">Agriculture</Link></li>
             </ul>
           </div>
 
