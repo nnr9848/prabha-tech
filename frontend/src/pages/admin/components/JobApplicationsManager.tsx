@@ -234,8 +234,32 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                   <span className="font-medium text-slate-900">{selectedApp.phone || 'N/A'}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Experience</span>
-                  <span className="font-medium text-slate-900">{selectedApp.experience || 'N/A'}</span>
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Current Location</span>
+                  <span className="font-medium text-slate-900">{selectedApp.currentLocation || 'N/A'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Total Experience</span>
+                  <span className="font-medium text-slate-900">{selectedApp.totalExperience || selectedApp.experience || 'N/A'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Current Company</span>
+                  <span className="font-medium text-slate-900">{selectedApp.currentCompany || 'N/A'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Current Designation</span>
+                  <span className="font-medium text-slate-900">{selectedApp.currentDesignation || 'N/A'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Expected Salary</span>
+                  <span className="font-medium text-slate-900">{selectedApp.expectedSalary || 'N/A'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Notice Period</span>
+                  <span className="font-medium text-slate-900">{selectedApp.noticePeriod || 'N/A'}</span>
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Resume File</span>
+                  <span className="font-medium text-slate-900">{selectedApp.resumeFileName || 'resume.pdf'}</span>
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-400 font-semibold uppercase block">Applied Date</span>
@@ -250,13 +274,13 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                   Resume / Portfolio Link
                 </span>
                 <a
-                  href={selectedApp.resumeLink}
+                  href={selectedApp.resumeLink || '#'}
                   target="_blank"
                   rel="noreferrer"
                   className="text-amber-600 hover:underline flex items-center gap-1 font-medium break-all"
                 >
                   <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                  <span>{selectedApp.resumeLink}</span>
+                  <span>{selectedApp.resumeLink || 'View Attached Resume'}</span>
                 </a>
               </div>
 

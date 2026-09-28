@@ -20,11 +20,14 @@ public class JobApplicationDto {
     private String email;
 
     private String phone;
-    private String experience;
-
-    @NotBlank(message = "Resume or portfolio link is required")
+    private String currentLocation;
+    private String totalExperience;
+    private String currentCompany;
+    private String currentDesignation;
+    private String expectedSalary;
+    private String noticePeriod;
+    private String resumeFileName;
     private String resumeLink;
-
     private String coverNote;
     private String status;
     private OffsetDateTime createdAt;
@@ -49,8 +52,26 @@ public class JobApplicationDto {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public String getExperience() { return experience; }
-    public void setExperience(String experience) { this.experience = experience; }
+    public String getCurrentLocation() { return currentLocation; }
+    public void setCurrentLocation(String currentLocation) { this.currentLocation = currentLocation; }
+
+    public String getTotalExperience() { return totalExperience; }
+    public void setTotalExperience(String totalExperience) { this.totalExperience = totalExperience; }
+
+    public String getCurrentCompany() { return currentCompany; }
+    public void setCurrentCompany(String currentCompany) { this.currentCompany = currentCompany; }
+
+    public String getCurrentDesignation() { return currentDesignation; }
+    public void setCurrentDesignation(String currentDesignation) { this.currentDesignation = currentDesignation; }
+
+    public String getExpectedSalary() { return expectedSalary; }
+    public void setExpectedSalary(String expectedSalary) { this.expectedSalary = expectedSalary; }
+
+    public String getNoticePeriod() { return noticePeriod; }
+    public void setNoticePeriod(String noticePeriod) { this.noticePeriod = noticePeriod; }
+
+    public String getResumeFileName() { return resumeFileName; }
+    public void setResumeFileName(String resumeFileName) { this.resumeFileName = resumeFileName; }
 
     public String getResumeLink() { return resumeLink; }
     public void setResumeLink(String resumeLink) { this.resumeLink = resumeLink; }

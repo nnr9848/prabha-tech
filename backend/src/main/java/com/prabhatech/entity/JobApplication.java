@@ -26,10 +26,28 @@ public class JobApplication {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "experience")
-    private String experience;
+    @Column(name = "current_location")
+    private String currentLocation;
 
-    @Column(name = "resume_link", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "total_experience")
+    private String totalExperience;
+
+    @Column(name = "current_company")
+    private String currentCompany;
+
+    @Column(name = "current_designation")
+    private String currentDesignation;
+
+    @Column(name = "expected_salary")
+    private String expectedSalary;
+
+    @Column(name = "notice_period")
+    private String noticePeriod;
+
+    @Column(name = "resume_file_name")
+    private String resumeFileName;
+
+    @Column(name = "resume_link", columnDefinition = "TEXT")
     private String resumeLink;
 
     @Column(name = "cover_note", columnDefinition = "TEXT")
@@ -76,8 +94,26 @@ public class JobApplication {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public String getExperience() { return experience; }
-    public void setExperience(String experience) { this.experience = experience; }
+    public String getCurrentLocation() { return currentLocation; }
+    public void setCurrentLocation(String currentLocation) { this.currentLocation = currentLocation; }
+
+    public String getTotalExperience() { return totalExperience; }
+    public void setTotalExperience(String totalExperience) { this.totalExperience = totalExperience; }
+
+    public String getCurrentCompany() { return currentCompany; }
+    public void setCurrentCompany(String currentCompany) { this.currentCompany = currentCompany; }
+
+    public String getCurrentDesignation() { return currentDesignation; }
+    public void setCurrentDesignation(String currentDesignation) { this.currentDesignation = currentDesignation; }
+
+    public String getExpectedSalary() { return expectedSalary; }
+    public void setExpectedSalary(String expectedSalary) { this.expectedSalary = expectedSalary; }
+
+    public String getNoticePeriod() { return noticePeriod; }
+    public void setNoticePeriod(String noticePeriod) { this.noticePeriod = noticePeriod; }
+
+    public String getResumeFileName() { return resumeFileName; }
+    public void setResumeFileName(String resumeFileName) { this.resumeFileName = resumeFileName; }
 
     public String getResumeLink() { return resumeLink; }
     public void setResumeLink(String resumeLink) { this.resumeLink = resumeLink; }

@@ -625,18 +625,17 @@ export const CareersPage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Right Apply Action using BrandButton */}
+                    {/* Right Apply Action using BrandButton navigating to dedicated application page */}
                     <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100 gap-3">
                       <span className="text-[11px] text-slate-400 font-medium">
                         {job.jobType || 'Full-time'}
                       </span>
-                      <button
-                        type="button"
-                        onClick={() => setActiveApplyJob(job)}
+                      <Link
+                        to={`/careers/apply?job=${job.slug || job.id}`}
                         className="px-4 py-2 rounded-md bg-[#020E26] hover:bg-[#E5A93C] hover:text-[#000B1E] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm cursor-pointer"
                       >
                         Apply Now
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 ))
@@ -896,117 +895,6 @@ export const CareersPage: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* ========================================================= */}
-      {/* 8. JOB APPLICATION MODAL DIALOG */}
-      {/* ========================================================= */}
-      {activeApplyJob && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200">
-            <button
-              onClick={() => setActiveApplyJob(null)}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            <div className="mb-6">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#E5A93C] block mb-1">
-                APPLICATION FORM
-              </span>
-              <h3 className="text-xl font-bold text-[#020E26]">
-                Apply for {activeApplyJob.title}
-              </h3>
-              <p className="text-xs text-slate-500 mt-1">
-                {activeApplyJob.department} • {activeApplyJob.location}
-              </p>
-            </div>
-
-            {applySuccess ? (
-              <div className="py-8 text-center space-y-3">
-                <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
-                <h4 className="text-base font-bold text-[#020E26]">Application Submitted!</h4>
-                <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                  Thank you for applying. Our talent acquisition team will review your profile and reach out shortly.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleApplySubmit} className="space-y-4">
-                <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={applyFormData.fullName}
-                    onChange={(e) => setApplyFormData({ ...applyFormData, fullName: e.target.value })}
-                    placeholder="Enter your full name"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 outline-none focus:border-[#E5A93C] focus:bg-white"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs font-semibold text-slate-700 block mb-1">Email Address</label>
-                    <input
-                      type="email"
-                      required
-                      value={applyFormData.email}
-                      onChange={(e) => setApplyFormData({ ...applyFormData, email: e.target.value })}
-                      placeholder="name@company.com"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 outline-none focus:border-[#E5A93C] focus:bg-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-slate-700 block mb-1">Phone Number</label>
-                    <input
-                      type="tel"
-                      required
-                      value={applyFormData.phone}
-                      onChange={(e) => setApplyFormData({ ...applyFormData, phone: e.target.value })}
-                      placeholder="+971 50..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 outline-none focus:border-[#E5A93C] focus:bg-white"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">LinkedIn / Portfolio / Resume URL</label>
-                  <input
-                    type="url"
-                    required
-                    value={applyFormData.resumeLink}
-                    onChange={(e) => setApplyFormData({ ...applyFormData, resumeLink: e.target.value })}
-                    placeholder="https://linkedin.com/in/... or drive link"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 outline-none focus:border-[#E5A93C] focus:bg-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">Cover Note / Why PrabhaTech?</label>
-                  <textarea
-                    rows={3}
-                    value={applyFormData.coverNote}
-                    onChange={(e) => setApplyFormData({ ...applyFormData, coverNote: e.target.value })}
-                    placeholder="Briefly describe your relevant experience..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 outline-none focus:border-[#E5A93C] focus:bg-white"
-                  />
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={applyMutation.isPending}
-                    className="w-full py-3 rounded-md bg-[#E5A93C] hover:bg-[#D4972B] active:scale-95 text-[#000B1E] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow cursor-pointer disabled:opacity-60"
-                  >
-                    <span>{applyMutation.isPending ? 'Submitting...' : 'Submit Application'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

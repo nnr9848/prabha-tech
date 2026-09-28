@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import {
   Sparkles,
   ArrowRight,
-  Play,
   Cpu,
   Layers,
   Smartphone,
@@ -98,20 +97,6 @@ export const HomePage: React.FC = () => {
               {/* Gold Enterprise Button */}
               <BrandButton to="/portfolio" variant="gold" size="md">
                 EXPLORE OUR SOLUTIONS
-              </BrandButton>
-
-              {/* Dark Outlined Watch Video Button */}
-              <BrandButton
-                variant="outline"
-                size="md"
-                showArrow={false}
-                icon={
-                  <div className="w-5 h-5 rounded-full bg-[#E5A93C] text-[#000B1E] flex items-center justify-center mr-1">
-                    <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
-                  </div>
-                }
-              >
-                WATCH VIDEO
               </BrandButton>
             </motion.div>
           </div>

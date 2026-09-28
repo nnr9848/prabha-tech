@@ -66,10 +66,14 @@ const NOTICE_PERIODS = [
   '90 Days (3 Months)',
 ];
 
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { publicApi } from '../api/client';
+import { JobPosition, JobApplication } from '../types';
+
 export const JobApplicationPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const preselectedJobId = searchParams.get('job');
+  const preselectedJobParam = searchParams.get('job');
 
   // Intelligent Exit: return to previous page position if in history, else fallback to /careers
   const handleExit = () => {
@@ -91,6 +95,15 @@ export const JobApplicationPage: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Live positions from PostgreSQL database
+  const { data: dbJobs = [] } = useQuery<JobPosition[]>({
+    queryKey: ['publicJobs'],
+    queryFn: () => publicApi.getJobs(),
+  });
+
+  // Dynamic Departments from Live Jobs
+  const dynamicDepartments = Array.from(new Set(dbJobs.map((j) => j.department || 'Engineering')));
+
   // Form State
   const [selectedPosition, setSelectedPosition] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -108,25 +121,29 @@ export const JobApplicationPage: React.FC = () => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   // Pre-fill position & department from URL query
   useEffect(() => {
-    if (preselectedJobId) {
-      const match = POSITIONS.find((p) => p.id === preselectedJobId);
+    if (preselectedJobParam && dbJobs.length > 0) {
+      const match = dbJobs.find(
+        (p) =>
+          p.slug === preselectedJobParam ||
+          String(p.id) === preselectedJobParam ||
+          p.title.toLowerCase() === preselectedJobParam.toLowerCase()
+      );
       if (match) {
         setSelectedPosition(match.title);
         setSelectedDepartment(match.department);
       }
     }
-  }, [preselectedJobId]);
+  }, [preselectedJobParam, dbJobs]);
 
   // When position changes, automatically sync department
   const handlePositionChange = (posTitle: string) => {
     setSelectedPosition(posTitle);
-    const match = POSITIONS.find((p) => p.title === posTitle);
+    const match = dbJobs.find((p) => p.title === posTitle);
     if (match) {
       setSelectedDepartment(match.department);
     }
@@ -142,6 +159,18 @@ export const JobApplicationPage: React.FC = () => {
       setResumeFile(file);
     }
   };
+
+  const applyMutation = useMutation({
+    mutationFn: (application: JobApplication) => publicApi.applyJob(application),
+    onSuccess: () => {
+      setIsSuccess(true);
+    },
+    onError: (err: any) => {
+      setErrorMessage(
+        err.response?.data?.message || 'Failed to submit application. Please check your details and try again.'
+      );
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -160,12 +189,24 @@ export const JobApplicationPage: React.FC = () => {
       return;
     }
 
-    setIsSubmitting(true);
-    // Simulate server submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 1200);
+    const matchedJob = dbJobs.find((j) => j.title === selectedPosition);
+
+    applyMutation.mutate({
+      jobId: matchedJob?.id,
+      jobTitle: selectedPosition,
+      fullName,
+      email,
+      phone: `${countryCode} ${phoneNumber}`.trim(),
+      currentLocation: location,
+      totalExperience,
+      currentCompany,
+      currentDesignation,
+      expectedSalary,
+      noticePeriod,
+      resumeFileName: resumeFile?.name || 'resume_uploaded.pdf',
+      resumeLink: resumeFile ? URL.createObjectURL(resumeFile) : 'https://prabhatech.com/resumes/candidate-resume.pdf',
+      coverNote: coverLetter,
+    });
   };
 
   return (
@@ -247,8 +288,8 @@ export const JobApplicationPage: React.FC = () => {
                       className="w-full appearance-none bg-slate-50/70 border border-slate-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-800 outline-none focus:border-[#E5A93C] focus:bg-white transition-all cursor-pointer pr-10"
                     >
                       <option value="">Select Position</option>
-                      {POSITIONS.map((pos) => (
-                        <option key={pos.id} value={pos.title}>
+                      {dbJobs.map((pos) => (
+                        <option key={pos.id || pos.slug} value={pos.title}>
                           {pos.title}
                         </option>
                       ))}
@@ -270,7 +311,7 @@ export const JobApplicationPage: React.FC = () => {
                       className="w-full appearance-none bg-slate-50/70 border border-slate-200 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-800 outline-none focus:border-[#E5A93C] focus:bg-white transition-all cursor-pointer pr-10"
                     >
                       <option value="">Select Department</option>
-                      {DEPARTMENTS.map((dept) => (
+                      {dynamicDepartments.map((dept) => (
                         <option key={dept} value={dept}>
                           {dept}
                         </option>
@@ -599,7 +640,7 @@ export const JobApplicationPage: React.FC = () => {
                   type="submit"
                   variant="dark"
                   size="lg"
-                  isLoading={isSubmitting}
+                  isLoading={applyMutation.isPending}
                   className="w-full sm:flex-1 justify-center text-sm py-4 rounded-xl"
                 >
                   Submit Application

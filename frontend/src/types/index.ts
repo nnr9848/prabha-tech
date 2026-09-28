@@ -114,8 +114,15 @@ export interface JobApplication {
   fullName: string;
   email: string;
   phone?: string;
+  currentLocation?: string;
+  totalExperience?: string;
   experience?: string;
-  resumeLink: string;
+  currentCompany?: string;
+  currentDesignation?: string;
+  expectedSalary?: string;
+  noticePeriod?: string;
+  resumeFileName?: string;
+  resumeLink?: string;
   coverNote?: string;
   status?: 'NEW' | 'REVIEWING' | 'SHORTLISTED' | 'REJECTED' | 'HIRED';
   createdAt?: string;
