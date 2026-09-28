@@ -71,24 +71,14 @@ export const App: React.FC = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/portfolio" element={<CaseStudiesPage />} />
                 <Route path="/portfolio/:slug" element={<CaseStudyDetailPage />} />
-                <Route path="/case-studies" element={<Navigate to="/portfolio" replace />} />
-                <Route path="/case-studies/:slug" element={<CaseStudyDetailPage />} />
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/services/custom-software-development" element={<CustomSoftwareDevelopmentPage />} />
-                <Route path="/services/enterprise-software" element={<CustomSoftwareDevelopmentPage />} />
-                <Route path="/services/mobile-apps" element={<MobileAppDevelopmentPage />} />
                 <Route path="/services/mobile-app-development" element={<MobileAppDevelopmentPage />} />
                 <Route path="/services/ai-analytics" element={<AiAnalyticsPage />} />
-                <Route path="/services/ai-and-analytics" element={<AiAnalyticsPage />} />
                 <Route path="/services/iiot-automation" element={<IiotAutomationPage />} />
-                <Route path="/services/industrial-iot" element={<IiotAutomationPage />} />
-                <Route path="/services/metaverse" element={<MetaverseDevelopmentPage />} />
                 <Route path="/services/metaverse-development" element={<MetaverseDevelopmentPage />} />
                 <Route path="/services/managed-it-services" element={<ManagedItServicesPage />} />
-                <Route path="/services/managed-it" element={<ManagedItServicesPage />} />
-                <Route path="/services/recruitment-and-staffing" element={<StaffingRecruitmentPage />} />
                 <Route path="/services/staffing-recruitment" element={<StaffingRecruitmentPage />} />
-                <Route path="/services/consulting" element={<StaffingRecruitmentPage />} />
                 <Route path="/insights" element={<InsightsPage />} />
                 <Route path="/insights/:slug" element={<InsightDetailPage />} />
                 <Route path="/about" element={<AboutPage />} />

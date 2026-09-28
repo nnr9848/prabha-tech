@@ -65,7 +65,7 @@ export const ServicesPage: React.FC = () => {
         'App Maintenance',
       ],
       img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
-      link: '/services/mobile-apps',
+      link: '/services/mobile-app-development',
     },
     {
       category: 'AI & Analytics',
@@ -107,7 +107,7 @@ export const ServicesPage: React.FC = () => {
         'Metaverse Commerce & Showrooms',
       ],
       img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=800&q=80',
-      link: '/services/metaverse',
+      link: '/services/metaverse-development',
     },
     {
       category: 'Managed IT Services',

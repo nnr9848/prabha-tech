@@ -80,7 +80,7 @@ export const HomePage: React.FC = () => {
               className="flex flex-wrap items-center gap-4"
             >
               {/* Gold Enterprise Button */}
-              <BrandButton to="/case-studies" variant="gold" size="md">
+              <BrandButton to="/portfolio" variant="gold" size="md">
                 EXPLORE OUR SOLUTIONS
               </BrandButton>
 
