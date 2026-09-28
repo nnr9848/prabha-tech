@@ -28,6 +28,7 @@ public class PublicController {
     private final SocialLinkService socialLinkService;
     private final com.prabhatech.service.HeroConfigService heroConfigService;
     private final com.prabhatech.service.JobPositionService jobPositionService;
+    private final com.prabhatech.service.JobApplicationService jobApplicationService;
 
     public PublicController(CaseStudyService caseStudyService,
                             ServiceItemService serviceItemService,
@@ -35,7 +36,8 @@ public class PublicController {
                             LeadInquiryService leadInquiryService,
                             SocialLinkService socialLinkService,
                             com.prabhatech.service.HeroConfigService heroConfigService,
-                            com.prabhatech.service.JobPositionService jobPositionService) {
+                            com.prabhatech.service.JobPositionService jobPositionService,
+                            com.prabhatech.service.JobApplicationService jobApplicationService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
@@ -43,6 +45,7 @@ public class PublicController {
         this.socialLinkService = socialLinkService;
         this.heroConfigService = heroConfigService;
         this.jobPositionService = jobPositionService;
+        this.jobApplicationService = jobApplicationService;
     }
 
     // --- Hero Section Dynamic Config ---
@@ -116,5 +119,10 @@ public class PublicController {
     @GetMapping("/jobs")
     public ResponseEntity<List<com.prabhatech.dto.JobPositionDto>> getJobs() {
         return ResponseEntity.ok(jobPositionService.getActiveJobsPublic());
+    }
+
+    @PostMapping("/jobs/apply")
+    public ResponseEntity<com.prabhatech.dto.JobApplicationDto> applyForJob(@Valid @RequestBody com.prabhatech.dto.JobApplicationDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(jobApplicationService.submitApplication(dto));
     }
 }

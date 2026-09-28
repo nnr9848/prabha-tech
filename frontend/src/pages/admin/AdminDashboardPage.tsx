@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../../api/client';
-import { CaseStudy, Article, LeadInquiry, SocialLink } from '../../types';
+import { CaseStudy, Article, LeadInquiry, SocialLink, JobPosition, JobApplication } from '../../types';
 import { AdminSidebar, AdminTab } from './components/AdminSidebar';
 import { AdminHeader } from './components/AdminHeader';
 import { AdminOverview } from './components/AdminOverview';
 import { CaseStudiesManager } from './components/CaseStudiesManager';
 import { ArticlesManager } from './components/ArticlesManager';
+import { JobsManager } from './components/JobsManager';
+import { JobApplicationsManager } from './components/JobApplicationsManager';
 import { InquiriesManager } from './components/InquiriesManager';
 import { SocialLinksManager } from './components/SocialLinksManager';
 import { useToast } from '../../context/ToastContext';
@@ -42,6 +44,16 @@ export const AdminDashboardPage: React.FC = () => {
     queryFn: () => adminApi.getAllSocialLinks(),
   });
 
+  const { data: jobs = [] } = useQuery<JobPosition[]>({
+    queryKey: ['adminJobs'],
+    queryFn: () => adminApi.getAllJobs(),
+  });
+
+  const { data: applications = [] } = useQuery<JobApplication[]>({
+    queryKey: ['adminApplications'],
+    queryFn: () => adminApi.getAllApplications(),
+  });
+
   // Modal States
   const [isCaseModalOpen, setIsCaseModalOpen] = useState(false);
   const [editingCase, setEditingCase] = useState<Partial<CaseStudy>>({
@@ -71,6 +83,22 @@ export const AdminDashboardPage: React.FC = () => {
     readTime: '5 min read',
     featured: true,
   });
+
+  const [isJobModalOpen, setIsJobModalOpen] = useState(false);
+  const [editingJob, setEditingJob] = useState<Partial<JobPosition>>({
+    title: '',
+    slug: '',
+    department: 'Engineering',
+    location: 'Dubai, UAE',
+    jobType: 'Full-time',
+    experience: '3+ Years',
+    description: '',
+    skills: [],
+    featured: false,
+    isActive: true,
+    displayOrder: 1,
+  });
+  const [skillsInput, setSkillsInput] = useState('');
 
   const [isSocialModalOpen, setIsSocialModalOpen] = useState(false);
   const [editingSocial, setEditingSocial] = useState<Partial<SocialLink>>({
@@ -163,8 +191,50 @@ export const AdminDashboardPage: React.FC = () => {
     onError: () => toast.error('Error', 'Failed to delete social channel.'),
   });
 
+  const saveJobMutation = useMutation({
+    mutationFn: (data: Partial<JobPosition>) => adminApi.saveJob(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminJobs'] });
+      queryClient.invalidateQueries({ queryKey: ['publicJobs'] });
+      setIsJobModalOpen(false);
+      toast.success('Job Role Saved', 'Open position is updated and synchronized.');
+    },
+    onError: (err: any) => {
+      toast.error('Failed to save Job Role', err.response?.data?.message || 'Check required fields.');
+    },
+  });
+
+  const deleteJobMutation = useMutation({
+    mutationFn: (id: number) => adminApi.deleteJob(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminJobs'] });
+      queryClient.invalidateQueries({ queryKey: ['publicJobs'] });
+      toast.info('Job Role Removed', 'The position has been removed from careers.');
+    },
+    onError: () => toast.error('Error', 'Failed to delete job position.'),
+  });
+
+  const updateAppStatusMutation = useMutation({
+    mutationFn: ({ id, status }: { id: number; status: string }) =>
+      adminApi.updateApplicationStatus(id, status),
+    onSuccess: (_, vars) => {
+      queryClient.invalidateQueries({ queryKey: ['adminApplications'] });
+      toast.success('Stage Updated', `Candidate moved to ${vars.status}.`);
+    },
+    onError: () => toast.error('Error', 'Failed to update application status.'),
+  });
+
+  const deleteAppMutation = useMutation({
+    mutationFn: (id: number) => adminApi.deleteApplication(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminApplications'] });
+      toast.info('Application Removed', 'Candidate application removed from pipeline.');
+    },
+    onError: () => toast.error('Error', 'Failed to delete application.'),
+  });
+
   // Modal Triggers
-  const handleQuickCreate = (type: 'case' | 'article' | 'social') => {
+  const handleQuickCreate = (type: 'case' | 'article' | 'job' | 'social') => {
     if (type === 'case') {
       setEditingCase({
         title: '',
@@ -194,6 +264,22 @@ export const AdminDashboardPage: React.FC = () => {
         featured: true,
       });
       setIsArticleModalOpen(true);
+    } else if (type === 'job') {
+      setEditingJob({
+        title: '',
+        slug: '',
+        department: 'Engineering',
+        location: 'Dubai, UAE',
+        jobType: 'Full-time',
+        experience: '3+ Years',
+        description: '',
+        skills: ['TypeScript', 'React', 'Node.js'],
+        featured: false,
+        isActive: true,
+        displayOrder: jobs.length + 1,
+      });
+      setSkillsInput('TypeScript, React, Node.js');
+      setIsJobModalOpen(true);
     } else if (type === 'social') {
       setEditingSocial({
         platformKey: 'linkedin',
@@ -208,6 +294,7 @@ export const AdminDashboardPage: React.FC = () => {
   };
 
   const newInquiriesCount = inquiries.filter((i) => !i.status || i.status === 'NEW').length;
+  const newApplicationsCount = applications.filter((a) => !a.status || a.status === 'NEW').length;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex">
@@ -220,6 +307,9 @@ export const AdminDashboardPage: React.FC = () => {
         counts={{
           caseStudies: caseStudies.length,
           articles: articles.length,
+          jobs: jobs.length,
+          applications: applications.length,
+          newApplications: newApplicationsCount,
           inquiries: inquiries.length,
           newInquiries: newInquiriesCount,
           socialLinks: socialLinks.length,
@@ -277,6 +367,30 @@ export const AdminDashboardPage: React.FC = () => {
                 setIsArticleModalOpen(true);
               }}
               onDelete={(id) => deleteArticleMutation.mutate(id)}
+            />
+          )}
+
+          {activeTab === 'jobs' && (
+            <JobsManager
+              jobs={jobs}
+              onOpenCreate={() => handleQuickCreate('job')}
+              onOpenEdit={(job) => {
+                setEditingJob(job);
+                setSkillsInput((job.skills || []).join(', '));
+                setIsJobModalOpen(true);
+              }}
+              onDelete={(id) => deleteJobMutation.mutate(id)}
+              onToggleActive={(job) =>
+                saveJobMutation.mutate({ ...job, isActive: !job.isActive })
+              }
+            />
+          )}
+
+          {activeTab === 'job-applications' && (
+            <JobApplicationsManager
+              applications={applications}
+              onUpdateStatus={(id, status) => updateAppStatusMutation.mutate({ id, status })}
+              onDelete={(id) => deleteAppMutation.mutate(id)}
             />
           )}
 
@@ -661,6 +775,220 @@ export const AdminDashboardPage: React.FC = () => {
               >
                 <Save className="w-3.5 h-3.5 text-slate-950" />
                 <span>Save Channel</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* 4. MODAL: JOB POSITION CREATE / EDIT */}
+      {/* ========================================================= */}
+      {isJobModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-6 my-8 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 block">
+                  Talent Acquisition
+                </span>
+                <h3 className="text-lg font-bold text-slate-900">
+                  {editingJob.id ? 'Edit Job Opening' : 'Post New Job Opening'}
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsJobModalOpen(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-1 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Job Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Senior Full-Stack AI Engineer"
+                    value={editingJob.title || ''}
+                    onChange={(e) => {
+                      const title = e.target.value;
+                      const slug = title
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/(^-|-$)+/g, '');
+                      setEditingJob({ ...editingJob, title, slug: editingJob.id ? editingJob.slug : slug });
+                    }}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Slug / URL Path *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="senior-full-stack-ai-engineer"
+                    value={editingJob.slug || ''}
+                    onChange={(e) => setEditingJob({ ...editingJob, slug: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Department *
+                  </label>
+                  <select
+                    value={editingJob.department || 'Engineering'}
+                    onChange={(e) => setEditingJob({ ...editingJob, department: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  >
+                    <option>Engineering</option>
+                    <option>AI & Data</option>
+                    <option>Mobile Apps</option>
+                    <option>IoT & Automation</option>
+                    <option>Managed Services</option>
+                    <option>Sales & Business Development</option>
+                    <option>Product & Design</option>
+                    <option>HR & Operations</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Location *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Dubai, UAE or Remote"
+                    value={editingJob.location || ''}
+                    onChange={(e) => setEditingJob({ ...editingJob, location: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Job Type *
+                  </label>
+                  <select
+                    value={editingJob.jobType || 'Full-time'}
+                    onChange={(e) => setEditingJob({ ...editingJob, jobType: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  >
+                    <option>Full-time</option>
+                    <option>Part-time</option>
+                    <option>Contract</option>
+                    <option>Internship</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Required Experience
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. 5+ Years, Mid-Senior level"
+                  value={editingJob.experience || ''}
+                  onChange={(e) => setEditingJob({ ...editingJob, experience: e.target.value })}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Role Description & Scope *
+                </label>
+                <textarea
+                  rows={4}
+                  required
+                  placeholder="Describe key responsibilities, deliverables, and role expectations..."
+                  value={editingJob.description || ''}
+                  onChange={(e) => setEditingJob({ ...editingJob, description: e.target.value })}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Required Skills (Comma-separated)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. React, Spring Boot, PostgreSQL, Docker"
+                  value={skillsInput}
+                  onChange={(e) => {
+                    setSkillsInput(e.target.value);
+                    const skillsArray = e.target.value
+                      .split(',')
+                      .map((s) => s.trim())
+                      .filter(Boolean);
+                    setEditingJob({ ...editingJob, skills: skillsArray });
+                  }}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+                {editingJob.skills && editingJob.skills.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {editingJob.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-amber-50 border border-amber-200 text-amber-800"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-100">
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={editingJob.featured || false}
+                    onChange={(e) => setEditingJob({ ...editingJob, featured: e.target.checked })}
+                    className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-0"
+                  />
+                  <span>Mark as Featured Position</span>
+                </label>
+
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={editingJob.isActive !== false}
+                    onChange={(e) => setEditingJob({ ...editingJob, isActive: e.target.checked })}
+                    className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-0"
+                  />
+                  <span>Active Opening (Visible to Applicants)</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+              <button
+                onClick={() => setIsJobModalOpen(false)}
+                className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => saveJobMutation.mutate(editingJob)}
+                disabled={!editingJob.title || !editingJob.description}
+                className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+              >
+                <Save className="w-3.5 h-3.5 text-slate-950" />
+                <span>Save Role</span>
               </button>
             </div>
           </div>

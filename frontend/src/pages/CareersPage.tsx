@@ -32,9 +32,9 @@ import {
 } from 'lucide-react';
 import { BrandButton } from '../components/common/BrandButton';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { publicApi } from '../api/client';
-import { JobPosition } from '../types';
+import { JobPosition, JobApplication } from '../types';
 
 // Dynamic department icon mapper
 const getDeptIcon = (dept: string) => {
@@ -154,21 +154,42 @@ export const CareersPage: React.FC = () => {
     ];
   }, [jobs]);
 
+  const applyMutation = useMutation({
+    mutationFn: (application: JobApplication) => publicApi.applyJob(application),
+    onSuccess: () => {
+      setApplySuccess(true);
+      setTimeout(() => {
+        setApplySuccess(false);
+        setActiveApplyJob(null);
+        setApplyFormData({
+          fullName: '',
+          email: '',
+          phone: '',
+          experience: '',
+          resumeLink: '',
+          coverNote: '',
+        });
+      }, 3000);
+    },
+    onError: () => {
+      alert('Failed to submit application. Please check your network and try again.');
+    },
+  });
+
   const handleApplySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setApplySuccess(true);
-    setTimeout(() => {
-      setApplySuccess(false);
-      setActiveApplyJob(null);
-      setApplyFormData({
-        fullName: '',
-        email: '',
-        phone: '',
-        experience: '',
-        resumeLink: '',
-        coverNote: '',
-      });
-    }, 2500);
+    if (!activeApplyJob) return;
+
+    applyMutation.mutate({
+      jobId: activeApplyJob.id,
+      jobTitle: activeApplyJob.title,
+      fullName: applyFormData.fullName,
+      email: applyFormData.email,
+      phone: applyFormData.phone,
+      experience: applyFormData.experience,
+      resumeLink: applyFormData.resumeLink,
+      coverNote: applyFormData.coverNote,
+    });
   };
 
   return (
@@ -974,9 +995,10 @@ export const CareersPage: React.FC = () => {
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-md bg-[#E5A93C] hover:bg-[#D4972B] active:scale-95 text-[#000B1E] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow cursor-pointer"
+                    disabled={applyMutation.isPending}
+                    className="w-full py-3 rounded-md bg-[#E5A93C] hover:bg-[#D4972B] active:scale-95 text-[#000B1E] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow cursor-pointer disabled:opacity-60"
                   >
-                    <span>Submit Application</span>
+                    <span>{applyMutation.isPending ? 'Submitting...' : 'Submit Application'}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition } from '../types';
+import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition, JobApplication } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -89,6 +89,11 @@ export const publicApi = {
 
   getJobs: async (): Promise<JobPosition[]> => {
     const res = await publicClient.get('/public/jobs');
+    return res.data;
+  },
+
+  applyJob: async (application: JobApplication): Promise<JobApplication> => {
+    const res = await publicClient.post('/public/jobs/apply', application);
     return res.data;
   },
 };
@@ -199,6 +204,24 @@ export const adminApi = {
 
   deleteJob: async (id: number): Promise<void> => {
     await adminClient.delete(`/admin/jobs/${id}`);
+  },
+
+  // Job Applications ATS Pipeline CMS
+  getAllApplications: async (status?: string): Promise<JobApplication[]> => {
+    const params = status ? { status } : {};
+    const res = await adminClient.get('/admin/applications', { params });
+    return res.data;
+  },
+
+  updateApplicationStatus: async (id: number, status: string): Promise<JobApplication> => {
+    const res = await adminClient.patch(`/admin/applications/${id}/status`, null, {
+      params: { status },
+    });
+    return res.data;
+  },
+
+  deleteApplication: async (id: number): Promise<void> => {
+    await adminClient.delete(`/admin/applications/${id}`);
   },
 };
 

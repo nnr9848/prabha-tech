@@ -41,6 +41,16 @@ const TAB_TITLES: Record<AdminTab, { title: string; subtitle: string; category: 
     title: 'Client Inquiries & RFPs',
     subtitle: 'Track inbound client submissions, estimated budgets, and workflow stages.',
   },
+  jobs: {
+    category: 'Talent Acquisition',
+    title: 'Careers & Open Roles',
+    subtitle: 'Manage job postings, requisitions, requirements, and active recruitment pipelines.',
+  },
+  'job-applications': {
+    category: 'Talent Acquisition',
+    title: 'Candidate Applications & ATS',
+    subtitle: 'Review candidate dossiers, stage pipelines, resume links, and hiring statuses.',
+  },
   'social-links': {
     category: 'Platform Settings',
     title: 'Brand Social Channels',
@@ -93,6 +103,16 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
             >
               <Plus className="w-3.5 h-3.5 text-slate-950" />
               <span>New Article</span>
+            </button>
+          )}
+
+          {activeTab === 'jobs' && (
+            <button
+              onClick={() => onQuickCreate('job' as any)}
+              className="py-2 px-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5 text-slate-950" />
+              <span>Post New Role</span>
             </button>
           )}
 

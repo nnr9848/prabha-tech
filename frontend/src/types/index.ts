@@ -107,5 +107,19 @@ export interface JobPosition {
   createdAt?: string;
 }
 
+export interface JobApplication {
+  id?: number;
+  jobId?: number;
+  jobTitle: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  experience?: string;
+  resumeLink: string;
+  coverNote?: string;
+  status?: 'NEW' | 'REVIEWING' | 'SHORTLISTED' | 'REJECTED' | 'HIRED';
+  createdAt?: string;
+}
+
 
 

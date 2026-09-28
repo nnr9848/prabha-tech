@@ -5,6 +5,8 @@ import {
   BookOpen,
   MessageSquare,
   Share2,
+  Briefcase,
+  Users,
   ChevronLeft,
   ChevronRight,
   Shield,
@@ -13,7 +15,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export type AdminTab = 'overview' | 'case-studies' | 'articles' | 'inquiries' | 'social-links';
+export type AdminTab = 'overview' | 'case-studies' | 'articles' | 'jobs' | 'job-applications' | 'inquiries' | 'social-links';
 
 interface AdminSidebarProps {
   activeTab: AdminTab;
@@ -23,6 +25,9 @@ interface AdminSidebarProps {
   counts: {
     caseStudies: number;
     articles: number;
+    jobs: number;
+    applications: number;
+    newApplications: number;
     inquiries: number;
     newInquiries: number;
     socialLinks: number;
@@ -75,6 +80,19 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           label: 'Articles / Insights',
           icon: <BookOpen className="w-4 h-4" />,
           badge: counts.articles,
+        },
+        {
+          id: 'jobs',
+          label: 'Careers / Roles',
+          icon: <Briefcase className="w-4 h-4" />,
+          badge: counts.jobs,
+        },
+        {
+          id: 'job-applications',
+          label: 'Job Applicants',
+          icon: <Users className="w-4 h-4" />,
+          badge: counts.applications,
+          highlightBadge: counts.newApplications > 0 ? `${counts.newApplications} New` : null,
         },
         {
           id: 'social-links',

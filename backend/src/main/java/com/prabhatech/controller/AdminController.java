@@ -23,6 +23,7 @@ public class AdminController {
     private final SocialLinkService socialLinkService;
     private final com.prabhatech.service.HeroConfigService heroConfigService;
     private final com.prabhatech.service.JobPositionService jobPositionService;
+    private final com.prabhatech.service.JobApplicationService jobApplicationService;
 
     public AdminController(CaseStudyService caseStudyService,
                            ServiceItemService serviceItemService,
@@ -30,7 +31,8 @@ public class AdminController {
                            LeadInquiryService leadInquiryService,
                            SocialLinkService socialLinkService,
                            com.prabhatech.service.HeroConfigService heroConfigService,
-                           com.prabhatech.service.JobPositionService jobPositionService) {
+                           com.prabhatech.service.JobPositionService jobPositionService,
+                           com.prabhatech.service.JobApplicationService jobApplicationService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
@@ -38,6 +40,7 @@ public class AdminController {
         this.socialLinkService = socialLinkService;
         this.heroConfigService = heroConfigService;
         this.jobPositionService = jobPositionService;
+        this.jobApplicationService = jobApplicationService;
     }
 
     // --- Hero Section CMS ---
@@ -158,6 +161,28 @@ public class AdminController {
     @DeleteMapping("/jobs/{id}")
     public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
         jobPositionService.deleteJob(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // --- Job Applications / ATS Pipeline ---
+    @GetMapping("/applications")
+    public ResponseEntity<List<com.prabhatech.dto.JobApplicationDto>> getAllApplications(
+            @RequestParam(required = false) String status
+    ) {
+        return ResponseEntity.ok(jobApplicationService.getAllApplications(status));
+    }
+
+    @PatchMapping("/applications/{id}/status")
+    public ResponseEntity<com.prabhatech.dto.JobApplicationDto> updateApplicationStatus(
+            @PathVariable Long id,
+            @RequestParam String status
+    ) {
+        return ResponseEntity.ok(jobApplicationService.updateStatus(id, status));
+    }
+
+    @DeleteMapping("/applications/{id}")
+    public ResponseEntity<Void> deleteApplication(@PathVariable Long id) {
+        jobApplicationService.deleteApplication(id);
         return ResponseEntity.noContent().build();
     }
 }
