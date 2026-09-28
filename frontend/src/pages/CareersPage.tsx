@@ -32,102 +32,40 @@ import {
 } from 'lucide-react';
 import { BrandButton } from '../components/common/BrandButton';
 
-interface JobPosition {
-  id: string;
-  title: string;
-  department: string;
-  deptIcon: React.ReactNode;
-  location: string;
-  experience: string;
-  type: string;
-  featured?: boolean;
-  postedAgo: string;
-  description: string;
-  skills: string[];
-}
+import { useQuery } from '@tanstack/react-query';
+import { publicApi } from '../api/client';
+import { JobPosition } from '../types';
 
-const JOBS_DATA: JobPosition[] = [
-  {
-    id: 'full-stack-java-dev',
-    title: 'Full Stack Java Developer',
-    department: 'Engineering',
-    deptIcon: <Code2 className="w-5 h-5 text-amber-500" />,
-    location: 'Dubai, UAE',
-    experience: '3-6 Years',
-    type: 'Full-time',
-    featured: true,
-    postedAgo: '2 days ago',
-    description: 'Build and maintain enterprise web applications using Java Spring Boot and React.',
-    skills: ['Java', 'Spring Boot', 'React', 'REST API', 'Microservices'],
-  },
-  {
-    id: 'react-native-mobile-dev',
-    title: 'React Native Mobile Developer',
-    department: 'Mobile Apps',
-    deptIcon: <Smartphone className="w-5 h-5 text-blue-500" />,
-    location: 'Hyderabad, India / Remote',
-    experience: '2-5 Years',
-    type: 'Full-time',
-    featured: false,
-    postedAgo: '1 day ago',
-    description: 'Develop cross-platform mobile applications for Android and iOS.',
-    skills: ['React Native', 'TypeScript', 'Mobile UI/UX', 'API Integration'],
-  },
-  {
-    id: 'ai-ml-engineer',
-    title: 'AI/ML Engineer',
-    department: 'AI & Data',
-    deptIcon: <Cpu className="w-5 h-5 text-purple-500" />,
-    location: 'Dubai, UAE',
-    experience: '3-7 Years',
-    type: 'Full-time',
-    featured: false,
-    postedAgo: '3 days ago',
-    description: 'Work on AI models, data pipelines and enterprise analytics solutions.',
-    skills: ['Python', 'Machine Learning', 'LLM', 'Data Engineering'],
-  },
-  {
-    id: 'devops-engineer',
-    title: 'DevOps Engineer',
-    department: 'Engineering',
-    deptIcon: <Cloud className="w-5 h-5 text-sky-500" />,
-    location: 'Riyadh, KSA',
-    experience: '3-6 Years',
-    type: 'Full-time',
-    featured: false,
-    postedAgo: '4 days ago',
-    description: 'Manage CI/CD pipelines, cloud infrastructure and deployment automation.',
-    skills: ['AWS', 'Docker', 'Kubernetes', 'Terraform', 'CI/CD'],
-  },
-  {
-    id: 'it-support-engineer',
-    title: 'IT Support Engineer',
-    department: 'Managed Services',
-    deptIcon: <Headphones className="w-5 h-5 text-indigo-500" />,
-    location: 'Dubai, UAE',
-    experience: '1-3 Years',
-    type: 'Full-time',
-    featured: false,
-    postedAgo: '5 days ago',
-    description: 'Provide technical support and manage IT infrastructure for enterprise clients.',
-    skills: ['Windows', 'Networking', 'Hardware', 'Troubleshooting'],
-  },
-  {
-    id: 'business-development-executive',
-    title: 'Business Development Executive',
-    department: 'Sales & Business Development',
-    deptIcon: <TrendingUp className="w-5 h-5 text-emerald-500" />,
-    location: 'UAE / KSA',
-    experience: '3-6 Years',
-    type: 'Full-time',
-    featured: false,
-    postedAgo: '1 week ago',
-    description: 'Drive new business opportunities and manage client relationships.',
-    skills: ['IT Solutions', 'SaaS', 'Enterprise Sales', 'Client Management'],
-  },
-];
+// Dynamic department icon mapper
+const getDeptIcon = (dept: string) => {
+  switch (dept?.toLowerCase()) {
+    case 'engineering':
+      return <Code2 className="w-5 h-5 text-amber-500" />;
+    case 'mobile apps':
+      return <Smartphone className="w-5 h-5 text-blue-500" />;
+    case 'ai & data':
+      return <Cpu className="w-5 h-5 text-purple-500" />;
+    case 'managed services':
+      return <Headphones className="w-5 h-5 text-indigo-500" />;
+    case 'sales & business development':
+      return <TrendingUp className="w-5 h-5 text-emerald-500" />;
+    default:
+      return <Cloud className="w-5 h-5 text-sky-500" />;
+  }
+};
 
 export const CareersPage: React.FC = () => {
+  // Single Source of Truth: Fetch active jobs from PostgreSQL database
+  const {
+    data: jobs = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery<JobPosition[]>({
+    queryKey: ['publicJobs'],
+    queryFn: () => publicApi.getJobs(),
+    staleTime: 1000 * 60 * 5,
+  });
   // Filters State
   const [searchKeyword, setSearchKeyword] = useState('');
   const [selectedDept, setSelectedDept] = useState('All Departments');
@@ -150,13 +88,14 @@ export const CareersPage: React.FC = () => {
 
   // Filtered jobs calculation
   const filteredJobs = useMemo(() => {
-    return JOBS_DATA.filter((job) => {
+    return jobs.filter((job) => {
       // Keyword
+      const query = searchKeyword.toLowerCase();
       const matchKeyword =
         !searchKeyword ||
-        job.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        job.description.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        job.skills.some((s) => s.toLowerCase().includes(searchKeyword.toLowerCase()));
+        job.title.toLowerCase().includes(query) ||
+        job.description.toLowerCase().includes(query) ||
+        (job.skills && job.skills.some((s) => s.toLowerCase().includes(query)));
 
       // Department
       const matchDept =
@@ -169,13 +108,51 @@ export const CareersPage: React.FC = () => {
         job.location.toLowerCase().includes(selectedLocation.toLowerCase());
 
       // Type
+      const jobTypeStr = job.jobType || 'Full-time';
       const matchType =
         selectedJobType === 'All Types' ||
-        job.type.toLowerCase().includes(selectedJobType.toLowerCase());
+        jobTypeStr.toLowerCase().includes(selectedJobType.toLowerCase());
 
       return matchKeyword && matchDept && matchLoc && matchType;
     });
-  }, [searchKeyword, selectedDept, selectedLocation, selectedJobType]);
+  }, [jobs, searchKeyword, selectedDept, selectedLocation, selectedJobType]);
+
+  // Dynamic Facets based on live database jobs
+  const departmentsList = useMemo(() => {
+    const map = new Map<string, number>();
+    jobs.forEach((j) => {
+      const dept = j.department || 'Other';
+      map.set(dept, (map.get(dept) || 0) + 1);
+    });
+    return [
+      { label: 'All Departments', count: jobs.length },
+      ...Array.from(map.entries()).map(([label, count]) => ({ label, count })),
+    ];
+  }, [jobs]);
+
+  const locationsList = useMemo(() => {
+    const map = new Map<string, number>();
+    jobs.forEach((j) => {
+      const loc = j.location || 'Remote';
+      map.set(loc, (map.get(loc) || 0) + 1);
+    });
+    return [
+      { label: 'All Locations', count: jobs.length },
+      ...Array.from(map.entries()).map(([label, count]) => ({ label, count })),
+    ];
+  }, [jobs]);
+
+  const jobTypesList = useMemo(() => {
+    const map = new Map<string, number>();
+    jobs.forEach((j) => {
+      const type = j.jobType || 'Full-time';
+      map.set(type, (map.get(type) || 0) + 1);
+    });
+    return [
+      { label: 'All Types', count: jobs.length },
+      ...Array.from(map.entries()).map(([label, count]) => ({ label, count })),
+    ];
+  }, [jobs]);
 
   const handleApplySubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -341,12 +318,11 @@ export const CareersPage: React.FC = () => {
                   onChange={(e) => setSelectedDept(e.target.value)}
                   className="w-full appearance-none bg-slate-50 rounded-xl px-3.5 py-2.5 text-xs text-slate-700 border border-slate-200 focus:border-[#E5A93C] focus:bg-white outline-none cursor-pointer pr-8"
                 >
-                  <option>All Departments</option>
-                  <option>Engineering</option>
-                  <option>AI & Data</option>
-                  <option>Mobile Apps</option>
-                  <option>Managed Services</option>
-                  <option>Sales & Business Development</option>
+                  {departmentsList.map((d) => (
+                    <option key={d.label} value={d.label}>
+                      {d.label} ({d.count})
+                    </option>
+                  ))}
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-3.5 pointer-events-none" />
               </div>
@@ -358,11 +334,11 @@ export const CareersPage: React.FC = () => {
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="w-full appearance-none bg-slate-50 rounded-xl px-3.5 py-2.5 text-xs text-slate-700 border border-slate-200 focus:border-[#E5A93C] focus:bg-white outline-none cursor-pointer pr-8"
                 >
-                  <option>All Locations</option>
-                  <option>Dubai, UAE</option>
-                  <option>Riyadh, KSA</option>
-                  <option>Hyderabad, India</option>
-                  <option>Remote</option>
+                  {locationsList.map((l) => (
+                    <option key={l.label} value={l.label}>
+                      {l.label} ({l.count})
+                    </option>
+                  ))}
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-3.5 pointer-events-none" />
               </div>
@@ -374,11 +350,11 @@ export const CareersPage: React.FC = () => {
                   onChange={(e) => setSelectedJobType(e.target.value)}
                   className="w-full appearance-none bg-slate-50 rounded-xl px-3.5 py-2.5 text-xs text-slate-700 border border-slate-200 focus:border-[#E5A93C] focus:bg-white outline-none cursor-pointer pr-8"
                 >
-                  <option>All Types</option>
-                  <option>Full-time</option>
-                  <option>Part-time</option>
-                  <option>Contract</option>
-                  <option>Internship</option>
+                  {jobTypesList.map((t) => (
+                    <option key={t.label} value={t.label}>
+                      {t.label} ({t.count})
+                    </option>
+                  ))}
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-3.5 pointer-events-none" />
               </div>
@@ -409,16 +385,7 @@ export const CareersPage: React.FC = () => {
                   <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </div>
                 <div className="space-y-2 text-xs text-slate-600">
-                  {[
-                    { label: 'All Departments', count: 42 },
-                    { label: 'Engineering', count: 14 },
-                    { label: 'AI & Data', count: 8 },
-                    { label: 'Mobile Apps', count: 6 },
-                    { label: 'IoT & Automation', count: 5 },
-                    { label: 'Managed Services', count: 3 },
-                    { label: 'Sales & Business Development', count: 4 },
-                    { label: 'HR & Operations', count: 2 },
-                  ].map((dept) => {
+                  {departmentsList.map((dept) => {
                     const isChecked = selectedDept === dept.label;
                     return (
                       <label
@@ -449,14 +416,7 @@ export const CareersPage: React.FC = () => {
                   <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </div>
                 <div className="space-y-2 text-xs text-slate-600">
-                  {[
-                    { label: 'All Locations', count: 42 },
-                    { label: 'Dubai, UAE', count: 20 },
-                    { label: 'Riyadh, KSA', count: 8 },
-                    { label: 'Kuwait City, Kuwait', count: 4 },
-                    { label: 'Hyderabad, India', count: 10 },
-                    { label: 'Remote', count: 12 },
-                  ].map((loc) => {
+                  {locationsList.map((loc) => {
                     const isChecked = selectedLocation === loc.label;
                     return (
                       <label
@@ -487,13 +447,7 @@ export const CareersPage: React.FC = () => {
                   <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </div>
                 <div className="space-y-2 text-xs text-slate-600">
-                  {[
-                    { label: 'All Types', count: 42 },
-                    { label: 'Full-time', count: 36 },
-                    { label: 'Part-time', count: 2 },
-                    { label: 'Contract', count: 4 },
-                    { label: 'Internship', count: 2 },
-                  ].map((type) => {
+                  {jobTypesList.map((type) => {
                     const isChecked = selectedJobType === type.label;
                     return (
                       <label
@@ -540,7 +494,36 @@ export const CareersPage: React.FC = () => {
               </div>
 
               {/* Jobs Cards Feed */}
-              {filteredJobs.length === 0 ? (
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3].map((n) => (
+                    <div
+                      key={n}
+                      className="bg-white rounded-2xl p-6 border border-slate-200/80 animate-pulse flex flex-col sm:flex-row items-start justify-between gap-5"
+                    >
+                      <div className="flex items-start gap-4 w-full">
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 shrink-0" />
+                        <div className="space-y-3 w-full max-w-lg">
+                          <div className="h-5 bg-slate-100 rounded w-1/3" />
+                          <div className="h-3 bg-slate-100 rounded w-1/2" />
+                          <div className="h-10 bg-slate-100 rounded w-full" />
+                        </div>
+                      </div>
+                      <div className="w-24 h-9 bg-slate-100 rounded-md shrink-0" />
+                    </div>
+                  ))}
+                </div>
+              ) : isError ? (
+                <div className="bg-white rounded-2xl p-10 text-center border border-red-100 shadow-sm">
+                  <p className="text-sm text-red-600 mb-3">Failed to load open positions from server.</p>
+                  <button
+                    onClick={() => refetch()}
+                    className="px-4 py-2 rounded-md bg-[#020E26] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#E5A93C] hover:text-[#000B1E] transition-colors cursor-pointer"
+                  >
+                    Retry Loading
+                  </button>
+                </div>
+              ) : filteredJobs.length === 0 ? (
                 <div className="bg-white rounded-2xl p-12 text-center border border-slate-200/90 shadow-sm">
                   <p className="text-sm text-slate-500 mb-3">No positions found matching your criteria.</p>
                   <button
@@ -564,7 +547,7 @@ export const CareersPage: React.FC = () => {
                     <div className="flex items-start gap-4">
                       {/* Dept Icon Box */}
                       <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 shadow-xs">
-                        {job.deptIcon}
+                        {getDeptIcon(job.department)}
                       </div>
 
                       {/* Content */}
@@ -590,12 +573,14 @@ export const CareersPage: React.FC = () => {
                             <MapPin className="w-3.5 h-3.5 text-slate-400" />
                             {job.location}
                           </span>
-                          <span className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5 text-slate-400" />
-                            {job.experience}
-                          </span>
+                          {job.experience && (
+                            <span className="flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 text-slate-400" />
+                              {job.experience}
+                            </span>
+                          )}
                           <span className="flex items-center gap-1.5 font-medium text-slate-600">
-                            {job.type}
+                            {job.jobType || 'Full-time'}
                           </span>
                         </div>
 
@@ -604,31 +589,33 @@ export const CareersPage: React.FC = () => {
                         </p>
 
                         {/* Skills Pill Badges */}
-                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          {job.skills.map((skill) => (
-                            <span
-                              key={skill}
-                              className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-50 border border-slate-200/70 text-slate-600"
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
+                        {job.skills && job.skills.length > 0 && (
+                          <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                            {job.skills.map((skill) => (
+                              <span
+                                key={skill}
+                                className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-50 border border-slate-200/70 text-slate-600"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
 
                     {/* Right Apply Action using BrandButton */}
                     <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100 gap-3">
                       <span className="text-[11px] text-slate-400 font-medium">
-                        {job.postedAgo}
+                        {job.jobType || 'Full-time'}
                       </span>
-                      <BrandButton
-                        to={`/careers/apply?job=${job.id}`}
-                        variant="dark"
-                        size="sm"
+                      <button
+                        type="button"
+                        onClick={() => setActiveApplyJob(job)}
+                        className="px-4 py-2 rounded-md bg-[#020E26] hover:bg-[#E5A93C] hover:text-[#000B1E] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm cursor-pointer"
                       >
                         Apply Now
-                      </BrandButton>
+                      </button>
                     </div>
                   </div>
                 ))

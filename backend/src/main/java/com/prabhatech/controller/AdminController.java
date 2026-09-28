@@ -22,19 +22,22 @@ public class AdminController {
     private final LeadInquiryService leadInquiryService;
     private final SocialLinkService socialLinkService;
     private final com.prabhatech.service.HeroConfigService heroConfigService;
+    private final com.prabhatech.service.JobPositionService jobPositionService;
 
     public AdminController(CaseStudyService caseStudyService,
                            ServiceItemService serviceItemService,
                            ArticleService articleService,
                            LeadInquiryService leadInquiryService,
                            SocialLinkService socialLinkService,
-                           com.prabhatech.service.HeroConfigService heroConfigService) {
+                           com.prabhatech.service.HeroConfigService heroConfigService,
+                           com.prabhatech.service.JobPositionService jobPositionService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
         this.leadInquiryService = leadInquiryService;
         this.socialLinkService = socialLinkService;
         this.heroConfigService = heroConfigService;
+        this.jobPositionService = jobPositionService;
     }
 
     // --- Hero Section CMS ---
@@ -138,6 +141,23 @@ public class AdminController {
     @DeleteMapping("/inquiries/{id}")
     public ResponseEntity<Void> deleteInquiry(@PathVariable Long id) {
         leadInquiryService.deleteInquiry(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // --- Job Positions / Careers CMS ---
+    @GetMapping("/jobs")
+    public ResponseEntity<List<com.prabhatech.dto.JobPositionDto>> getAllJobs() {
+        return ResponseEntity.ok(jobPositionService.getAllJobsAdmin());
+    }
+
+    @PostMapping("/jobs")
+    public ResponseEntity<com.prabhatech.dto.JobPositionDto> saveJob(@Valid @RequestBody com.prabhatech.dto.JobPositionDto dto) {
+        return ResponseEntity.ok(jobPositionService.saveJob(dto));
+    }
+
+    @DeleteMapping("/jobs/{id}")
+    public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
+        jobPositionService.deleteJob(id);
         return ResponseEntity.noContent().build();
     }
 }

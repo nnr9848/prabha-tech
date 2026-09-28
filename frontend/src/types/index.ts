@@ -91,4 +91,21 @@ export interface SocialLink {
   updatedAt?: string;
 }
 
+export interface JobPosition {
+  id?: number;
+  slug: string;
+  title: string;
+  department: string;
+  location: string;
+  experience: string;
+  jobType?: string;
+  description: string;
+  skills: string[];
+  featured?: boolean;
+  displayOrder?: number;
+  isActive?: boolean;
+  createdAt?: string;
+}
+
+
 

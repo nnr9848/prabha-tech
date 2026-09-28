@@ -27,19 +27,22 @@ public class PublicController {
     private final LeadInquiryService leadInquiryService;
     private final SocialLinkService socialLinkService;
     private final com.prabhatech.service.HeroConfigService heroConfigService;
+    private final com.prabhatech.service.JobPositionService jobPositionService;
 
     public PublicController(CaseStudyService caseStudyService,
                             ServiceItemService serviceItemService,
                             ArticleService articleService,
                             LeadInquiryService leadInquiryService,
                             SocialLinkService socialLinkService,
-                            com.prabhatech.service.HeroConfigService heroConfigService) {
+                            com.prabhatech.service.HeroConfigService heroConfigService,
+                            com.prabhatech.service.JobPositionService jobPositionService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
         this.leadInquiryService = leadInquiryService;
         this.socialLinkService = socialLinkService;
         this.heroConfigService = heroConfigService;
+        this.jobPositionService = jobPositionService;
     }
 
     // --- Hero Section Dynamic Config ---
@@ -107,5 +110,11 @@ public class PublicController {
     @PostMapping("/inquiries")
     public ResponseEntity<LeadInquiryDto> submitInquiry(@Valid @RequestBody LeadInquiryDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(leadInquiryService.submitInquiry(dto));
+    }
+
+    // --- Job Positions / Careers ---
+    @GetMapping("/jobs")
+    public ResponseEntity<List<com.prabhatech.dto.JobPositionDto>> getJobs() {
+        return ResponseEntity.ok(jobPositionService.getActiveJobsPublic());
     }
 }

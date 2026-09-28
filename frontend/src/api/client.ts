@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink } from '../types';
+import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -84,6 +84,11 @@ export const publicApi = {
 
   submitInquiry: async (inquiry: LeadInquiry): Promise<LeadInquiry> => {
     const res = await publicClient.post('/public/inquiries', inquiry);
+    return res.data;
+  },
+
+  getJobs: async (): Promise<JobPosition[]> => {
+    const res = await publicClient.get('/public/jobs');
     return res.data;
   },
 };
@@ -179,6 +184,21 @@ export const adminApi = {
 
   deleteInquiry: async (id: number): Promise<void> => {
     await adminClient.delete(`/admin/inquiries/${id}`);
+  },
+
+  // Job Positions / Careers CMS
+  getAllJobs: async (): Promise<JobPosition[]> => {
+    const res = await adminClient.get('/admin/jobs');
+    return res.data;
+  },
+
+  saveJob: async (data: Partial<JobPosition>): Promise<JobPosition> => {
+    const res = await adminClient.post('/admin/jobs', data);
+    return res.data;
+  },
+
+  deleteJob: async (id: number): Promise<void> => {
+    await adminClient.delete(`/admin/jobs/${id}`);
   },
 };
 
