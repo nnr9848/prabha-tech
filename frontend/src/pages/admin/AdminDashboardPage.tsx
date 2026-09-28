@@ -11,6 +11,7 @@ import { InquiriesManager } from './components/InquiriesManager';
 import { SocialLinksManager } from './components/SocialLinksManager';
 import { useToast } from '../../context/ToastContext';
 import { X, Save, Image as ImageIcon } from 'lucide-react';
+import { ImageUploader } from '../../components/common/ImageUploader';
 
 export const AdminDashboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
@@ -372,15 +373,12 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1">Hero Image URL *</label>
-              <input
-                type="text"
-                value={editingCase.heroImageUrl || ''}
-                onChange={(e) => setEditingCase({ ...editingCase, heroImageUrl: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
-              />
-            </div>
+            <ImageUploader
+              label="Hero Image"
+              value={editingCase.heroImageUrl || ''}
+              onChange={(url) => setEditingCase({ ...editingCase, heroImageUrl: url })}
+              required
+            />
 
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">Video URL (Optional)</label>
@@ -495,15 +493,12 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1">Cover Image URL *</label>
-              <input
-                type="text"
-                value={editingArticle.coverImageUrl || ''}
-                onChange={(e) => setEditingArticle({ ...editingArticle, coverImageUrl: e.target.value })}
-                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
-              />
-            </div>
+            <ImageUploader
+              label="Cover Image"
+              value={editingArticle.coverImageUrl || ''}
+              onChange={(url) => setEditingArticle({ ...editingArticle, coverImageUrl: url })}
+              required
+            />
 
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">Excerpt / Summary *</label>

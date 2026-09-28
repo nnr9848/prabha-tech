@@ -49,13 +49,22 @@ const PublicLayout: React.FC = () => {
   );
 };
 
-// Protected Route Wrapper for Admin CMS
+// Protected Route Wrapper for Admin CMS (Redirects unauthenticated users to /admin preserving location)
 const ProtectedAdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
   if (!isAuthenticated) {
     return <Navigate to="/admin" replace />;
   }
   return <>{children}</>;
+};
+
+// Route wrapper for Admin Login (Redirects already authenticated admins straight to /admin/dashboard)
+const AdminLoginRoute: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+  if (isAuthenticated) {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+  return <AdminLoginPage />;
 };
 
 export const App: React.FC = () => {
@@ -88,8 +97,9 @@ export const App: React.FC = () => {
                 <Route path="/contact" element={<ContactPage />} />
               </Route>
 
-              {/* Admin CMS Authentication Route */}
-              <Route path="/admin" element={<AdminLoginPage />} />
+              {/* Admin CMS Authentication Routes (Auto-redirects to dashboard if already logged in) */}
+              <Route path="/admin" element={<AdminLoginRoute />} />
+              <Route path="/admin/login" element={<AdminLoginRoute />} />
 
               {/* Enterprise Admin CMS Workspace */}
               <Route

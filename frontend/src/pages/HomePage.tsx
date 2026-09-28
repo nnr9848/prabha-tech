@@ -29,9 +29,25 @@ import {
 
 import { BrandButton } from '../components/common/BrandButton';
 import { SectionHeading } from '../components/common/SectionHeading';
+import { FeaturedPortfolioSlider } from '../components/home/FeaturedPortfolioSlider';
+import { useQuery } from '@tanstack/react-query';
+import { publicApi } from '../api/client';
+import { CaseStudy } from '../types';
 
 export const HomePage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('all');
+
+  // Single Source of Truth: Load published portfolio from PostgreSQL via Spring Boot REST API
+  const {
+    data: caseStudies = [],
+    isLoading: isPortfolioLoading,
+    isError: isPortfolioError,
+    refetch: refetchPortfolio,
+  } = useQuery<CaseStudy[]>({
+    queryKey: ['allHomepagePortfolio'],
+    queryFn: () => publicApi.getCaseStudies(),
+    staleTime: 1000 * 60 * 5,
+  });
 
   return (
     <div className="bg-white text-slate-900 font-sans selection:bg-[#E5A93C]/30">
@@ -256,149 +272,16 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 3. FLAGSHIP PRODUCT: AI SMART BEMS */}
+      {/* 3. COMPLETE WORK ARCHIVE & CLIENT SOLUTIONS (Interactive 3-Card Carousel) */}
       {/* ========================================================= */}
-      <section className="relative py-24 bg-white border-b border-slate-200 overflow-hidden">
-        {/* Modern Glass Corporate Office Architecture starting early from center-left across the right side */}
-        <div 
-          className="absolute right-0 top-0 bottom-0 w-full lg:w-[70%] z-0 pointer-events-none overflow-hidden"
-          style={{
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 18%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.95) 65%, black 100%)',
-            maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 18%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.95) 65%, black 100%)'
-          }}
-        >
-          <img
-            src="/assets/images/glass-office-building.jpeg"
-            alt="Smart Glass Commercial Office Architecture"
-            className="w-full h-full object-cover object-right opacity-95 scale-100"
-          />
-          {/* Subtle bottom/top edge feathering */}
-          <div className="hidden lg:block absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white via-white/40 to-transparent pointer-events-none"></div>
-          <div className="hidden lg:block absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white via-white/30 to-transparent pointer-events-none"></div>
-          {/* Mobile/Tablet readability gradient */}
-          <div className="lg:hidden absolute inset-0 bg-gradient-to-r from-white via-white/95 to-transparent"></div>
-        </div>
+      <FeaturedPortfolioSlider
+        items={caseStudies}
+        isLoading={isPortfolioLoading}
+        isError={isPortfolioError}
+        onRetry={refetchPortfolio}
+        autoPlayInterval={6000}
+      />
 
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Description */}
-            <div className="lg:col-span-5 space-y-6">
-              <SectionHeading
-                theme="light"
-                size="section"
-                badge="Smart Energy Innovation"
-                title="AI Smart BEMS"
-                subtitle={
-                  <div>
-                    <p className="text-sm font-semibold text-slate-800 mb-2">
-                      Intelligent Building Energy Management System
-                    </p>
-                    <p>
-                      Harness the power of AI and IoT to optimize building performance, reduce energy consumption, and create smarter, more sustainable spaces across commercial and residential developments.
-                    </p>
-                  </div>
-                }
-              />
-
-              <div className="pt-2">
-                <BrandButton to="/services" variant="gold" size="sm">
-                  LEARN MORE
-                </BrandButton>
-              </div>
-            </div>
-
-            {/* Right Dashboard Screen Render */}
-            <div className="lg:col-span-7">
-              <div className="relative rounded-2xl bg-[#000B1E]/95 backdrop-blur-md p-4 sm:p-6 border border-slate-700/60 shadow-2xl shadow-slate-900/30 overflow-hidden">
-                {/* Header of Simulated BEMS Glass UI */}
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4 text-xs text-slate-400">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span className="font-bold text-white tracking-wider">BEMS CENTRAL DASHBOARD</span>
-                  </div>
-                  <div className="flex items-center gap-4 text-[11px]">
-                    <span>STATUS: LIVE</span>
-                    <span className="text-emerald-400 font-mono">99.8% EFFICIENCY</span>
-                  </div>
-                </div>
-
-                {/* Dashboard Metric Widgets */}
-                <div className="grid grid-cols-3 gap-3 mb-4">
-                  <div className="bg-[#020E26]/90 rounded-xl p-3 border border-slate-800">
-                    <div className="text-[10px] text-slate-400 uppercase">Total Energy</div>
-                    <div className="text-lg sm:text-xl font-bold text-white mt-1">125.4 MWh</div>
-                    <div className="text-[10px] text-emerald-400 mt-1 font-semibold">↓ 12% vs last month</div>
-                  </div>
-                  <div className="bg-[#020E26]/90 rounded-xl p-3 border border-slate-800">
-                    <div className="text-[10px] text-slate-400 uppercase">Cost Savings</div>
-                    <div className="text-lg sm:text-xl font-bold text-[#E5A93C] mt-1">SAR 36,820</div>
-                    <div className="text-[10px] text-emerald-400 mt-1 font-semibold">↑ 18% improvement</div>
-                  </div>
-                  <div className="bg-[#020E26]/90 rounded-xl p-3 border border-slate-800">
-                    <div className="text-[10px] text-slate-400 uppercase">Carbon Reduction</div>
-                    <div className="text-lg sm:text-xl font-bold text-[#3B82F6] mt-1">52.3 Tons</div>
-                    <div className="text-[10px] text-[#3B82F6] mt-1 font-semibold">Net Zero Target</div>
-                  </div>
-                </div>
-
-                {/* Real-Time Consumption Chart Mock with Circular Gauge */}
-                <div className="bg-[#020E26]/80 rounded-xl p-4 border border-slate-800">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-xs font-bold text-slate-300">Energy Consumption Analytics</span>
-                    <span className="text-[10px] text-slate-400">Live 24h Telemetry</span>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                    {/* Brand Blue Telemetry Bars */}
-                    <div className="md:col-span-3 h-28 flex items-end gap-2 pt-2">
-                      {[45, 60, 52, 70, 85, 65, 48, 55, 78, 92, 40, 50, 68, 74, 58].map((val, i) => (
-                        <div key={i} className="flex-1 bg-slate-800/80 rounded-t overflow-hidden h-full flex items-end">
-                          <div
-                            style={{ height: `${val}%` }}
-                            className={`w-full transition-all duration-500 ${
-                              i === 9
-                                ? 'bg-[#E5A93C]'
-                                : 'bg-[#2563EB] hover:bg-[#3B82F6]'
-                            }`}
-                          ></div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Circular Radial Donut Gauge (76% Efficiency) */}
-                    <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-[#000B1E] border border-slate-800">
-                      <div className="relative w-16 h-16 flex items-center justify-center">
-                        <svg className="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
-                          <path
-                            className="text-slate-800"
-                            strokeWidth="3.5"
-                            stroke="currentColor"
-                            fill="none"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                          />
-                          <path
-                            className="text-[#2563EB]"
-                            strokeDasharray="76, 100"
-                            strokeWidth="3.5"
-                            strokeLinecap="round"
-                            stroke="currentColor"
-                            fill="none"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                          />
-                        </svg>
-                        <div className="absolute text-center">
-                          <span className="text-xs font-bold text-white">76%</span>
-                        </div>
-                      </div>
-                      <span className="text-[10px] text-slate-400 mt-1 font-semibold uppercase">Efficiency</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ========================================================= */}
       {/* 4. TECHNOLOGY THAT DRIVES REAL IMPACT (6-Pillar Grid) */}

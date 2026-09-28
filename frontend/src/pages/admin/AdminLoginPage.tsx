@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { adminApi } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 import { ShieldCheck, Lock, User, ArrowRight, ArrowLeft } from 'lucide-react';
@@ -11,9 +11,18 @@ export const AdminLoginPage: React.FC = () => {
   const [password, setPassword] = useState('admin123');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Industry Standard: If already authenticated, redirect straight to dashboard or previous deep-link
+  useEffect(() => {
+    if (isAuthenticated) {
+      const destination = (location.state as any)?.from?.pathname || '/admin/dashboard';
+      navigate(destination, { replace: true });
+    }
+  }, [isAuthenticated, navigate, location]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

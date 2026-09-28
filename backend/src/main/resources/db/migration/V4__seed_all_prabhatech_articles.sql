@@ -1,0 +1,161 @@
+-- =========================================================================
+-- V4__seed_all_prabhatech_articles.sql : Canonical Articles & Insights Seed
+-- =========================================================================
+
+INSERT INTO articles (slug, title, excerpt, content, cover_image_url, author_name, author_avatar, category, read_time, featured, is_published)
+VALUES
+(
+    'future-of-ai-in-enterprise-applications',
+    'The Future of AI in Enterprise Applications',
+    'How AI is transforming industries with intelligent automation, predictive analytics and real-world business impact.',
+    'Deep dive into the operationalization of artificial intelligence, agentic workflows, and predictive analytics across enterprise software architectures. Modern organizations are migrating away from static rule engines to autonomous AI agents that optimize decisions in real time across supply chains, banking, and customer support.',
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=85',
+    'Prabha Tech Advisory',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+    'AI & Emerging Tech',
+    '5 min read',
+    TRUE,
+    TRUE
+),
+(
+    'ai-driven-bems-for-sustainable-tomorrow',
+    'AI-Driven BEMS for a Sustainable Tomorrow',
+    'Optimizing building energy consumption, HVAC telemetry, and carbon footprints through automated predictive controls.',
+    'Building Energy Management Systems (BEMS) powered by machine learning are cutting enterprise facility power overhead by up to 34%. By continuously monitoring environmental parameters, occupancy trends, and tariff fluctuations, AI models optimize HVAC output dynamically while maintaining optimal human comfort.',
+    'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=85',
+    'Smart Facilities Team',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+    'Smart Buildings (BEMS)',
+    '4 min read',
+    TRUE,
+    TRUE
+),
+(
+    'digital-transformation-in-heavy-equipment-industry',
+    'Digital Transformation in Heavy Equipment Industry',
+    'Connecting heavy construction fleets with real-time CAN bus telemetry, predictive maintenance, and cloud scheduling.',
+    'How industrial OEMs and rental fleet operators leverage IoT edge telematics to eradicate unplanned equipment downtime. By aggregating hydraulic sensor readings, engine temperatures, and vibration signatures, predictive maintenance algorithms alert dispatchers before catastrophic component failure occurs.',
+    'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=85',
+    'Industrial IoT Division',
+    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+    'Industrial IoT',
+    '6 min read',
+    TRUE,
+    TRUE
+),
+(
+    'super-app-all-in-one-solution-for-modern-businesses',
+    'Super App: All-in-One Solution for Modern Businesses',
+    'Consolidating customer self-service, marketplace transactions, and communications into unified omnichannel mobile suites.',
+    'Why modular micro-frontend super apps are outperforming disjointed single-purpose mobile apps in GCC digital ecosystems. A unified ecosystem provides lower acquisition costs, higher user retention, and frictionless cross-service transactions in a single trusted digital identity.',
+    'https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80',
+    'Mobile Engineering',
+    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+    'Enterprise Software',
+    '4 min read',
+    FALSE,
+    TRUE
+),
+(
+    'how-ai-hrms-is-redefining-workplace-management',
+    'How AI HRMS is Redefining Workplace Management',
+    'Automating talent acquisition, compliance tracking, and predictive retention modeling for distributed multinational workforces.',
+    'Next-generation human resource management systems leverage NLP and automated workflows to deliver consumer-grade employee experiences. From automated shift allocation to predictive attrition detection, AI HRMS platforms remove friction across enterprise HR workflows.',
+    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+    'Workforce Solutions',
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+    'HR & Workforce',
+    '5 min read',
+    FALSE,
+    TRUE
+),
+(
+    'ai-analytics-for-smarter-and-safer-spaces',
+    'AI Analytics for Smarter and Safer Spaces',
+    'Deploying edge computer vision and intelligent occupancy heatmaps to enhance commercial asset security and energy efficiency.',
+    'How smart retail hubs and enterprise corporate campuses use privacy-preserving computer vision for real-time safety telemetry. Automated crowd density analysis and anomaly detection protect venues without compromising individual visitor anonymity.',
+    'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80',
+    'Vision AI Lab',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+    'AI & Emerging Tech',
+    '4 min read',
+    FALSE,
+    TRUE
+),
+(
+    'digital-auctions-creating-transparent-markets',
+    'Digital Auctions: Creating Transparent Markets',
+    'Architecting high-frequency real-time bidding engines with verifiable sub-second latency for commodities and industrial equipment.',
+    'Transforming legacy physical auction floors into secure, high-concurrency cloud auction exchanges with instant settlement. Live WebSocket streams and immutable audit trails ensure high liquidity, fair pricing, and trust across global buyers.',
+    'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
+    'Fintech Architecture',
+    'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80',
+    'Enterprise Software',
+    '4 min read',
+    FALSE,
+    TRUE
+),
+(
+    'modern-insurance-crm-for-better-customer-engagement',
+    'Modern Insurance CRM for Better Customer Engagement',
+    'Streamlining policyholder onboarding, automated claims adjudication, and personalized risk underwriting on unified CRM clouds.',
+    'Insurance carriers are migrating away from fragmented mainframes to unified customer relationship platforms with automated SLA tracking. Automated policy renewal triggers and streamlined claims validation drive significant improvements in customer satisfaction and retention.',
+    'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
+    'InsurTech Practice',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+    'Enterprise Software',
+    '4 min read',
+    FALSE,
+    TRUE
+),
+(
+    'it-equipment-rental-and-managed-services-for-business-continuity',
+    'IT Equipment Rental & Managed Services for Business Continuity',
+    'Flexible hardware lifecycle management, 24/7 SLA governance, and rapid deployment for rapid-growth enterprise branches.',
+    'How agile IT equipment rental models allow enterprises to preserve capital expenditure while maintaining zero hardware downtime. Centralized ticketing and guaranteed 15-minute dispatch times ensure peak operational productivity.',
+    'https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&w=800&q=80',
+    'Managed IT Services',
+    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+    'IT Services',
+    '4 min read',
+    FALSE,
+    TRUE
+),
+(
+    'building-loyalty-programs-that-drive-real-value',
+    'Building Loyalty Programs That Drive Real Value',
+    'Gamified reward architectures, instant digital wallet redemption, and behavioral engagement mechanisms that boost lifetime value.',
+    'Moving past simple point cards to experiential loyalty ecosystems integrated into daily payment and lifestyle interactions. Modern enterprise loyalty platforms unlock real-time merchant settlement and personalized reward catalogs.',
+    'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80',
+    'Digital Commerce Group',
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+    'Rewards & Loyalty',
+    '4 min read',
+    FALSE,
+    TRUE
+),
+(
+    'vertical-farming-technology-for-a-greener-future',
+    'Vertical Farming: Technology for a Greener Future',
+    'Closed-loop hydroponic telemetry, automated spectral lighting, and IoT nutrient dosing for resilient arid-climate agriculture.',
+    'Controlled Environment Agriculture (CEA) powered by smart sensor grids and automated nutrient analytics is revolutionizing food security. Real-time water recycling and localized climate optimization deliver up to 35% higher yields with 95% less water consumption.',
+    'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=800&q=80',
+    'AgriTech Labs',
+    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+    'Industry Trends',
+    '4 min read',
+    FALSE,
+    TRUE
+)
+ON CONFLICT (slug) DO UPDATE SET
+    title = EXCLUDED.title,
+    excerpt = EXCLUDED.excerpt,
+    content = EXCLUDED.content,
+    cover_image_url = EXCLUDED.cover_image_url,
+    author_name = EXCLUDED.author_name,
+    author_avatar = EXCLUDED.author_avatar,
+    category = EXCLUDED.category,
+    read_time = EXCLUDED.read_time,
+    featured = EXCLUDED.featured,
+    is_published = EXCLUDED.is_published,
+    updated_at = CURRENT_TIMESTAMP;

@@ -13,195 +13,32 @@ import {
 import { publicApi } from '../api/client';
 import { Article } from '../types';
 
-// Curated Enterprise Insights Catalog matching target screenshot
-const DEFAULT_INSIGHTS: Article[] = [
-  // 1. Primary Featured
-  {
-    id: 101,
-    slug: 'future-of-ai-in-enterprise-applications',
-    title: 'The Future of AI in Enterprise Applications',
-    excerpt: 'How AI is transforming industries with intelligent automation, predictive analytics and real-world business impact.',
-    content: 'Deep dive into the operationalization of artificial intelligence, agentic workflows, and predictive analytics across enterprise software architectures...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=85',
-    authorName: 'Prabha Tech Advisory',
-    category: 'AI & Emerging Tech',
-    readTime: '5 min read',
-    createdAt: '22 Sep 2026',
-    featured: true,
-  },
-  // 2. Secondary Featured Top
-  {
-    id: 102,
-    slug: 'ai-driven-bems-for-sustainable-tomorrow',
-    title: 'AI-Driven BEMS for a Sustainable Tomorrow',
-    excerpt: 'Optimizing building energy consumption, HVAC telemetry, and carbon footprints through automated predictive controls.',
-    content: 'Building Energy Management Systems (BEMS) powered by machine learning are cutting enterprise facility power overhead by up to 34%...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=85',
-    authorName: 'Smart Facilities Team',
-    category: 'Smart Buildings (BEMS)',
-    readTime: '4 min read',
-    createdAt: '18 Sep 2026',
-    featured: true,
-  },
-  // 3. Secondary Featured Bottom
-  {
-    id: 103,
-    slug: 'digital-transformation-in-heavy-equipment-industry',
-    title: 'Digital Transformation in Heavy Equipment Industry',
-    excerpt: 'Connecting heavy construction fleets with real-time CAN bus telemetry, predictive maintenance, and cloud scheduling.',
-    content: 'How industrial OEMs and rental fleet operators leverage IoT edge telematics to eradicate unplanned equipment downtime...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=85',
-    authorName: 'Industrial IoT Division',
-    category: 'Industrial IoT',
-    readTime: '6 min read',
-    createdAt: '15 Sep 2026',
-    featured: true,
-  },
-  // 4. Latest Insights - 1
-  {
-    id: 104,
-    slug: 'super-app-all-in-one-solution-for-modern-businesses',
-    title: 'Super App: All-in-One Solution for Modern Businesses',
-    excerpt: 'Consolidating customer self-service, marketplace transactions, and communications into unified omnichannel mobile suites.',
-    content: 'Why modular micro-frontend super apps are outperforming disjointed single-purpose mobile apps in GCC digital ecosystems...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80',
-    authorName: 'Mobile Engineering',
-    category: 'Enterprise Software',
-    readTime: '4 min read',
-    createdAt: '22 Sep 2026',
-  },
-  // 5. Latest Insights - 2
-  {
-    id: 105,
-    slug: 'how-ai-hrms-is-redefining-workplace-management',
-    title: 'How AI HRMS is Redefining Workplace Management',
-    excerpt: 'Automating talent acquisition, compliance tracking, and predictive retention modeling for distributed multinational workforces.',
-    content: 'Next-generation human resource management systems leverage NLP and automated workflows to deliver consumer-grade employee experiences...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-    authorName: 'Workforce Solutions',
-    category: 'HR & Workforce',
-    readTime: '5 min read',
-    createdAt: '10 Sep 2026',
-  },
-  // 6. Latest Insights - 3
-  {
-    id: 106,
-    slug: 'ai-analytics-for-smarter-and-safer-spaces',
-    title: 'AI Analytics for Smarter and Safer Spaces',
-    excerpt: 'Deploying edge computer vision and intelligent occupancy heatmaps to enhance commercial asset security and energy efficiency.',
-    content: 'How smart retail hubs and enterprise corporate campuses use privacy-preserving computer vision for real-time safety telemetry...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80',
-    authorName: 'Vision AI Lab',
-    category: 'AI & Emerging Tech',
-    readTime: '4 min read',
-    createdAt: '08 Sep 2026',
-  },
-  // 7. Latest Insights - 4
-  {
-    id: 107,
-    slug: 'digital-auctions-creating-transparent-markets',
-    title: 'Digital Auctions: Creating Transparent Markets',
-    excerpt: 'Architecting high-frequency real-time bidding engines with verifiable sub-second latency for commodities and industrial equipment.',
-    content: 'Transforming legacy physical auction floors into secure, high-concurrency cloud auction exchanges with instant settlement...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
-    authorName: 'Fintech Architecture',
-    category: 'Enterprise Software',
-    readTime: '4 min read',
-    createdAt: '05 Sep 2026',
-  },
-  // 8. Latest Insights - 5
-  {
-    id: 108,
-    slug: 'modern-insurance-crm-for-better-customer-engagement',
-    title: 'Modern Insurance CRM for Better Customer Engagement',
-    excerpt: 'Streamlining policyholder onboarding, automated claims adjudication, and personalized risk underwriting on unified CRM clouds.',
-    content: 'Insurance carriers are migrating away from fragmented mainframes to unified customer relationship platforms with automated SLA tracking...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-    authorName: 'InsurTech Practice',
-    category: 'Enterprise Software',
-    readTime: '4 min read',
-    createdAt: '12 Sep 2026',
-  },
-  // 9. Latest Insights - 6
-  {
-    id: 109,
-    slug: 'it-equipment-rental-and-managed-services-for-business-continuity',
-    title: 'IT Equipment Rental & Managed Services for Business Continuity',
-    excerpt: 'Flexible hardware lifecycle management, 24/7 SLA governance, and rapid deployment for rapid-growth enterprise branches.',
-    content: 'How agile IT equipment rental models allow enterprises to preserve capital expenditure while maintaining zero hardware downtime...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&w=800&q=80',
-    authorName: 'Managed IT Services',
-    category: 'IT Services',
-    readTime: '4 min read',
-    createdAt: '28 Aug 2026',
-  },
-  // 10. Latest Insights - 7
-  {
-    id: 110,
-    slug: 'building-loyalty-programs-that-drive-real-value',
-    title: 'Building Loyalty Programs That Drive Real Value',
-    excerpt: 'Gamified reward architectures, instant digital wallet redemption, and behavioral engagement mechanisms that boost lifetime value.',
-    content: 'Moving past simple point cards to experiential loyalty ecosystems integrated into daily payment and lifestyle interactions...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80',
-    authorName: 'Digital Commerce Group',
-    category: 'Rewards & Loyalty',
-    readTime: '4 min read',
-    createdAt: '25 Aug 2026',
-  },
-  // 11. Latest Insights - 8
-  {
-    id: 111,
-    slug: 'vertical-farming-technology-for-a-greener-future',
-    title: 'Vertical Farming: Technology for a Greener Future',
-    excerpt: 'Closed-loop hydroponic telemetry, automated spectral lighting, and IoT nutrient dosing for resilient arid-climate agriculture.',
-    content: 'Controlled Environment Agriculture (CEA) powered by smart sensor grids and automated nutrient analytics is revolutionizing food security...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=800&q=80',
-    authorName: 'AgriTech Labs',
-    category: 'Industry Trends',
-    readTime: '4 min read',
-    createdAt: '20 Aug 2026',
-  },
-];
-
-const CATEGORIES = [
-  'All',
-  'AI & Emerging Tech',
-  'Enterprise Software',
-  'Industrial IoT',
-  'Smart Buildings (BEMS)',
-  'HR & Workforce',
-  'Rewards & Loyalty',
-  'IT Services',
-  'Industry Trends',
-];
-
 export const InsightsPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSuccess, setNewsletterSuccess] = useState(false);
 
-  // Fetch articles from backend API with fallback to rich curated catalog
-  const { data: serverArticles = [] } = useQuery<Article[]>({
+  // Single Source of Truth: Fetch published articles from PostgreSQL database
+  const {
+    data: allArticles = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery<Article[]>({
     queryKey: ['articles', 'all'],
     queryFn: () => publicApi.getArticles(),
     staleTime: 1000 * 60 * 5,
   });
 
-  // Merge server articles with rich default catalog
-  const allArticles = useMemo(() => {
-    if (serverArticles && serverArticles.length > 0) {
-      const mergedMap = new Map<string, Article>();
-      serverArticles.forEach((art) => mergedMap.set(art.slug, art));
-      DEFAULT_INSIGHTS.forEach((art) => {
-        if (!mergedMap.has(art.slug)) {
-          mergedMap.set(art.slug, art);
-        }
-      });
-      return Array.from(mergedMap.values());
-    }
-    return DEFAULT_INSIGHTS;
-  }, [serverArticles]);
+  // Dynamically derive category pills from database articles
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    allArticles.forEach((art) => {
+      if (art.category) set.add(art.category);
+    });
+    return ['All', ...Array.from(set)];
+  }, [allArticles]);
 
   // Featured Insights (1 main large + 2 stacked)
   const primaryFeatured = allArticles.find((a) => a.slug === 'future-of-ai-in-enterprise-applications') || allArticles[0];
@@ -329,7 +166,7 @@ export const InsightsPage: React.FC = () => {
       <section className="py-6 border-b border-slate-100 bg-white sticky top-[68px] sm:top-[76px] z-30 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-            {CATEGORIES.map((cat) => {
+            {categories.map((cat) => {
               const isActive = selectedCategory.toLowerCase() === cat.toLowerCase();
               return (
                 <button

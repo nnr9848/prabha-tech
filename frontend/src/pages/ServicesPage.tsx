@@ -23,126 +23,69 @@ import {
 import { SectionHeading } from '../components/common/SectionHeading';
 import { BrandButton } from '../components/common/BrandButton';
 
+import { useQuery } from '@tanstack/react-query';
+import { publicApi } from '../api/client';
+import { ServiceItem } from '../types';
+
+// Dynamic icon mapper for industry services
+const getServiceIcon = (iconName: string) => {
+  switch (iconName?.toLowerCase()) {
+    case 'smartphone':
+      return <Smartphone className="w-5 h-5 text-white" />;
+    case 'cpu':
+      return <Cpu className="w-5 h-5 text-white" />;
+    case 'radio':
+      return <Radio className="w-5 h-5 text-white" />;
+    case 'box':
+      return <Box className="w-5 h-5 text-white" />;
+    case 'headphones':
+      return <Headphones className="w-5 h-5 text-white" />;
+    case 'users2':
+      return <Users2 className="w-5 h-5 text-white" />;
+    case 'code2':
+    default:
+      return <Code2 className="w-5 h-5 text-white" />;
+  }
+};
+
+// Curated service images
+const SERVICE_IMAGES: Record<string, { img: string; isTransparent?: boolean }> = {
+  'custom-software-development': { img: '/assets/images/enterprise-software.png', isTransparent: true },
+  'mobile-app-development': { img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80' },
+  'ai-analytics': { img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
+  'iiot-automation': { img: '/assets/images/indistrial-iot.jpg' },
+  'metaverse-development': { img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=800&q=80' },
+  'managed-it-services': { img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80' },
+  'staffing-recruitment': { img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80' },
+};
+
 export const ServicesPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All Services');
 
+  // Single Source of Truth: Fetch published enterprise services from PostgreSQL
+  const {
+    data: services = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery<ServiceItem[]>({
+    queryKey: ['publicServices'],
+    queryFn: () => publicApi.getServices(),
+    staleTime: 1000 * 60 * 5,
+  });
+
   const filterTabs = [
     { label: 'All Services', icon: <span className="text-sm">▦</span> },
-    { label: 'Software Development', icon: <Code2 className="w-3.5 h-3.5" /> },
-    { label: 'Mobile Applications', icon: <Smartphone className="w-3.5 h-3.5" /> },
-    { label: 'AI & Analytics', icon: <Cpu className="w-3.5 h-3.5" /> },
-    { label: 'Industrial IoT', icon: <Radio className="w-3.5 h-3.5" /> },
-    { label: 'Metaverse Development', icon: <Box className="w-3.5 h-3.5" /> },
-    { label: 'Managed IT Services', icon: <Headphones className="w-3.5 h-3.5" /> },
-    { label: 'Consulting', icon: <Users2 className="w-3.5 h-3.5" /> },
-  ];
-
-  const servicesList = [
-    {
-      category: 'Software Development',
-      icon: <Code2 className="w-5 h-5 text-white" />,
-      title: 'Enterprise Software Development',
-      desc: 'Custom enterprise applications to streamline operations and drive digital transformation.',
-      features: [
-        'Web Applications',
-        'Cloud-based Solutions',
-        'System Integration',
-        'Ongoing Support & Maintenance',
-      ],
-      img: '/assets/images/enterprise-software.png',
-      isTransparentAsset: true,
-      link: '/services/custom-software-development',
-    },
-    {
-      category: 'Mobile Applications',
-      icon: <Smartphone className="w-5 h-5 text-white" />,
-      title: 'Mobile Applications',
-      desc: 'User-friendly and high-performance mobile apps for Android & iOS platforms.',
-      features: [
-        'iOS & Android Apps',
-        'Cross-Platform Development',
-        'UI/UX Design',
-        'App Maintenance',
-      ],
-      img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
-      link: '/services/mobile-app-development',
-    },
-    {
-      category: 'AI & Analytics',
-      icon: <Cpu className="w-5 h-5 text-white" />,
-      title: 'AI & Analytics Solutions',
-      desc: 'Turn your data into intelligent insights with AI-powered solutions.',
-      features: [
-        'AI Automation',
-        'Predictive Analytics',
-        'Computer Vision',
-        'Business Intelligence Dashboards',
-      ],
-      img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-      link: '/services/ai-analytics',
-    },
-    {
-      category: 'Industrial IoT',
-      icon: <Radio className="w-5 h-5 text-white" />,
-      title: 'Industrial IoT & Automation',
-      desc: 'Smart and connected solutions for industrial assets and facilities.',
-      features: [
-        'Fleet Management',
-        'Building Management (BEMS)',
-        'Smart Gate & Access Control',
-        'Vertical Farming Solutions',
-      ],
-      img: '/assets/images/indistrial-iot.jpg',
-      link: '/services/iiot-automation',
-    },
-    {
-      category: 'Metaverse Development',
-      icon: <Box className="w-5 h-5 text-white" />,
-      title: 'Metaverse & Web3 Development',
-      desc: '3D virtual environments, digital twins, and immersive AR/VR applications.',
-      features: [
-        'Virtual Business Spaces',
-        'Industrial Digital Twin',
-        'VR Training & Simulation',
-        'Metaverse Commerce & Showrooms',
-      ],
-      img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=800&q=80',
-      link: '/services/metaverse-development',
-    },
-    {
-      category: 'Managed IT Services',
-      icon: <Headphones className="w-5 h-5 text-white" />,
-      title: 'Managed IT Services',
-      desc: 'Reliable IT infrastructure and support to keep your business running smoothly.',
-      features: [
-        'IT Support & AMC',
-        'Server & Network Setup',
-        'CCTV & Biometric Solutions',
-        'Data Center Construction',
-      ],
-      img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
-      link: '/services/managed-it-services',
-    },
-    {
-      category: 'Consulting',
-      icon: <Users2 className="w-5 h-5 text-white" />,
-      title: 'IT Consulting & Staffing',
-      desc: 'Expert consulting and IT talent to accelerate your business growth.',
-      features: [
-        'IT Consultancy',
-        'Project Management',
-        'IT Staffing & Recruitment',
-        'Technology Advisory',
-      ],
-      img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-      link: '/services/staffing-recruitment',
-    },
+    ...services.map((s) => ({
+      label: s.title,
+      icon: getServiceIcon(s.icon),
+    })),
   ];
 
   const filteredServices =
     activeFilter === 'All Services'
-      ? servicesList
-      : servicesList.filter((s) => s.category === activeFilter);
+      ? services
+      : services.filter((s) => s.title === activeFilter);
 
   return (
     <div className="bg-white text-slate-900 font-sans selection:bg-[#E5A93C]/30">
@@ -221,61 +164,107 @@ export const ServicesPage: React.FC = () => {
             })}
           </div>
 
-          {/* 3x2 Grid Cards matching Screenshot */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredServices.map((service, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E5A93C]/50 transition-all duration-300 flex flex-col group"
-              >
-                {/* Visual Header */}
-                <div className={`aspect-[16/10] overflow-hidden relative flex items-center justify-center ${
-                  service.isTransparentAsset ? 'bg-gradient-to-tr from-slate-900 to-[#020E26] p-4' : 'bg-slate-100'
-                }`}>
-                  <img
-                    src={service.img}
-                    alt={service.title}
-                    className={`w-full h-full transition-transform duration-500 group-hover:scale-105 ${
-                      service.isTransparentAsset ? 'object-contain' : 'object-cover'
-                    }`}
-                  />
-                  <div className="absolute top-4 left-4 w-9 h-9 rounded-lg bg-[#020E26] border border-slate-700 flex items-center justify-center shadow-lg">
-                    {service.icon}
-                  </div>
-                </div>
-
-                {/* Content Body */}
-                <div className="p-7 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-[#020E26] mb-2 group-hover:text-[#E5A93C] transition-colors">
-                      {service.title}
-                    </h3>
-                    <p className="text-xs text-slate-600 leading-relaxed mb-6">
-                      {service.desc}
-                    </p>
-
-                    {/* Feature Checkmarks with Gold Ticks */}
-                    <div className="space-y-2.5 mb-8">
-                      {service.features.map((feat, i) => (
-                        <div key={i} className="flex items-center gap-2.5 text-xs text-slate-700">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#E5A93C] shrink-0" />
-                          <span>{feat}</span>
-                        </div>
-                      ))}
+          {/* Loading Skeleton */}
+          {isLoading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div
+                  key={n}
+                  className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs animate-pulse"
+                >
+                  <div className="aspect-[16/10] bg-slate-200" />
+                  <div className="p-7 space-y-4">
+                    <div className="h-6 bg-slate-200 rounded w-3/4" />
+                    <div className="h-3.5 bg-slate-200 rounded w-full" />
+                    <div className="space-y-2 pt-2">
+                      <div className="h-3 bg-slate-200 rounded w-4/5" />
+                      <div className="h-3 bg-slate-200 rounded w-3/5" />
                     </div>
                   </div>
-
-                  <Link
-                    to={service.link || '/contact'}
-                    className="pt-4 border-t border-slate-100 flex items-center text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] transition-colors"
-                  >
-                    <span>Learn More</span>
-                    <ArrowRight className="w-3.5 h-3.5 ml-1.5 transition-transform group-hover:translate-x-1" />
-                  </Link>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
+
+          {/* Error State */}
+          {isError && !isLoading && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center">
+              <p className="text-slate-600 font-medium mb-4">Unable to load enterprise services at this moment.</p>
+              <button
+                onClick={() => refetch()}
+                className="px-5 py-2.5 rounded-md bg-[#020E26] hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
+              >
+                Retry Loading
+              </button>
+            </div>
+          )}
+
+          {/* 3x2 Grid Cards from Database */}
+          {!isLoading && !isError && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredServices.map((service, idx) => {
+                const serviceVisual = SERVICE_IMAGES[service.slug] || {
+                  img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+                  isTransparent: false,
+                };
+
+                return (
+                  <div
+                    key={service.slug || idx}
+                    className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E5A93C]/50 transition-all duration-300 flex flex-col group"
+                  >
+                    {/* Visual Header */}
+                    <div className={`aspect-[16/10] overflow-hidden relative flex items-center justify-center ${
+                      serviceVisual.isTransparent ? 'bg-gradient-to-tr from-slate-900 to-[#020E26] p-4' : 'bg-slate-100'
+                    }`}>
+                      <img
+                        src={serviceVisual.img}
+                        alt={service.title}
+                        className={`w-full h-full transition-transform duration-500 group-hover:scale-105 ${
+                          serviceVisual.isTransparent ? 'object-contain' : 'object-cover'
+                        }`}
+                      />
+                      <div className="absolute top-4 left-4 w-9 h-9 rounded-lg bg-[#020E26] border border-slate-700 flex items-center justify-center shadow-lg">
+                        {getServiceIcon(service.icon)}
+                      </div>
+                    </div>
+
+                    {/* Content Body */}
+                    <div className="p-7 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-lg font-bold text-[#020E26] mb-2 group-hover:text-[#E5A93C] transition-colors">
+                          {service.title}
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed mb-6">
+                          {service.shortDescription}
+                        </p>
+
+                        {/* Feature Checkmarks with Gold Ticks */}
+                        {service.deliverables && service.deliverables.length > 0 && (
+                          <div className="space-y-2.5 mb-8">
+                            {service.deliverables.map((feat, i) => (
+                              <div key={i} className="flex items-center gap-2.5 text-xs text-slate-700">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#E5A93C] shrink-0" />
+                                <span>{feat}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <Link
+                        to={`/services/${service.slug}`}
+                        className="pt-4 border-t border-slate-100 flex items-center text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] transition-colors"
+                      >
+                        <span>Learn More</span>
+                        <ArrowRight className="w-3.5 h-3.5 ml-1.5 transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 

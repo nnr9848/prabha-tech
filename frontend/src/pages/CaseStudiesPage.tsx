@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import {
   ArrowRight,
   ExternalLink,
@@ -16,127 +17,41 @@ import {
   Gift,
   Server,
   Layers,
+  Sparkles,
 } from 'lucide-react';
 import { SectionHeading } from '../components/common/SectionHeading';
 import { BrandButton } from '../components/common/BrandButton';
+import { publicApi } from '../api/client';
+import { CaseStudy } from '../types';
 
 export const CaseStudiesPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All');
 
-  const filterCategories = [
-    'All',
-    'Enterprise Solutions',
-    'Mobile Applications',
-    'AI & Analytics',
-    'Industrial & IoT',
-    'IT Services',
-    'Platforms & Marketplaces',
-    'Smart Solutions',
-  ];
+  // Single Source of Truth: Fetch all case studies from PostgreSQL via public REST API
+  const {
+    data: caseStudies = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery<CaseStudy[]>({
+    queryKey: ['publicCaseStudies'],
+    queryFn: () => publicApi.getCaseStudies(),
+    staleTime: 1000 * 60 * 5,
+  });
 
-  const portfolioItems = [
-    {
-      badge: 'ENTERPRISE PLATFORM',
-      title: 'Super App All-in-One',
-      desc: 'A unified mobile and web application integrating multiple services, business operations, and customer engagement in one seamless platform.',
-      category: 'Enterprise Solutions',
-      img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-      slug: 'super-app-all-in-one',
-    },
-    {
-      badge: 'INDUSTRIAL SOLUTIONS',
-      title: 'AI Fleet Management',
-      desc: 'Smart platform for heavy equipment sales, rental maintenance, and tracking with AI-powered fleet operations and analytics.',
-      category: 'Industrial & IoT',
-      img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80',
-      slug: 'ai-fleet-management',
-    },
-    {
-      badge: 'MARKETPLACE',
-      title: 'BigAuction Auction Portal',
-      desc: 'A digital auction platform for heavy equipment, vehicles, and industrial assets with live bidding, secure payments, and global reach.',
-      category: 'Platforms & Marketplaces',
-      img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
-      slug: 'bigauction-portal',
-    },
-    {
-      badge: 'HR & WORKFORCE',
-      title: 'Grecha.ai AI HRMS',
-      desc: 'All-in-one HRMS with attendance, payroll, leave, performance, recruitment, and workforce management for modern enterprises.',
-      category: 'Enterprise Solutions',
-      img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
-      slug: 'grecha-ai-hrms',
-    },
-    {
-      badge: 'AI & SECURITY',
-      title: 'AI Analytics for Cameras',
-      desc: 'Real-time video analytics for malls and commercial spaces with crowd analysis, behavior detection, and smart monitoring.',
-      category: 'AI & Analytics',
-      img: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80',
-      slug: 'ai-camera-analytics',
-    },
-    {
-      badge: 'BUILDING MANAGEMENT',
-      title: 'BEMS Smart Buildings',
-      desc: 'AI-powered Building Energy Management System for HVAC, electrical, and facilities with real-time monitoring, analytics, and energy optimization.',
-      category: 'Smart Solutions',
-      img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
-      slug: 'bems-smart-buildings',
-    },
-    {
-      badge: 'INSURANCE SOLUTIONS',
-      title: 'Insurance CRM Portal',
-      desc: 'Complete CRM for insurance brokers and agents with lead management, policy tracking, reminders, and meeting scheduling.',
-      category: 'Enterprise Solutions',
-      img: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
-      slug: 'insurance-crm-portal',
-    },
-    {
-      badge: 'IT SERVICES PLATFORM',
-      title: 'Wefyx.pro IT Support & Rental',
-      desc: 'One-stop platform for IT support, equipment rental, managed services, AMC, and on-site engineer booking for businesses and individuals.',
-      category: 'IT Services',
-      img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
-      slug: 'wefyx-it-platform',
-    },
-    {
-      badge: 'ACCESS & SECURITY',
-      title: 'Smart Gate Cloud',
-      desc: 'Cloud-based access control and gate management system with real-time monitoring, visitor management, and secure entry solutions.',
-      category: 'Smart Solutions',
-      img: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80',
-      slug: 'smart-gate-cloud',
-    },
-    {
-      badge: 'AGRICULTURE TECHNOLOGY',
-      title: 'Vertical Farming',
-      desc: 'IoT and AI-based smart farming system for controlled environment agriculture, increasing yield and resource efficiency.',
-      category: 'Industrial & IoT',
-      img: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=800&q=80',
-      slug: 'vertical-farming-iot',
-    },
-    {
-      badge: 'LOYALTY & REWARDS',
-      title: 'Rewards Portal',
-      desc: 'Enterprise rewards and loyalty platform where companies and banks can purchase rewards for their customers, and users can also buy directly.',
-      category: 'Platforms & Marketplaces',
-      img: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80',
-      slug: 'rewards-portal',
-    },
-    {
-      badge: 'FINANCIAL SOLUTIONS',
-      title: 'Blink Financial Pay App',
-      desc: 'Secure and modern payment application for seamless transactions, wallet services, and financial management for individuals and businesses.',
-      category: 'Mobile Applications',
-      img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80',
-      slug: 'blink-financial-pay',
-    },
-  ];
+  // Dynamically compute unique category filter tabs from live database records
+  const filterCategories = React.useMemo(() => {
+    const set = new Set<string>();
+    caseStudies.forEach((cs) => {
+      if (cs.category) set.add(cs.category);
+    });
+    return ['All', ...Array.from(set)];
+  }, [caseStudies]);
 
   const filteredItems =
     activeCategory === 'All'
-      ? portfolioItems
-      : portfolioItems.filter((item) => item.category === activeCategory);
+      ? caseStudies
+      : caseStudies.filter((item) => item.category === activeCategory);
 
   return (
     <div className="bg-white text-slate-900 font-sans selection:bg-[#E5A93C]/30">
@@ -222,52 +137,99 @@ export const CaseStudiesPage: React.FC = () => {
             })}
           </div>
 
-          {/* 2-Column Luxury Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {filteredItems.map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E5A93C]/50 transition-all duration-300 flex flex-col group"
+          {/* Loading Skeleton */}
+          {isLoading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[1, 2, 3, 4].map((n) => (
+                <div
+                  key={n}
+                  className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs animate-pulse"
+                >
+                  <div className="aspect-[16/9] bg-slate-200" />
+                  <div className="p-7 space-y-4">
+                    <div className="h-6 bg-slate-200 rounded w-3/4" />
+                    <div className="space-y-2">
+                      <div className="h-3.5 bg-slate-200 rounded" />
+                      <div className="h-3.5 bg-slate-200 rounded w-5/6" />
+                    </div>
+                    <div className="pt-4 border-t border-slate-100 flex gap-3">
+                      <div className="h-9 bg-slate-200 rounded w-28" />
+                      <div className="h-9 bg-slate-200 rounded w-28" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Error State */}
+          {isError && !isLoading && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center">
+              <p className="text-slate-600 font-medium mb-4">Unable to load portfolio projects at this moment.</p>
+              <button
+                onClick={() => refetch()}
+                className="px-5 py-2.5 rounded-md bg-[#020E26] hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
               >
-                {/* Visual Thumbnail */}
-                <div className="aspect-[16/9] bg-slate-100 overflow-hidden relative">
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 px-3 py-1 rounded-md bg-[#020E26]/85 backdrop-blur-sm text-[10px] font-bold uppercase tracking-wider text-[#E5A93C] border border-slate-700/60 shadow">
-                    {item.badge}
+                Retry Loading
+              </button>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!isLoading && !isError && filteredItems.length === 0 && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center text-slate-500">
+              No portfolio projects found for this category.
+            </div>
+          )}
+
+          {/* 2-Column Luxury Cards Grid */}
+          {!isLoading && !isError && filteredItems.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {filteredItems.map((item, idx) => (
+                <div
+                  key={item.slug || idx}
+                  className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E5A93C]/50 transition-all duration-300 flex flex-col group"
+                >
+                  {/* Visual Thumbnail */}
+                  <div className="aspect-[16/9] bg-slate-100 overflow-hidden relative">
+                    <img
+                      src={item.heroImageUrl || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'}
+                      alt={item.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute top-4 left-4 px-3 py-1 rounded-md bg-[#020E26]/85 backdrop-blur-sm text-[10px] font-bold uppercase tracking-wider text-[#E5A93C] border border-slate-700/60 shadow">
+                      {item.category}
+                    </div>
+                  </div>
+
+                  {/* Content Details */}
+                  <div className="p-7 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-xl font-bold text-[#020E26] mb-2 group-hover:text-[#E5A93C] transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-slate-600 leading-relaxed mb-6">
+                        {item.summary}
+                      </p>
+                    </div>
+
+                    {/* Dual Action Buttons */}
+                    <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+                      <BrandButton to={`/portfolio/${item.slug}`} variant="dark" size="sm">
+                        Case Study
+                      </BrandButton>
+                      <Link
+                        to="/contact"
+                        className="px-5 py-2.5 rounded-md bg-slate-100 hover:bg-slate-200 text-[#020E26] text-xs font-semibold uppercase tracking-wider transition-colors"
+                      >
+                        Explore →
+                      </Link>
+                    </div>
                   </div>
                 </div>
-
-                {/* Content Details */}
-                <div className="p-7 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-xl font-bold text-[#020E26] mb-2 group-hover:text-[#E5A93C] transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-slate-600 leading-relaxed mb-6">
-                      {item.desc}
-                    </p>
-                  </div>
-
-                  {/* Dual Action Buttons */}
-                  <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                    <BrandButton to={`/portfolio/${item.slug}`} variant="dark" size="sm">
-                      Case Study
-                    </BrandButton>
-                    <Link
-                      to="/contact"
-                      className="px-5 py-2.5 rounded-md bg-slate-100 hover:bg-slate-200 text-[#020E26] text-xs font-semibold uppercase tracking-wider transition-colors"
-                    >
-                      Explore →
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
