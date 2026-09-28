@@ -29,6 +29,7 @@ public class PublicController {
     private final com.prabhatech.service.HeroConfigService heroConfigService;
     private final com.prabhatech.service.JobPositionService jobPositionService;
     private final com.prabhatech.service.JobApplicationService jobApplicationService;
+    private final com.prabhatech.service.FileStorageService fileStorageService;
 
     public PublicController(CaseStudyService caseStudyService,
                             ServiceItemService serviceItemService,
@@ -37,7 +38,8 @@ public class PublicController {
                             SocialLinkService socialLinkService,
                             com.prabhatech.service.HeroConfigService heroConfigService,
                             com.prabhatech.service.JobPositionService jobPositionService,
-                            com.prabhatech.service.JobApplicationService jobApplicationService) {
+                            com.prabhatech.service.JobApplicationService jobApplicationService,
+                            com.prabhatech.service.FileStorageService fileStorageService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
@@ -46,6 +48,7 @@ public class PublicController {
         this.heroConfigService = heroConfigService;
         this.jobPositionService = jobPositionService;
         this.jobApplicationService = jobApplicationService;
+        this.fileStorageService = fileStorageService;
     }
 
     // --- Hero Section Dynamic Config ---
@@ -124,5 +127,35 @@ public class PublicController {
     @PostMapping("/jobs/apply")
     public ResponseEntity<com.prabhatech.dto.JobApplicationDto> applyForJob(@Valid @RequestBody com.prabhatech.dto.JobApplicationDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(jobApplicationService.submitApplication(dto));
+    }
+
+    // --- Resume Upload & Download ---
+    @PostMapping(value = "/upload/resume", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<java.util.Map<String, String>> uploadResume(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+        String storedFilename = fileStorageService.storeResume(file);
+        String downloadUrl = "/api/v1/public/resumes/" + storedFilename;
+        java.util.Map<String, String> response = new java.util.HashMap<>();
+        response.put("fileName", file.getOriginalFilename() != null ? file.getOriginalFilename() : storedFilename);
+        response.put("storedName", storedFilename);
+        response.put("url", downloadUrl);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/resumes/{filename:.+}")
+    public ResponseEntity<org.springframework.core.io.Resource> getResume(@PathVariable String filename) {
+        org.springframework.core.io.Resource resource = fileStorageService.loadAsResource(filename);
+        String contentType = "application/octet-stream";
+        if (filename.toLowerCase().endsWith(".pdf")) {
+            contentType = "application/pdf";
+        } else if (filename.toLowerCase().endsWith(".doc")) {
+            contentType = "application/msword";
+        } else if (filename.toLowerCase().endsWith(".docx")) {
+            contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(org.springframework.http.MediaType.parseMediaType(contentType))
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }

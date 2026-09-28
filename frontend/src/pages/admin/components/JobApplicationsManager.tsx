@@ -18,6 +18,7 @@ import { JobApplication } from '../../../types';
 
 interface JobApplicationsManagerProps {
   applications: JobApplication[];
+  initialRoleFilter?: string;
   onUpdateStatus: (id: number, status: string) => void;
   onDelete: (id: number) => void;
 }
@@ -33,12 +34,21 @@ const STATUS_CONFIG: Record<
   HIRED: { label: 'Hired', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
 };
 
+const resolveResumeUrl = (link?: string) => {
+  if (!link) return '#';
+  if (link.startsWith('http://') || link.startsWith('https://')) {
+    return link;
+  }
+  return link.startsWith('/') ? link : `/${link}`;
+};
+
 export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
   applications,
+  initialRoleFilter = '',
   onUpdateStatus,
   onDelete,
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialRoleFilter);
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [selectedApp, setSelectedApp] = useState<JobApplication | null>(null);
 
@@ -141,8 +151,8 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                         </span>
                       </td>
 
-                      <td className="py-4 px-4 text-slate-600">
-                        {app.experience || 'Not specified'}
+                      <td className="py-4 px-4 text-slate-600 font-medium">
+                        {app.totalExperience || app.experience || 'Not specified'}
                       </td>
 
                       <td className="py-4 px-4">
@@ -166,7 +176,7 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                       <td className="py-4 px-5 text-right">
                         <div className="flex items-center justify-end gap-1.5">
                           <a
-                            href={app.resumeLink}
+                            href={resolveResumeUrl(app.resumeLink)}
                             target="_blank"
                             rel="noreferrer"
                             className="p-1.5 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 transition-colors cursor-pointer"
@@ -274,13 +284,13 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                   Resume / Portfolio Link
                 </span>
                 <a
-                  href={selectedApp.resumeLink || '#'}
+                  href={resolveResumeUrl(selectedApp.resumeLink)}
                   target="_blank"
                   rel="noreferrer"
                   className="text-amber-600 hover:underline flex items-center gap-1 font-medium break-all"
                 >
                   <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                  <span>{selectedApp.resumeLink || 'View Attached Resume'}</span>
+                  <span>{selectedApp.resumeFileName || selectedApp.resumeLink || 'View Attached Resume'}</span>
                 </a>
               </div>
 

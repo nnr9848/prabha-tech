@@ -152,13 +152,41 @@ export const JobApplicationPage: React.FC = () => {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      if (file.size > 5 * 1024 * 1024) {
-        alert('File size exceeds 5MB limit. Please upload a smaller file.');
-        return;
-      }
-      setResumeFile(file);
+      validateAndSetFile(file);
     }
   };
+
+  const validateAndSetFile = (file: File) => {
+    const validExtensions = ['.pdf', '.doc', '.docx'];
+    const lowerName = file.name.toLowerCase();
+    const isValidExt = validExtensions.some((ext) => lowerName.endsWith(ext));
+
+    if (!isValidExt) {
+      alert('Please upload a valid document format (.pdf, .doc, or .docx).');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size exceeds 5MB limit. Please upload a smaller file.');
+      return;
+    }
+    setResumeFile(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      validateAndSetFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const applyMutation = useMutation({
     mutationFn: (application: JobApplication) => publicApi.applyJob(application),
@@ -172,7 +200,7 @@ export const JobApplicationPage: React.FC = () => {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
@@ -191,22 +219,41 @@ export const JobApplicationPage: React.FC = () => {
 
     const matchedJob = dbJobs.find((j) => j.title === selectedPosition);
 
-    applyMutation.mutate({
-      jobId: matchedJob?.id,
-      jobTitle: selectedPosition,
-      fullName,
-      email,
-      phone: `${countryCode} ${phoneNumber}`.trim(),
-      currentLocation: location,
-      totalExperience,
-      currentCompany,
-      currentDesignation,
-      expectedSalary,
-      noticePeriod,
-      resumeFileName: resumeFile?.name || 'resume_uploaded.pdf',
-      resumeLink: resumeFile ? URL.createObjectURL(resumeFile) : 'https://prabhatech.com/resumes/candidate-resume.pdf',
-      coverNote: coverLetter,
-    });
+    try {
+      let finalResumeLink = '';
+      let finalResumeFileName = resumeFile?.name || '';
+
+      if (resumeFile) {
+        setIsUploading(true);
+        const uploadResult = await publicApi.uploadResume(resumeFile);
+        finalResumeLink = uploadResult.url;
+        finalResumeFileName = uploadResult.fileName || resumeFile.name;
+        setIsUploading(false);
+      }
+
+      applyMutation.mutate({
+        jobId: matchedJob?.id,
+        jobTitle: selectedPosition,
+        fullName,
+        email,
+        phone: `${countryCode} ${phoneNumber}`.trim(),
+        currentLocation: location,
+        totalExperience,
+        experience: totalExperience,
+        currentCompany,
+        currentDesignation,
+        expectedSalary,
+        noticePeriod,
+        resumeFileName: finalResumeFileName,
+        resumeLink: finalResumeLink,
+        coverNote: coverLetter,
+      });
+    } catch (err: any) {
+      setIsUploading(false);
+      setErrorMessage(
+        err.response?.data?.message || 'Failed to upload resume file. Please ensure it is a valid PDF or DOC/DOCX under 5MB.'
+      );
+    }
   };
 
   return (
@@ -532,7 +579,11 @@ export const JobApplicationPage: React.FC = () => {
                   <h3 className="text-sm font-bold text-[#020E26]">Resume / CV</h3>
                 </div>
 
-                <div className="relative rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-[#E5A93C]/50 transition-all p-8 text-center">
+                <div
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  className="relative rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-slate-50 hover:border-[#E5A93C]/50 transition-all p-8 text-center"
+                >
                   <input
                     type="file"
                     id="resume-file"
@@ -640,10 +691,10 @@ export const JobApplicationPage: React.FC = () => {
                   type="submit"
                   variant="dark"
                   size="lg"
-                  isLoading={applyMutation.isPending}
+                  isLoading={applyMutation.isPending || isUploading}
                   className="w-full sm:flex-1 justify-center text-sm py-4 rounded-xl"
                 >
-                  Submit Application
+                  {isUploading ? 'Uploading Resume...' : applyMutation.isPending ? 'Submitting Application...' : 'Submit Application'}
                 </BrandButton>
               </div>
             </form>

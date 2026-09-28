@@ -96,6 +96,17 @@ export const publicApi = {
     const res = await publicClient.post('/public/jobs/apply', application);
     return res.data;
   },
+
+  uploadResume: async (file: File): Promise<{ fileName: string; storedName: string; url: string }> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await publicClient.post('/public/upload/resume', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return res.data;
+  },
 };
 
 // ==========================================

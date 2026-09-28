@@ -11,24 +11,29 @@ import {
   CheckCircle2,
   XCircle,
   Sparkles,
+  Users,
 } from 'lucide-react';
-import { JobPosition } from '../../../types';
+import { JobPosition, JobApplication } from '../../../types';
 import { Link } from 'react-router-dom';
 
 interface JobsManagerProps {
   jobs: JobPosition[];
+  applications?: JobApplication[];
   onOpenCreate: () => void;
   onOpenEdit: (job: JobPosition) => void;
   onDelete: (id: number) => void;
   onToggleActive?: (job: JobPosition) => void;
+  onSelectRoleFilter?: (jobTitle: string) => void;
 }
 
 export const JobsManager: React.FC<JobsManagerProps> = ({
   jobs,
+  applications = [],
   onOpenCreate,
   onOpenEdit,
   onDelete,
   onToggleActive,
+  onSelectRoleFilter,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('ALL');
@@ -105,6 +110,7 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
                 <th className="py-3.5 px-4">Department</th>
                 <th className="py-3.5 px-4">Location & Type</th>
                 <th className="py-3.5 px-4">Required Experience</th>
+                <th className="py-3.5 px-4">Applicants</th>
                 <th className="py-3.5 px-4">Status</th>
                 <th className="py-3.5 px-5 text-right">Actions</th>
               </tr>
@@ -112,7 +118,7 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
             <tbody className="divide-y divide-slate-100">
               {filteredJobs.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-slate-400">
+                  <td colSpan={7} className="py-12 text-center text-slate-400">
                     <Briefcase className="w-8 h-8 text-slate-300 mx-auto mb-2" />
                     No open positions found matching your criteria.
                   </td>
@@ -166,6 +172,39 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
                         <Clock className="w-3 h-3 text-slate-400" />
                         {job.experience || 'Not specified'}
                       </span>
+                    </td>
+
+                    {/* Applicants Metrics Badge with Quick Filter */}
+                    <td className="py-4 px-4">
+                      {(() => {
+                        const roleApps = applications.filter(
+                          (a) => (a.jobId && a.jobId === job.id) || a.jobTitle?.trim().toLowerCase() === job.title?.trim().toLowerCase()
+                        );
+                        const newCount = roleApps.filter((a) => !a.status || a.status === 'NEW').length;
+                        const totalCount = roleApps.length;
+
+                        return totalCount > 0 ? (
+                          <button
+                            type="button"
+                            onClick={() => onSelectRoleFilter && onSelectRoleFilter(job.title)}
+                            title={`Filter ATS applications for ${job.title}`}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 hover:bg-amber-100/80 text-amber-900 border border-amber-200/80 transition-all cursor-pointer shadow-2xs group/badge"
+                          >
+                            <Users className="w-3 h-3 text-amber-600 group-hover/badge:scale-110 transition-transform" />
+                            <span>{totalCount}</span>
+                            {newCount > 0 && (
+                              <span className="ml-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-amber-500 text-white leading-tight">
+                                {newCount} new
+                              </span>
+                            )}
+                          </button>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 font-medium">
+                            <Users className="w-3 h-3 text-slate-300" />
+                            <span>0 applicants</span>
+                          </span>
+                        );
+                      })()}
                     </td>
 
                     <td className="py-4 px-4">

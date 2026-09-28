@@ -19,6 +19,7 @@ export const AdminDashboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [selectedInquiry, setSelectedInquiry] = useState<LeadInquiry | null>(null);
+  const [roleFilterForApplications, setRoleFilterForApplications] = useState('');
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -373,6 +374,11 @@ export const AdminDashboardPage: React.FC = () => {
           {activeTab === 'jobs' && (
             <JobsManager
               jobs={jobs}
+              applications={applications}
+              onSelectRoleFilter={(jobTitle) => {
+                setRoleFilterForApplications(jobTitle);
+                setActiveTab('job-applications');
+              }}
               onOpenCreate={() => handleQuickCreate('job')}
               onOpenEdit={(job) => {
                 setEditingJob(job);
@@ -389,6 +395,7 @@ export const AdminDashboardPage: React.FC = () => {
           {activeTab === 'job-applications' && (
             <JobApplicationsManager
               applications={applications}
+              initialRoleFilter={roleFilterForApplications}
               onUpdateStatus={(id, status) => updateAppStatusMutation.mutate({ id, status })}
               onDelete={(id) => deleteAppMutation.mutate(id)}
             />
