@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import { SocialLink } from '../../../types';
 import { PLATFORM_ICONS } from '../../../components/common/SocialIconsGroup';
-import { PillButton } from '../../../components/common/PillButton';
 
 interface SocialLinksManagerProps {
   socialLinks: SocialLink[];

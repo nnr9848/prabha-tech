@@ -15,7 +15,6 @@ import {
   Filter,
 } from 'lucide-react';
 import { LeadInquiry } from '../../../types';
-import { PillButton } from '../../../components/common/PillButton';
 
 interface InquiriesManagerProps {
   inquiries: LeadInquiry[];

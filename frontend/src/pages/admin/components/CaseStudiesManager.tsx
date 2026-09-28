@@ -12,7 +12,6 @@ import {
   Eye,
 } from 'lucide-react';
 import { CaseStudy } from '../../../types';
-import { PillButton } from '../../../components/common/PillButton';
 import { Link } from 'react-router-dom';
 
 interface CaseStudiesManagerProps {

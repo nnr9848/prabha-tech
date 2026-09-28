@@ -12,7 +12,6 @@ import {
   Share2,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { PillButton } from '../../../components/common/PillButton';
 import { AdminTab } from './AdminSidebar';
 
 interface AdminHeaderProps {

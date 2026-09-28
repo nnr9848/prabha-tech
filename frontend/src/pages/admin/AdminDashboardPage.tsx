@@ -9,7 +9,6 @@ import { CaseStudiesManager } from './components/CaseStudiesManager';
 import { ArticlesManager } from './components/ArticlesManager';
 import { InquiriesManager } from './components/InquiriesManager';
 import { SocialLinksManager } from './components/SocialLinksManager';
-import { PillButton } from '../../components/common/PillButton';
 import { useToast } from '../../context/ToastContext';
 import { X, Save, Image as ImageIcon } from 'lucide-react';
 

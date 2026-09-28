@@ -13,7 +13,6 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { CaseStudy, Article, LeadInquiry, SocialLink } from '../../../types';
-import { PillButton } from '../../../components/common/PillButton';
 import { AdminTab } from './AdminSidebar';
 
 interface AdminOverviewProps {

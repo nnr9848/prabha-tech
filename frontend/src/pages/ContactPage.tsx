@@ -315,7 +315,7 @@ export const ContactPage: React.FC = () => {
                         setDetails('');
                         setAttachedFile(null);
                       }}
-                      className="px-6 py-2.5 rounded-full bg-[#020E26] hover:bg-[#E5A93C] hover:text-[#000B1E] text-white text-xs font-semibold transition-all shadow-sm cursor-pointer"
+                      className="px-6 py-2.5 rounded-md bg-[#020E26] hover:bg-[#E5A93C] hover:text-[#000B1E] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer"
                     >
                       Send Another Message
                     </button>

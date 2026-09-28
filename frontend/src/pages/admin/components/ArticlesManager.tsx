@@ -10,7 +10,6 @@ import {
   Clock,
 } from 'lucide-react';
 import { Article } from '../../../types';
-import { PillButton } from '../../../components/common/PillButton';
 import { Link } from 'react-router-dom';
 
 interface ArticlesManagerProps {

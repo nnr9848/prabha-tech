@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, HeroConfig } from '../types';
+import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -86,11 +86,6 @@ export const publicApi = {
     const res = await publicClient.post('/public/inquiries', inquiry);
     return res.data;
   },
-
-  getHeroConfig: async (): Promise<HeroConfig> => {
-    const res = await publicClient.get('/public/hero-config');
-    return res.data;
-  },
 };
 
 // ==========================================
@@ -100,17 +95,6 @@ export const adminApi = {
   // Authentication Login uses the clean unauthenticated publicClient
   login: async (credentials: { username: string; password: string }): Promise<AuthResponse> => {
     const res = await publicClient.post('/auth/login', credentials);
-    return res.data;
-  },
-
-  // Hero Section CMS
-  getHeroConfig: async (): Promise<HeroConfig> => {
-    const res = await adminClient.get('/admin/hero-config');
-    return res.data;
-  },
-
-  updateHeroConfig: async (data: Partial<HeroConfig>): Promise<HeroConfig> => {
-    const res = await adminClient.put('/admin/hero-config', data);
     return res.data;
   },
 

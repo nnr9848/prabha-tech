@@ -100,6 +100,3 @@ export const BrandButton: React.FC<BrandButtonProps> = ({
     </button>
   );
 };
-
-// Also export as PillButton for backward compatibility
-export const PillButton = BrandButton;

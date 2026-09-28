@@ -202,18 +202,18 @@ export const CaseStudiesPage: React.FC = () => {
       {/* ========================================================= */}
       <section className="py-20 bg-slate-50 border-b border-slate-200">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
-          {/* Filter Pills */}
-          <div className="flex items-center gap-2.5 overflow-x-auto pb-4 mb-14 no-scrollbar">
+          {/* Filter Categories */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-14 no-scrollbar">
             {filterCategories.map((cat) => {
               const isSelected = activeCategory === cat;
               return (
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-6 py-2.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 shadow-sm ${
+                  className={`px-5 py-2 rounded-md text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'bg-[#020E26] text-white shadow-md border border-[#020E26]'
-                      : 'bg-white text-slate-600 hover:text-[#020E26] border border-slate-200 hover:border-slate-300 hover:shadow'
+                      ? 'bg-[#020E26] text-white shadow-sm border border-[#020E26]'
+                      : 'bg-white text-slate-600 hover:text-[#020E26] border border-slate-200 hover:border-slate-300 hover:shadow-xs'
                   }`}
                 >
                   {cat}

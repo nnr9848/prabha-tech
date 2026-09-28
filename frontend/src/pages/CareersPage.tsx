@@ -550,7 +550,7 @@ export const CareersPage: React.FC = () => {
                       setSelectedLocation('All Locations');
                       setSelectedJobType('All Types');
                     }}
-                    className="px-4 py-2 rounded-full bg-[#020E26] text-white text-xs font-semibold hover:bg-[#E5A93C] hover:text-[#000B1E] transition-colors"
+                    className="px-4 py-2 rounded-md bg-[#020E26] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#E5A93C] hover:text-[#000B1E] transition-colors cursor-pointer"
                   >
                     Reset All Filters
                   </button>
@@ -987,7 +987,7 @@ export const CareersPage: React.FC = () => {
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-full bg-[#E5A93C] hover:bg-[#D4972B] active:scale-95 text-[#000B1E] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer"
+                    className="w-full py-3 rounded-md bg-[#E5A93C] hover:bg-[#D4972B] active:scale-95 text-[#000B1E] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow cursor-pointer"
                   >
                     <span>Submit Application</span>
                     <ArrowRight className="w-4 h-4" />
