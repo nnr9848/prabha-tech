@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Share2,
   Plus,
@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { SocialLink } from '../../../types';
 import { PLATFORM_ICONS } from '../../../components/common/SocialIconsGroup';
+import { ConfirmModal } from '../../../components/common/ConfirmModal';
 
 interface SocialLinksManagerProps {
   socialLinks: SocialLink[];
@@ -26,6 +27,8 @@ export const SocialLinksManager: React.FC<SocialLinksManagerProps> = ({
   onDelete,
   onToggleActive,
 }) => {
+  const [linkToDelete, setLinkToDelete] = useState<SocialLink | null>(null);
+
   return (
     <div className="space-y-6">
       {/* Header Info */}
@@ -123,7 +126,7 @@ export const SocialLinksManager: React.FC<SocialLinksManagerProps> = ({
                   </button>
                   {link.id && (
                     <button
-                      onClick={() => onDelete(link.id!)}
+                      onClick={() => setLinkToDelete(link)}
                       className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
                       title="Delete Channel"
                     >
@@ -136,6 +139,23 @@ export const SocialLinksManager: React.FC<SocialLinksManagerProps> = ({
           );
         })}
       </div>
+
+      {/* Enterprise Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!linkToDelete}
+        onClose={() => setLinkToDelete(null)}
+        onConfirm={() => {
+          if (linkToDelete?.id) {
+            onDelete(linkToDelete.id);
+            setLinkToDelete(null);
+          }
+        }}
+        title="Remove Social Channel?"
+        description={`Are you sure you want to remove "${linkToDelete?.platformName}"? It will no longer appear in the header, navigation, or website footer.`}
+        confirmText="Remove Channel"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

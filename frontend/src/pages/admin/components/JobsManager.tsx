@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { JobPosition, JobApplication } from '../../../types';
 import { Link } from 'react-router-dom';
+import { ConfirmModal } from '../../../components/common/ConfirmModal';
 
 interface JobsManagerProps {
   jobs: JobPosition[];
@@ -38,6 +39,7 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'ACTIVE' | 'INACTIVE'>('ALL');
+  const [jobToDelete, setJobToDelete] = useState<JobPosition | null>(null);
 
   const departments = ['ALL', ...Array.from(new Set(jobs.map((j) => j.department || 'Other')))];
 
@@ -260,11 +262,7 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => {
-                            if (job.id && window.confirm(`Are you sure you want to delete "${job.title}"?`)) {
-                              onDelete(job.id);
-                            }
-                          }}
+                          onClick={() => setJobToDelete(job)}
                           className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                           title="Delete Position"
                         >
@@ -279,6 +277,23 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
           </table>
         </div>
       </div>
+
+      {/* Enterprise Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!jobToDelete}
+        onClose={() => setJobToDelete(null)}
+        onConfirm={() => {
+          if (jobToDelete?.id) {
+            onDelete(jobToDelete.id);
+            setJobToDelete(null);
+          }
+        }}
+        title="Delete Career Position?"
+        description={`Are you sure you want to remove the job opening "${jobToDelete?.title}"? Any linked applicants or saved candidates will retain their application history, but the role will no longer appear on the careers board.`}
+        confirmText="Delete Role"
+        cancelText="Keep Role"
+        variant="danger"
+      />
     </div>
   );
 };

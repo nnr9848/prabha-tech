@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Article } from '../../../types';
 import { Link } from 'react-router-dom';
+import { ConfirmModal } from '../../../components/common/ConfirmModal';
 
 interface ArticlesManagerProps {
   articles: Article[];
@@ -27,6 +28,7 @@ export const ArticlesManager: React.FC<ArticlesManagerProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
+  const [articleToDelete, setArticleToDelete] = useState<Article | null>(null);
 
   const categories = ['ALL', ...Array.from(new Set(articles.map((a) => a.category)))];
 
@@ -153,7 +155,7 @@ export const ArticlesManager: React.FC<ArticlesManagerProps> = ({
                 </button>
                 {art.id && (
                   <button
-                    onClick={() => onDelete(art.id!)}
+                    onClick={() => setArticleToDelete(art)}
                     className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
                     title="Delete Article"
                   >
@@ -165,6 +167,23 @@ export const ArticlesManager: React.FC<ArticlesManagerProps> = ({
           </div>
         ))}
       </div>
+
+      {/* Enterprise Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!articleToDelete}
+        onClose={() => setArticleToDelete(null)}
+        onConfirm={() => {
+          if (articleToDelete?.id) {
+            onDelete(articleToDelete.id);
+            setArticleToDelete(null);
+          }
+        }}
+        title="Delete Article & Publication?"
+        description={`Are you sure you want to permanently un-publish "${articleToDelete?.title}"? This article and its publication link will be removed from Insights.`}
+        confirmText="Delete Article"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

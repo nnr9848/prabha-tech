@@ -21,6 +21,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { JobApplication } from '../../../types';
+import { ConfirmModal } from '../../../components/common/ConfirmModal';
 
 interface JobApplicationsManagerProps {
   applications: JobApplication[];
@@ -60,6 +61,7 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
   const [searchTerm, setSearchTerm] = useState(initialRoleFilter);
   const [statusFilter, setStatusFilter] = useState<string>(urlStatus || 'ALL');
   const [selectedApp, setSelectedApp] = useState<JobApplication | null>(null);
+  const [appToDelete, setAppToDelete] = useState<JobApplication | null>(null);
 
   // Once applications finish loading, if no explicit URL param was provided and there are NEW items, auto-select NEW
   useEffect(() => {
@@ -482,12 +484,7 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                   Close Drawer
                 </button>
                 <button
-                  onClick={() => {
-                    if (selectedApp.id && window.confirm(`Permanently remove candidate application for ${selectedApp.fullName}?`)) {
-                      onDelete(selectedApp.id);
-                      setSelectedApp(null);
-                    }
-                  }}
+                  onClick={() => setAppToDelete(selectedApp)}
                   className="py-2 px-3 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 font-semibold text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
                   title="Delete Application Record"
                 >
@@ -507,6 +504,26 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
           </div>
         </div>
       )}
+
+      {/* Enterprise Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!appToDelete}
+        onClose={() => setAppToDelete(null)}
+        onConfirm={() => {
+          if (appToDelete?.id) {
+            onDelete(appToDelete.id);
+            if (selectedApp?.id === appToDelete.id) {
+              setSelectedApp(null);
+            }
+            setAppToDelete(null);
+          }
+        }}
+        title="Permanently Remove Application?"
+        description={`Are you sure you want to permanently delete the application record for ${appToDelete?.fullName || 'this candidate'} for the "${appToDelete?.jobTitle || 'role'}"? This action cannot be undone.`}
+        confirmText="Delete Application"
+        cancelText="Keep Candidate"
+        variant="danger"
+      />
     </div>
   );
 };

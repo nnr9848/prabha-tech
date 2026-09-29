@@ -21,6 +21,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { LeadInquiry } from '../../../types';
+import { ConfirmModal } from '../../../components/common/ConfirmModal';
 
 interface InquiriesManagerProps {
   inquiries: LeadInquiry[];
@@ -42,6 +43,7 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>(urlStatus || 'ALL');
+  const [inquiryToDelete, setInquiryToDelete] = useState<LeadInquiry | null>(null);
 
   // Once inquiries finish loading from network, if no explicit URL param was provided and there are NEW items, auto-select NEW
   useEffect(() => {
@@ -433,12 +435,7 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
                 </button>
                 {onDelete && selectedInquiry.id && (
                   <button
-                    onClick={() => {
-                      if (selectedInquiry.id && window.confirm(`Permanently delete inquiry from ${selectedInquiry.fullName}? This cannot be undone.`)) {
-                        onDelete(selectedInquiry.id);
-                        setSelectedInquiry(null);
-                      }
-                    }}
+                    onClick={() => setInquiryToDelete(selectedInquiry)}
                     className="py-2 px-3 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 font-semibold text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
                     title="Permanently Delete Inquiry"
                   >
@@ -458,6 +455,26 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
           </div>
         </div>
       )}
+
+      {/* Enterprise Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!inquiryToDelete}
+        onClose={() => setInquiryToDelete(null)}
+        onConfirm={() => {
+          if (inquiryToDelete?.id && onDelete) {
+            onDelete(inquiryToDelete.id);
+            if (selectedInquiry?.id === inquiryToDelete.id) {
+              setSelectedInquiry(null);
+            }
+            setInquiryToDelete(null);
+          }
+        }}
+        title="Permanently Delete Inquiry?"
+        description={`Are you sure you want to remove the inquiry from "${inquiryToDelete?.fullName || 'this client'}"? This record will be permanently purged from the database and cannot be recovered.`}
+        confirmText="Delete Record"
+        cancelText="Keep Inquiry"
+        variant="danger"
+      />
     </div>
   );
 };

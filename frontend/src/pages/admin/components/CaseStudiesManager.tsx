@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { CaseStudy } from '../../../types';
 import { Link } from 'react-router-dom';
+import { ConfirmModal } from '../../../components/common/ConfirmModal';
 
 interface CaseStudiesManagerProps {
   caseStudies: CaseStudy[];
@@ -30,6 +31,7 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [studyToDelete, setStudyToDelete] = useState<CaseStudy | null>(null);
 
   const categories = ['ALL', ...Array.from(new Set(caseStudies.map((c) => c.category)))];
 
@@ -176,7 +178,7 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
                   </button>
                   {study.id && (
                     <button
-                      onClick={() => onDelete(study.id!)}
+                      onClick={() => setStudyToDelete(study)}
                       className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
                       title="Delete Case Study"
                     >
@@ -244,7 +246,7 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
                         </button>
                         {study.id && (
                           <button
-                            onClick={() => onDelete(study.id!)}
+                            onClick={() => setStudyToDelete(study)}
                             className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -259,6 +261,23 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
           </div>
         </div>
       )}
+
+      {/* Enterprise Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!studyToDelete}
+        onClose={() => setStudyToDelete(null)}
+        onConfirm={() => {
+          if (studyToDelete?.id) {
+            onDelete(studyToDelete.id);
+            setStudyToDelete(null);
+          }
+        }}
+        title="Delete Case Study?"
+        description={`Are you sure you want to permanently remove "${studyToDelete?.title}"? It will be immediately un-published from the live website.`}
+        confirmText="Delete Study"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };
