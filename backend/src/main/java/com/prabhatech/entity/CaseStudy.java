@@ -30,13 +30,13 @@ public class CaseStudy {
     @Column(nullable = false, length = 100)
     private String category;
 
-    @Column(name = "hero_image_url", nullable = false, length = 500)
+    @Column(name = "hero_image_url", nullable = false, columnDefinition = "TEXT")
     private String heroImageUrl;
 
-    @Column(name = "thumbnail_url", length = 500)
+    @Column(name = "thumbnail_url", columnDefinition = "TEXT")
     private String thumbnailUrl;
 
-    @Column(name = "video_url", length = 500)
+    @Column(name = "video_url", columnDefinition = "TEXT")
     private String videoUrl;
 
     @Column(nullable = false, columnDefinition = "TEXT")

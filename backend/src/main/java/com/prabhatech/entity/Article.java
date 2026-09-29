@@ -27,13 +27,13 @@ public class Article {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "cover_image_url", nullable = false, length = 500)
+    @Column(name = "cover_image_url", nullable = false, columnDefinition = "TEXT")
     private String coverImageUrl;
 
     @Column(name = "author_name", nullable = false, length = 150)
     private String authorName;
 
-    @Column(name = "author_avatar", length = 500)
+    @Column(name = "author_avatar", columnDefinition = "TEXT")
     private String authorAvatar;
 
     @Column(nullable = false, length = 100)
