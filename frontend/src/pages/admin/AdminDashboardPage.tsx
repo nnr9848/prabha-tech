@@ -427,6 +427,16 @@ export const AdminDashboardPage: React.FC = () => {
           activeTab={activeTab}
           onQuickCreate={handleQuickCreate}
           unreadInquiriesCount={newInquiriesCount}
+          unreadApplicationsCount={newApplicationsCount}
+          recentInquiries={inquiries.filter((i) => !i.status || i.status === 'NEW').slice(0, 5)}
+          recentApplications={applications.filter((a) => !a.status || a.status === 'NEW').slice(0, 5)}
+          onNavigateToInquiry={(inq) => {
+            setSelectedInquiry(inq);
+            handleTabChange('inquiries', undefined);
+          }}
+          onNavigateToApplications={() => {
+            handleTabChange('job-applications', undefined);
+          }}
           onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         />
 

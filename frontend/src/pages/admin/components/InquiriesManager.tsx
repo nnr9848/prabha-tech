@@ -55,6 +55,21 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
     }
   }, [inquiries.length, urlStatus]);
 
+  // Close drawer on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedInquiry) {
+        setSelectedInquiry(null);
+      }
+    };
+    if (selectedInquiry) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedInquiry, setSelectedInquiry]);
+
   const handleStatusFilterChange = (st: string) => {
     setStatusFilter(st);
     const newParams = new URLSearchParams(searchParams);
@@ -260,8 +275,14 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
 
       {/* Slide-over Inspection Drawer */}
       {selectedInquiry && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full max-w-xl bg-white border-l border-slate-200 h-full overflow-y-auto p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-2xl">
+        <div
+          onClick={() => setSelectedInquiry(null)}
+          className="fixed inset-0 z-50 flex justify-end bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200 cursor-pointer"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-xl bg-white border-l border-slate-200 h-full overflow-y-auto p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-2xl cursor-default"
+          >
             <div className="space-y-6">
               {/* Drawer Header */}
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
