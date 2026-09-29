@@ -35,6 +35,7 @@ export const AdminDashboardPage: React.FC = () => {
 
   const [activeTab, setActiveTabState] = useState<AdminTab>(initialTab);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedInquiry, setSelectedInquiry] = useState<LeadInquiry | null>(null);
   const [roleFilterForApplications, setRoleFilterForApplications] = useState(
     searchParams.get('role') || ''
@@ -384,6 +385,8 @@ export const AdminDashboardPage: React.FC = () => {
         setActiveTab={handleTabChange}
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
+        isMobileOpen={isMobileMenuOpen}
+        setIsMobileOpen={setIsMobileMenuOpen}
         counts={{
           caseStudies: caseStudies.length,
           articles: articles.length,
@@ -407,6 +410,7 @@ export const AdminDashboardPage: React.FC = () => {
           activeTab={activeTab}
           onQuickCreate={handleQuickCreate}
           unreadInquiriesCount={newInquiriesCount}
+          onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         />
 
         {/* Tab View Container */}

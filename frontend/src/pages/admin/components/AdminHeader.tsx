@@ -10,6 +10,7 @@ import {
   Layers,
   BookOpen,
   Share2,
+  Menu,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AdminTab } from './AdminSidebar';
@@ -18,6 +19,7 @@ interface AdminHeaderProps {
   activeTab: AdminTab;
   onQuickCreate: (type: 'case' | 'article' | 'social') => void;
   unreadInquiriesCount: number;
+  onToggleMobileMenu?: () => void;
 }
 
 const TAB_TITLES: Record<AdminTab, { title: string; subtitle: string; category: string }> = {
@@ -62,25 +64,37 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   activeTab,
   onQuickCreate,
   unreadInquiriesCount,
+  onToggleMobileMenu,
 }) => {
   const { user, logout } = useAuth();
   const meta = TAB_TITLES[activeTab] || TAB_TITLES.overview;
 
   return (
-    <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 px-6 sm:px-8 py-4">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        {/* Breadcrumb & Section Title */}
-        <div>
-          <div className="flex items-center gap-2 text-[11px] font-medium text-slate-500 mb-1">
-            <span>Admin</span>
-            <span>/</span>
-            <span className="text-amber-700 font-medium">{meta.category}</span>
-            <span>/</span>
-            <span className="text-slate-900 font-semibold">{meta.title}</span>
+    <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200 px-4 sm:px-8 py-3.5 sm:py-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
+        {/* Breadcrumb & Section Title with Mobile Hamburger */}
+        <div className="flex items-center gap-3">
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={onToggleMobileMenu}
+            className="flex md:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors border border-slate-200 cursor-pointer shrink-0"
+            aria-label="Toggle navigation menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          <div>
+            <div className="flex items-center gap-2 text-[11px] font-medium text-slate-500 mb-0.5 sm:mb-1">
+              <span>Admin</span>
+              <span>/</span>
+              <span className="text-amber-700 font-medium">{meta.category}</span>
+              <span>/</span>
+              <span className="text-slate-900 font-semibold">{meta.title}</span>
+            </div>
+            <h1 className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              {meta.title}
+            </h1>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            {meta.title}
-          </h1>
         </div>
 
         {/* Action Controls & User Profile */}
