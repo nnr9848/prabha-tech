@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Users,
   Search,
@@ -16,6 +17,8 @@ import {
   Clock,
   DollarSign,
   Award,
+  Archive,
+  RotateCcw,
 } from 'lucide-react';
 import { JobApplication } from '../../../types';
 
@@ -51,13 +54,33 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
   onUpdateStatus,
   onDelete,
 }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlStatus = searchParams.get('status');
+
   const [searchTerm, setSearchTerm] = useState(initialRoleFilter);
-  // Default to NEW if there are new candidates awaiting review, otherwise ALL
-  const [statusFilter, setStatusFilter] = useState(() => {
-    const hasNew = applications.some((a) => !a.status || a.status === 'NEW');
-    return hasNew ? 'NEW' : 'ALL';
-  });
+  const [statusFilter, setStatusFilter] = useState<string>(urlStatus || 'ALL');
   const [selectedApp, setSelectedApp] = useState<JobApplication | null>(null);
+
+  // Once applications finish loading, if no explicit URL param was provided and there are NEW items, auto-select NEW
+  useEffect(() => {
+    if (!urlStatus && applications.length > 0) {
+      const hasNew = applications.some((a) => !a.status || a.status === 'NEW');
+      if (hasNew) {
+        setStatusFilter('NEW');
+      }
+    }
+  }, [applications.length, urlStatus]);
+
+  const handleStatusFilterChange = (st: string) => {
+    setStatusFilter(st);
+    const newParams = new URLSearchParams(searchParams);
+    if (st === 'ALL') {
+      newParams.delete('status');
+    } else {
+      newParams.set('status', st);
+    }
+    setSearchParams(newParams, { replace: true });
+  };
 
   const statuses = ['ALL', 'NEW', 'REVIEWING', 'SHORTLISTED', 'HIRED', 'REJECTED'];
 
@@ -117,7 +140,7 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
             return (
               <button
                 key={st}
-                onClick={() => setStatusFilter(st)}
+                onClick={() => handleStatusFilterChange(st)}
                 className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-amber-500 text-slate-950 shadow-xs'
@@ -306,6 +329,28 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                   })}
                 </div>
               </div>
+
+              {/* Archive / Restoration Callout */}
+              {selectedApp.status === 'REJECTED' && (
+                <div className="p-3.5 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-between gap-3 text-xs text-slate-700">
+                  <div className="flex items-center gap-2">
+                    <Archive className="w-4 h-4 text-slate-500 shrink-0" />
+                    <span>This candidate is archived in your talent pool.</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (selectedApp.id) {
+                        onUpdateStatus(selectedApp.id, 'REVIEWING');
+                        setSelectedApp({ ...selectedApp, status: 'REVIEWING' as any });
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-slate-200 text-slate-800 font-bold hover:bg-slate-50 shadow-2xs cursor-pointer shrink-0"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Reopen Candidate</span>
+                  </button>
+                </div>
+              )}
 
               {/* Candidate Info Grid */}
               <div className="space-y-4">

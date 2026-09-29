@@ -244,6 +244,15 @@ export const AdminDashboardPage: React.FC = () => {
     onError: () => toast.error('Error', 'Failed to update inquiry status.'),
   });
 
+  const deleteInquiryMutation = useMutation({
+    mutationFn: (id: number) => adminApi.deleteInquiry(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminInquiries'] });
+      toast.info('Inquiry Removed', 'Inquiry record permanently removed.');
+    },
+    onError: () => toast.error('Error', 'Failed to delete inquiry.'),
+  });
+
   const saveSocialMutation = useMutation({
     mutationFn: (data: Partial<SocialLink>) => {
       if (data.id) {
@@ -487,6 +496,7 @@ export const AdminDashboardPage: React.FC = () => {
             <InquiriesManager
               inquiries={inquiries}
               onUpdateStatus={(id, status) => updateInquiryStatusMutation.mutate({ id, status })}
+              onDelete={(id) => deleteInquiryMutation.mutate(id)}
               selectedInquiry={selectedInquiry}
               setSelectedInquiry={setSelectedInquiry}
             />

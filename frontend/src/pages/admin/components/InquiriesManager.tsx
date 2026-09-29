@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   MessageSquare,
   Search,
@@ -16,12 +17,15 @@ import {
   FileText,
   Image as ImageIcon,
   ExternalLink,
+  Trash2,
+  RotateCcw,
 } from 'lucide-react';
 import { LeadInquiry } from '../../../types';
 
 interface InquiriesManagerProps {
   inquiries: LeadInquiry[];
   onUpdateStatus: (id: number, status: string) => void;
+  onDelete?: (id: number) => void;
   selectedInquiry: LeadInquiry | null;
   setSelectedInquiry: (inquiry: LeadInquiry | null) => void;
 }
@@ -29,15 +33,36 @@ interface InquiriesManagerProps {
 export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
   inquiries,
   onUpdateStatus,
+  onDelete,
   selectedInquiry,
   setSelectedInquiry,
 }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlStatus = searchParams.get('status');
+
   const [searchTerm, setSearchTerm] = useState('');
-  // Default to NEW if there are unreviewed inquiries awaiting response, otherwise ALL
-  const [statusFilter, setStatusFilter] = useState<string>(() => {
-    const hasNew = inquiries.some((i) => !i.status || i.status === 'NEW');
-    return hasNew ? 'NEW' : 'ALL';
-  });
+  const [statusFilter, setStatusFilter] = useState<string>(urlStatus || 'ALL');
+
+  // Once inquiries finish loading from network, if no explicit URL param was provided and there are NEW items, auto-select NEW
+  useEffect(() => {
+    if (!urlStatus && inquiries.length > 0) {
+      const hasNew = inquiries.some((i) => !i.status || i.status === 'NEW');
+      if (hasNew) {
+        setStatusFilter('NEW');
+      }
+    }
+  }, [inquiries.length, urlStatus]);
+
+  const handleStatusFilterChange = (st: string) => {
+    setStatusFilter(st);
+    const newParams = new URLSearchParams(searchParams);
+    if (st === 'ALL') {
+      newParams.delete('status');
+    } else {
+      newParams.set('status', st);
+    }
+    setSearchParams(newParams, { replace: true });
+  };
 
   const statuses = [
     { key: 'ALL', label: 'All Inquiries' },
@@ -104,7 +129,7 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
             return (
               <button
                 key={key}
-                onClick={() => setStatusFilter(key)}
+                onClick={() => handleStatusFilterChange(key)}
                 className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-amber-500 text-slate-950 shadow-xs'
@@ -290,6 +315,28 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
                 </div>
               </div>
 
+              {/* Archive / Restoration Helper Callout */}
+              {selectedInquiry.status === 'ARCHIVED' && (
+                <div className="p-3.5 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-between gap-3 text-xs text-slate-700">
+                  <div className="flex items-center gap-2">
+                    <Archive className="w-4 h-4 text-slate-500 shrink-0" />
+                    <span>This inquiry is archived and preserved in history.</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (selectedInquiry.id) {
+                        onUpdateStatus(selectedInquiry.id, 'IN_REVIEW');
+                        setSelectedInquiry({ ...selectedInquiry, status: 'IN_REVIEW' });
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-slate-200 text-slate-800 font-bold hover:bg-slate-50 shadow-2xs cursor-pointer shrink-0"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Reopen Inquiry</span>
+                  </button>
+                </div>
+              )}
+
               {/* Client Profile Details */}
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -375,14 +422,31 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
               </div>
             </div>
 
-            {/* Bottom Direct Email Action */}
+            {/* Bottom Actions Footer */}
             <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-              <button
-                onClick={() => setSelectedInquiry(null)}
-                className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
-              >
-                Close Drawer
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setSelectedInquiry(null)}
+                  className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
+                >
+                  Close Drawer
+                </button>
+                {onDelete && selectedInquiry.id && (
+                  <button
+                    onClick={() => {
+                      if (selectedInquiry.id && window.confirm(`Permanently delete inquiry from ${selectedInquiry.fullName}? This cannot be undone.`)) {
+                        onDelete(selectedInquiry.id);
+                        setSelectedInquiry(null);
+                      }
+                    }}
+                    className="py-2 px-3 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 font-semibold text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
+                    title="Permanently Delete Inquiry"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete</span>
+                  </button>
+                )}
+              </div>
               <a
                 href={`mailto:${selectedInquiry.email}?subject=Regarding your inquiry for Prabha Technologies&body=Hi ${selectedInquiry.fullName},%0D%0A%0D%0AThank you for reaching out to Prabha Technologies.`}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold shadow-xs transition-all"
