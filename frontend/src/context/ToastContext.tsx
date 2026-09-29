@@ -82,7 +82,7 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onDismiss: (id: string) => voi
   return (
     <div
       aria-live="polite"
-      className="fixed top-6 right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"
+      className="fixed top-4 inset-x-4 sm:inset-x-auto sm:top-6 sm:right-6 z-50 flex flex-col gap-2.5 sm:max-w-sm w-auto pointer-events-none"
     >
       <AnimatePresence mode="popLayout">
         {toasts.map((toast) => {
@@ -91,22 +91,25 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onDismiss: (id: string) => voi
             <motion.div
               key={toast.id}
               layout
-              initial={{ opacity: 0, y: -25, scale: 0.95 }}
+              initial={{ opacity: 0, y: -20, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, y: -15, transition: { duration: 0.2 } }}
-              transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-              className={`pointer-events-auto flex items-start gap-3.5 p-4 rounded-2xl bg-[#0D111A]/95 backdrop-blur-xl border ${config.borderColor} shadow-[0_12px_40px_rgba(0,0,0,0.6)]`}
+              exit={{ opacity: 0, scale: 0.92, y: -12, transition: { duration: 0.18 } }}
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              className={`pointer-events-auto flex items-start gap-3.5 p-4 rounded-2xl bg-white/98 backdrop-blur-xl border ${config.borderColor} shadow-[0_12px_36px_rgba(2,14,38,0.09),0_2px_8px_rgba(2,14,38,0.04)] relative overflow-hidden`}
             >
-              <div className={`p-1.5 rounded-xl ${config.iconBg} ${config.iconColor} shrink-0 mt-0.5`}>
+              {/* Subtle top indicator bar */}
+              <div className={`absolute top-0 left-0 right-0 h-0.5 ${config.accentBar}`} />
+
+              <div className={`p-2 rounded-xl ${config.iconBg} ${config.iconColor} shrink-0 mt-0.5`}>
                 {config.icon}
               </div>
 
               <div className="flex-1 min-w-0 pr-1">
-                <h4 className="text-xs font-bold text-white tracking-wide leading-tight">
+                <h4 className="text-xs font-bold text-slate-900 tracking-tight leading-tight">
                   {toast.title}
                 </h4>
                 {toast.message && (
-                  <p className="text-[11px] text-[#94A3B8] mt-1 leading-normal font-normal break-words">
+                  <p className="text-[11px] text-slate-600 mt-1 leading-relaxed font-normal break-words">
                     {toast.message}
                   </p>
                 )}
@@ -114,7 +117,7 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onDismiss: (id: string) => voi
 
               <button
                 onClick={() => onDismiss(toast.id)}
-                className="p-1 rounded-lg hover:bg-white/10 text-[#64748B] hover:text-white transition-colors cursor-pointer shrink-0"
+                className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer shrink-0"
                 title="Dismiss notification"
               >
                 <X className="w-3.5 h-3.5" />
@@ -132,31 +135,35 @@ function getToastConfig(type: ToastType) {
     case 'success':
       return {
         icon: <CheckCircle2 className="w-4 h-4" />,
-        borderColor: 'border-emerald-500/30',
-        iconBg: 'bg-emerald-500/15',
-        iconColor: 'text-emerald-400',
+        borderColor: 'border-emerald-200/80',
+        accentBar: 'bg-emerald-500',
+        iconBg: 'bg-emerald-50',
+        iconColor: 'text-emerald-600',
       };
     case 'error':
       return {
         icon: <AlertCircle className="w-4 h-4" />,
-        borderColor: 'border-rose-500/30',
-        iconBg: 'bg-rose-500/15',
-        iconColor: 'text-rose-400',
+        borderColor: 'border-rose-200/80',
+        accentBar: 'bg-rose-500',
+        iconBg: 'bg-rose-50',
+        iconColor: 'text-rose-600',
       };
     case 'warning':
       return {
         icon: <AlertTriangle className="w-4 h-4" />,
-        borderColor: 'border-amber-500/30',
-        iconBg: 'bg-amber-500/15',
-        iconColor: 'text-amber-400',
+        borderColor: 'border-amber-200/80',
+        accentBar: 'bg-amber-500',
+        iconBg: 'bg-amber-50',
+        iconColor: 'text-amber-600',
       };
     case 'info':
     default:
       return {
         icon: <Info className="w-4 h-4" />,
-        borderColor: 'border-[var(--brand-primary,#9873ff)]/30',
-        iconBg: 'bg-[var(--brand-primary,#9873ff)]/15',
-        iconColor: 'text-[var(--brand-primary,#9873ff)]',
+        borderColor: 'border-blue-200/80',
+        accentBar: 'bg-[#103875]',
+        iconBg: 'bg-blue-50',
+        iconColor: 'text-[#103875]',
       };
   }
 }
