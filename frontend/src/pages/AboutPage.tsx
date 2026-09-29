@@ -24,6 +24,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { BrandButton } from '../components/common/BrandButton';
+import { ClientLogosCarousel } from '../components/common/ClientLogosCarousel';
 
 export const AboutPage: React.FC = () => {
   const milestones = [
@@ -103,114 +104,6 @@ export const AboutPage: React.FC = () => {
       link: '/services',
     },
   ];
-
-  const clientLogos = [
-    { name: 'Client 1', src: '/assets/clients/client1.webp' },
-    { name: 'Client 2', src: '/assets/clients/client2.webp' },
-    { name: 'Client 3', src: '/assets/clients/client3.webp' },
-    { name: 'Client 4', src: '/assets/clients/client4.webp' },
-    { name: 'Client 5', src: '/assets/clients/client5.webp' },
-    { name: 'Client 6', src: '/assets/clients/client6.webp' },
-    { name: 'Client 7', src: '/assets/clients/client7.webp' },
-    { name: 'Client 8', src: '/assets/clients/client8.png' },
-    { name: 'Client 9', src: '/assets/clients/client9.png' },
-    { name: 'Client 10', src: '/assets/clients/client10.png' },
-    { name: 'Client 11', src: '/assets/clients/client11.png' },
-    { name: 'Client 12', src: '/assets/clients/client12.png' },
-    { name: 'Client 13', src: '/assets/clients/client13.png' },
-    { name: 'Client 14', src: '/assets/clients/client14.png' },
-    { name: 'Client 15', src: '/assets/clients/client15.png' },
-    { name: 'Client 16', src: '/assets/clients/client16.png' },
-  ];
-
-  // Infinite Draggable & Arrow-Controlled Client Slider (3-buffer virtual wrap)
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-  const isWrappingRef = useRef(false);
-
-  // Triplicate clientLogos so the list can seamlessly wrap in both directions
-  const loopedLogos = [...clientLogos, ...clientLogos, ...clientLogos];
-
-  // Initialize scroll position in the center buffer (Set 2 of 3)
-  useEffect(() => {
-    const el = sliderRef.current;
-    if (!el) return;
-    const initScroll = () => {
-      const setWidth = el.scrollWidth / 3;
-      if (setWidth > 0) {
-        el.scrollLeft = setWidth;
-      }
-    };
-    initScroll();
-    // Also recheck when images load or window resizes
-    window.addEventListener('resize', initScroll);
-    return () => window.removeEventListener('resize', initScroll);
-  }, []);
-
-  // Seamless boundary wrap on scroll
-  const handleScroll = () => {
-    const el = sliderRef.current;
-    if (!el || isWrappingRef.current) return;
-    const setWidth = el.scrollWidth / 3;
-    if (setWidth <= 0) return;
-
-    // Approaching left end of Set 1 -> silently jump to Set 2
-    if (el.scrollLeft <= 10) {
-      isWrappingRef.current = true;
-      el.scrollLeft += setWidth;
-      requestAnimationFrame(() => {
-        isWrappingRef.current = false;
-      });
-    }
-    // Approaching right end of Set 3 -> silently jump to Set 2
-    else if (el.scrollLeft >= setWidth * 2 - 10) {
-      isWrappingRef.current = true;
-      el.scrollLeft -= setWidth;
-      requestAnimationFrame(() => {
-        isWrappingRef.current = false;
-      });
-    }
-  };
-
-  const scrollSlider = (direction: 'left' | 'right') => {
-    const el = sliderRef.current;
-    if (!el) return;
-    const scrollOffset = el.clientWidth * 0.65;
-    const setWidth = el.scrollWidth / 3;
-
-    // Pre-wrap if next step would hit boundary
-    if (direction === 'left' && el.scrollLeft <= scrollOffset + 10) {
-      el.scrollLeft += setWidth;
-    } else if (direction === 'right' && el.scrollLeft >= setWidth * 2 - scrollOffset - 10) {
-      el.scrollLeft -= setWidth;
-    }
-
-    el.scrollBy({
-      left: direction === 'left' ? -scrollOffset : scrollOffset,
-      behavior: 'smooth'
-    });
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!sliderRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - sliderRef.current.offsetLeft);
-    setScrollLeftState(sliderRef.current.scrollLeft);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !sliderRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    sliderRef.current.scrollLeft = scrollLeftState - walk;
-  };
-
-  const handleMouseUpOrLeave = () => {
-    setIsDragging(false);
-  };
 
   return (
     <div className="bg-white text-slate-900 font-sans selection:bg-[#E5A93C]/30">
@@ -659,78 +552,17 @@ export const AboutPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 8. CLIENT SUCCESS: TRUSTED BY TOP COMPANIES (Infinite Slider) */}
+      {/* 8. CLIENT SUCCESS: TRUSTED BY TOP COMPANIES (Reusable Carousel) */}
       {/* ========================================================= */}
-      <section className="py-20 bg-white border-b border-slate-100 overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
-            <div>
-              <span className="heading-eyebrow block mb-1">
-                CLIENT SUCCESS
-              </span>
-              <h3 className="heading-section text-[#020E26]">
-                Trusted By <span className="text-[#E5A93C] font-light">Top Companies</span>
-              </h3>
-            </div>
-
-            {/* Carousel Navigation Indicators */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                aria-label="Previous logos"
-                className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#020E26] hover:border-[#E5A93C] hover:bg-[#E5A93C]/10 active:scale-95 transition-all shadow-sm"
-                onClick={() => scrollSlider('left')}
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                aria-label="Next logos"
-                className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#020E26] hover:border-[#E5A93C] hover:bg-[#E5A93C]/10 active:scale-95 transition-all shadow-sm"
-                onClick={() => scrollSlider('right')}
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Draggable & Arrow-Controlled Slider Track with Smooth Edge Fades */}
-          <div 
-            className="relative w-full overflow-hidden py-4"
-            style={{
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
-              maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)'
-            }}
-          >
-            <div
-              ref={sliderRef}
-              onScroll={handleScroll}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUpOrLeave}
-              onMouseLeave={handleMouseUpOrLeave}
-              className={`flex items-center gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth py-2 select-none ${
-                isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
-              }`}
-            >
-              {loopedLogos.map((client, idx) => (
-                <div
-                  key={idx}
-                  className="h-20 sm:h-24 w-32 sm:w-40 shrink-0 flex items-center justify-center p-1 group transition-transform duration-300 pointer-events-none sm:pointer-events-auto"
-                >
-                  <img
-                    src={client.src}
-                    alt={client.name}
-                    draggable={false}
-                    className="h-16 sm:h-20 max-h-20 max-w-[160px] sm:max-w-[190px] w-auto object-contain grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 select-none pointer-events-none"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <ClientLogosCarousel
+        badge="CLIENT SUCCESS"
+        title={
+          <>
+            Trusted By <span className="text-[#E5A93C] font-light">Top Companies</span>
+          </>
+        }
+        subtitle="Long-term technology partnerships delivering measurable enterprise impact across the GCC."
+      />
 
       {/* ========================================================= */}
       {/* 9. BOTTOM CTA BANNER: READY TO CREATE WHAT'S NEXT */}

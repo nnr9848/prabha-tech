@@ -20,8 +20,8 @@ export const PLATFORM_ICONS: Record<string, { icon: React.ReactNode; defaultBg: 
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
       </svg>
     ),
-    defaultBg: '#FFFFFF',
-    defaultColor: 'text-black',
+    defaultBg: '#000000',
+    defaultColor: 'text-white',
   },
   instagram: {
     icon: (
@@ -74,7 +74,7 @@ const DEFAULT_FALLBACK_LINKS: SocialLink[] = [
     platformKey: 'twitter_x',
     platformName: 'X (Twitter)',
     url: 'https://x.com/prabhanow',
-    bgColor: '#FFFFFF',
+    bgColor: '#000000',
     displayOrder: 2,
     isActive: true,
   },
@@ -136,7 +136,11 @@ export const SocialIconsGroup: React.FC<SocialIconsGroupProps> = ({
             rel="noopener noreferrer"
             title={link.platformName}
             style={bgStyle}
-            className={`${sizeClasses[size]} rounded-full ${platform.defaultColor} flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg shadow-sm group`}
+            className={`${sizeClasses[size]} rounded-full ${
+              link.bgColor?.toUpperCase() === '#FFFFFF' || (!link.bgColor && platform.defaultBg === '#FFFFFF')
+                ? 'text-slate-900 border border-slate-200'
+                : platform.defaultColor || 'text-white'
+            } flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg shadow-sm group`}
           >
             {platform.icon}
           </a>

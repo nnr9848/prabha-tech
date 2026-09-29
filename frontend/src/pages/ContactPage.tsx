@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { SocialIconsGroup } from '../components/common/SocialIconsGroup';
 import { BrandButton } from '../components/common/BrandButton';
+import { ClientLogosCarousel } from '../components/common/ClientLogosCarousel';
 import { publicApi } from '../api/client';
 import { LeadInquiry } from '../types';
 
@@ -45,96 +46,6 @@ export const ContactPage: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  // Client Logos Infinite Carousel (Draggable & Arrow Controlled)
-  const clientLogos = [
-    { name: 'ADNEC', src: '/assets/clients/client1.webp' },
-    { name: 'Emirates', src: '/assets/clients/client2.webp' },
-    { name: 'Etisalat', src: '/assets/clients/client3.webp' },
-    { name: 'Tata', src: '/assets/clients/client4.webp' },
-    { name: 'Siemens', src: '/assets/clients/client5.webp' },
-    { name: 'Schneider Electric', src: '/assets/clients/client6.webp' },
-    { name: 'JCB', src: '/assets/clients/client7.webp' },
-    { name: 'Honeywell', src: '/assets/clients/client8.png' },
-    { name: 'Client 9', src: '/assets/clients/client9.png' },
-    { name: 'Client 10', src: '/assets/clients/client10.png' },
-    { name: 'Client 11', src: '/assets/clients/client11.png' },
-    { name: 'Client 12', src: '/assets/clients/client12.png' },
-  ];
-
-  // Triplicate clientLogos for seamless infinite wrap
-  const loopedLogos = [...clientLogos, ...clientLogos, ...clientLogos];
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-  const isWrappingRef = useRef(false);
-
-  useEffect(() => {
-    const el = sliderRef.current;
-    if (!el) return;
-    const initScroll = () => {
-      const setWidth = el.scrollWidth / 3;
-      if (setWidth > 0) el.scrollLeft = setWidth;
-    };
-    initScroll();
-    window.addEventListener('resize', initScroll);
-    return () => window.removeEventListener('resize', initScroll);
-  }, []);
-
-  const handleCarouselScroll = () => {
-    const el = sliderRef.current;
-    if (!el || isWrappingRef.current) return;
-    const setWidth = el.scrollWidth / 3;
-    if (setWidth <= 0) return;
-
-    if (el.scrollLeft <= 10) {
-      isWrappingRef.current = true;
-      el.scrollLeft += setWidth;
-      requestAnimationFrame(() => (isWrappingRef.current = false));
-    } else if (el.scrollLeft >= setWidth * 2 - 10) {
-      isWrappingRef.current = true;
-      el.scrollLeft -= setWidth;
-      requestAnimationFrame(() => (isWrappingRef.current = false));
-    }
-  };
-
-  const scrollSlider = (direction: 'left' | 'right') => {
-    const el = sliderRef.current;
-    if (!el) return;
-    const scrollOffset = el.clientWidth * 0.65;
-    const setWidth = el.scrollWidth / 3;
-
-    if (direction === 'left' && el.scrollLeft <= scrollOffset + 10) {
-      el.scrollLeft += setWidth;
-    } else if (direction === 'right' && el.scrollLeft >= setWidth * 2 - scrollOffset - 10) {
-      el.scrollLeft -= setWidth;
-    }
-
-    el.scrollBy({
-      left: direction === 'left' ? -scrollOffset : scrollOffset,
-      behavior: 'smooth',
-    });
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!sliderRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - sliderRef.current.offsetLeft);
-    setScrollLeftState(sliderRef.current.scrollLeft);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !sliderRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    sliderRef.current.scrollLeft = scrollLeftState - walk;
-  };
-
-  const handleMouseUpOrLeave = () => {
-    setIsDragging(false);
-  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -718,79 +629,22 @@ export const ContactPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 3. OUR CLIENTS: INFINITE LOGO CAROUSEL */}
+      {/* 3. OUR CLIENTS: REUSABLE INFINITE LOGO CAROUSEL */}
       {/* ========================================================= */}
-      <section className="py-14 sm:py-20 bg-white border-b border-slate-100">
+      <ClientLogosCarousel
+        badge=""
+        title={
+          <>
+            Our <span className="text-[#E5A93C] font-normal">Clients</span>
+          </>
+        }
+        subtitle="Trusted by 120+ Businesses Across the GCC and Beyond"
+      />
+
+      {/* Elevated 4-Pillar Metrics Strip */}
+      <section className="py-12 bg-white border-b border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-[#020E26]">
-                Our <span className="text-[#E5A93C] font-normal">Clients</span>
-              </h3>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-xs text-slate-500 font-light">
-                Trusted by 120+ Businesses Across the GCC and Beyond
-              </span>
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  aria-label="Previous client"
-                  onClick={() => scrollSlider('left')}
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#020E26] hover:border-[#E5A93C] transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  aria-label="Next client"
-                  onClick={() => scrollSlider('right')}
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#020E26] hover:border-[#E5A93C] transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Draggable & Looping Logo Track */}
-          <div 
-            className="relative w-full overflow-hidden py-4"
-            style={{
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
-              maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
-            }}
-          >
-            <div
-              ref={sliderRef}
-              onScroll={handleCarouselScroll}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUpOrLeave}
-              onMouseLeave={handleMouseUpOrLeave}
-              className={`flex items-center gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth py-2 select-none ${
-                isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
-              }`}
-            >
-              {loopedLogos.map((client, idx) => (
-                <div
-                  key={idx}
-                  className="h-20 sm:h-24 w-32 sm:w-40 shrink-0 flex items-center justify-center p-2 rounded-xl bg-white border border-slate-100 shadow-xs hover:shadow-md transition-all group pointer-events-none sm:pointer-events-auto"
-                >
-                  <img
-                    src={client.src}
-                    alt={client.name}
-                    draggable={false}
-                    className="h-14 sm:h-16 max-h-16 max-w-[150px] w-auto object-contain grayscale opacity-85 group-hover:grayscale-0 group-hover:opacity-100 transition-all select-none pointer-events-none"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Elevated 4-Pillar Metrics Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 mt-8 border-t border-slate-100">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="flex items-center gap-4 p-3">
               <FileText className="w-8 h-8 text-[#E5A93C] shrink-0" />
               <div>

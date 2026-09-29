@@ -5,8 +5,10 @@ import { Menu, X, ShieldCheck } from 'lucide-react';
 import logoImg from '../../assets/prabhatech-logo.png';
 import { SocialIconsGroup } from '../common/SocialIconsGroup';
 import { BrandButton } from '../common/BrandButton';
+import { useAuth } from '../../context/AuthContext';
 
 export const Navbar: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -92,13 +94,23 @@ export const Navbar: React.FC = () => {
 
           {/* Right Section: LET'S TALK -> Exact Dark Navy Enterprise Button */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link
-              to="/admin"
-              className="text-xs text-slate-400 hover:text-[#020E26] transition-colors px-2 py-1"
-              title="Admin CMS"
-            >
-              CMS
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                to="/admin/dashboard"
+                className="text-xs font-semibold text-slate-700 hover:text-[#020E26] bg-slate-100 hover:bg-slate-200/80 px-2.5 py-1.5 rounded-lg transition-colors border border-slate-200"
+                title="Go to Admin Dashboard"
+              >
+                Admin CMS
+              </Link>
+            ) : (
+              <Link
+                to="/admin"
+                className="text-xs text-slate-400 hover:text-[#020E26] transition-colors px-2 py-1"
+                title="Admin Login"
+              >
+                CMS
+              </Link>
+            )}
             <BrandButton to="/contact" variant="dark" size="sm">
               LET'S TALK
             </BrandButton>

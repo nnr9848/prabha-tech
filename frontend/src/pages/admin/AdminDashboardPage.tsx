@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../../api/client';
 import { CaseStudy, Article, LeadInquiry, SocialLink, JobPosition, JobApplication } from '../../types';
@@ -15,11 +16,61 @@ import { useToast } from '../../context/ToastContext';
 import { X, Save, Image as ImageIcon } from 'lucide-react';
 import { ImageUploader } from '../../components/common/ImageUploader';
 
+const VALID_TABS: AdminTab[] = [
+  'overview',
+  'case-studies',
+  'articles',
+  'jobs',
+  'job-applications',
+  'inquiries',
+  'social-links',
+];
+
 export const AdminDashboardPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<AdminTab>('overview');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read initial tab and role from URL search parameters
+  const tabFromUrl = searchParams.get('tab') as AdminTab;
+  const initialTab: AdminTab = VALID_TABS.includes(tabFromUrl) ? tabFromUrl : 'overview';
+
+  const [activeTab, setActiveTabState] = useState<AdminTab>(initialTab);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [selectedInquiry, setSelectedInquiry] = useState<LeadInquiry | null>(null);
-  const [roleFilterForApplications, setRoleFilterForApplications] = useState('');
+  const [roleFilterForApplications, setRoleFilterForApplications] = useState(
+    searchParams.get('role') || ''
+  );
+
+  // Sync state if URL changes (e.g. back/forward navigation)
+  useEffect(() => {
+    const currentUrlTab = searchParams.get('tab') as AdminTab;
+    if (currentUrlTab && VALID_TABS.includes(currentUrlTab) && currentUrlTab !== activeTab) {
+      setActiveTabState(currentUrlTab);
+    }
+    const currentUrlRole = searchParams.get('role') || '';
+    if (currentUrlRole !== roleFilterForApplications) {
+      setRoleFilterForApplications(currentUrlRole);
+    }
+  }, [searchParams]);
+
+  // Tab switch handler that keeps URL search parameters in sync
+  const handleTabChange = (tab: AdminTab, optionalRole?: string) => {
+    setActiveTabState(tab);
+    const newParams: Record<string, string> = {};
+    if (tab !== 'overview') {
+      newParams.tab = tab;
+    }
+    if (optionalRole !== undefined) {
+      setRoleFilterForApplications(optionalRole);
+      if (optionalRole) {
+        newParams.role = optionalRole;
+      }
+    } else if (tab === 'job-applications' && roleFilterForApplications) {
+      newParams.role = roleFilterForApplications;
+    } else {
+      setRoleFilterForApplications('');
+    }
+    setSearchParams(newParams, { replace: false });
+  };
 
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -110,6 +161,34 @@ export const AdminDashboardPage: React.FC = () => {
     displayOrder: 1,
     isActive: true,
   });
+
+  // Auto-open edit modal if ?edit=<id> is present in the URL
+  useEffect(() => {
+    const editId = searchParams.get('edit');
+    if (!editId) return;
+
+    const idNum = Number(editId);
+    if (activeTab === 'case-studies' && caseStudies.length > 0) {
+      const match = caseStudies.find((c) => c.id === idNum);
+      if (match) {
+        setEditingCase(match);
+        setIsCaseModalOpen(true);
+      }
+    } else if (activeTab === 'articles' && articles.length > 0) {
+      const match = articles.find((a) => a.id === idNum);
+      if (match) {
+        setEditingArticle(match);
+        setIsArticleModalOpen(true);
+      }
+    } else if (activeTab === 'jobs' && jobs.length > 0) {
+      const match = jobs.find((j) => j.id === idNum);
+      if (match) {
+        setEditingJob(match);
+        setSkillsInput((match.skills || []).join(', '));
+        setIsJobModalOpen(true);
+      }
+    }
+  }, [searchParams, activeTab, caseStudies, articles, jobs]);
 
   // Mutations
   const deleteCaseMutation = useMutation({
@@ -302,7 +381,7 @@ export const AdminDashboardPage: React.FC = () => {
       {/* Collapsible Left Sidebar */}
       <AdminSidebar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
         counts={{
@@ -338,11 +417,11 @@ export const AdminDashboardPage: React.FC = () => {
               articles={articles}
               inquiries={inquiries}
               socialLinks={socialLinks}
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onNavigateTab={(tab) => handleTabChange(tab)}
               onQuickCreate={handleQuickCreate}
               onSelectInquiry={(inq) => {
                 setSelectedInquiry(inq);
-                setActiveTab('inquiries');
+                handleTabChange('inquiries');
               }}
             />
           )}
@@ -376,8 +455,7 @@ export const AdminDashboardPage: React.FC = () => {
               jobs={jobs}
               applications={applications}
               onSelectRoleFilter={(jobTitle) => {
-                setRoleFilterForApplications(jobTitle);
-                setActiveTab('job-applications');
+                handleTabChange('job-applications', jobTitle);
               }}
               onOpenCreate={() => handleQuickCreate('job')}
               onOpenEdit={(job) => {

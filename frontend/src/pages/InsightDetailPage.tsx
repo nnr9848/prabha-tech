@@ -3,10 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { publicApi } from '../api/client';
 import { Article } from '../types';
-import { ArrowLeft, BookOpen, Clock, User, Share2 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { ArrowLeft, BookOpen, Clock, User, Share2, Edit } from 'lucide-react';
 
 export const InsightDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { isAuthenticated } = useAuth();
 
   const { data: article, isLoading, isError } = useQuery<Article>({
     queryKey: ['article', slug],
@@ -46,10 +48,23 @@ export const InsightDetailPage: React.FC = () => {
       </div>
 
       <article className="max-w-4xl mx-auto px-6 sm:px-8 text-slate-900">
-        <div className="mb-8">
-          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E5A93C]/10 border border-[#E5A93C]/30 text-[#E5A93C] mb-4 inline-block">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E5A93C]/10 border border-[#E5A93C]/30 text-[#E5A93C]">
             {article.category}
           </span>
+
+          {isAuthenticated && (
+            <Link
+              to={`/admin/dashboard?tab=articles&edit=${article.id}`}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all shadow-2xs"
+            >
+              <Edit className="w-3.5 h-3.5 text-amber-700" />
+              <span>Edit Article in CMS</span>
+            </Link>
+          )}
+        </div>
+
+        <div className="mb-8">
           <h1 className="text-3xl sm:text-5xl font-extrabold text-[#020E26] tracking-tight leading-tight mb-6">
             {article.title}
           </h1>

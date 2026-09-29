@@ -62,7 +62,11 @@ export const SocialLinksManager: React.FC<SocialLinksManagerProps> = ({
                 <div className="flex items-center justify-between mb-5">
                   <div
                     style={bgStyle}
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform"
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform ${
+                      link.bgColor?.toUpperCase() === '#FFFFFF' || (!link.bgColor && platform.defaultBg === '#FFFFFF')
+                        ? 'text-slate-900 border border-slate-200'
+                        : platform.defaultColor || 'text-white'
+                    }`}
                   >
                     {platform.icon}
                   </div>

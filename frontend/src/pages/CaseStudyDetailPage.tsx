@@ -3,10 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { publicApi } from '../api/client';
 import { CaseStudy } from '../types';
-import { ArrowLeft, Award, CheckCircle2, TrendingUp, Sparkles, Building, Layers } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { ArrowLeft, Award, CheckCircle2, TrendingUp, Sparkles, Building, Layers, Edit } from 'lucide-react';
 
 export const CaseStudyDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { isAuthenticated } = useAuth();
 
   const { data: study, isLoading, isError } = useQuery<CaseStudy>({
     queryKey: ['caseStudy', slug],
@@ -48,14 +50,26 @@ export const CaseStudyDetailPage: React.FC = () => {
 
       {/* Header */}
       <div className="max-w-6xl mx-auto px-6 sm:px-8 mb-12">
-        <div className="flex flex-wrap items-center gap-3 mb-4">
-          <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E5A93C]/10 border border-[#E5A93C]/30 text-[#E5A93C]">
-            {study.category}
-          </span>
-          <span className="text-xs text-slate-500 flex items-center gap-1">
-            <Building className="w-3.5 h-3.5" />
-            Client: {study.clientName}
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E5A93C]/10 border border-[#E5A93C]/30 text-[#E5A93C]">
+              {study.category}
+            </span>
+            <span className="text-xs text-slate-500 flex items-center gap-1">
+              <Building className="w-3.5 h-3.5" />
+              Client: {study.clientName}
+            </span>
+          </div>
+
+          {isAuthenticated && (
+            <Link
+              to={`/admin/dashboard?tab=case-studies&edit=${study.id}`}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all shadow-2xs"
+            >
+              <Edit className="w-3.5 h-3.5 text-amber-700" />
+              <span>Edit Case Study in CMS</span>
+            </Link>
+          )}
         </div>
 
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#020E26] tracking-tight leading-tight mb-6">

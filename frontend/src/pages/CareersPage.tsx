@@ -23,6 +23,7 @@ import {
   ShieldCheck,
   Home,
   CheckCircle2,
+  Edit,
   GraduationCap,
   HeartHandshake,
   Trophy,
@@ -35,6 +36,7 @@ import { BrandButton } from '../components/common/BrandButton';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { publicApi } from '../api/client';
 import { JobPosition, JobApplication } from '../types';
+import { useAuth } from '../context/AuthContext';
 
 // Dynamic department icon mapper
 const getDeptIcon = (dept: string) => {
@@ -55,6 +57,7 @@ const getDeptIcon = (dept: string) => {
 };
 
 export const CareersPage: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   // Single Source of Truth: Fetch active jobs from PostgreSQL database
   const {
     data: jobs = [],
@@ -496,10 +499,21 @@ export const CareersPage: React.FC = () => {
             {/* Right Job Positions List Column */}
             <div className="lg:col-span-9 space-y-4">
               {/* Positions Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200/80">
-                <h3 className="text-base sm:text-lg font-bold text-[#020E26]">
-                  Open Positions <span className="text-slate-400 font-normal">({filteredJobs.length})</span>
-                </h3>
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200/80">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-base sm:text-lg font-bold text-[#020E26]">
+                    Open Positions <span className="text-slate-400 font-normal">({filteredJobs.length})</span>
+                  </h3>
+                  {isAuthenticated && (
+                    <Link
+                      to="/admin/dashboard?tab=jobs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all shadow-2xs"
+                    >
+                      <Edit className="w-3.5 h-3.5 text-amber-700" />
+                      <span>Manage Jobs in CMS</span>
+                    </Link>
+                  )}
+                </div>
 
                 <div className="flex items-center gap-2 text-xs text-slate-500">
                   <span>Sort by:</span>

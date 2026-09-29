@@ -29,6 +29,7 @@ import {
 import { BrandButton } from '../components/common/BrandButton';
 import { SectionHeading } from '../components/common/SectionHeading';
 import { FeaturedPortfolioSlider } from '../components/home/FeaturedPortfolioSlider';
+import { ClientLogosCarousel } from '../components/common/ClientLogosCarousel';
 import { useQuery } from '@tanstack/react-query';
 import { publicApi } from '../api/client';
 import { CaseStudy } from '../types';
@@ -257,7 +258,20 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 3. COMPLETE WORK ARCHIVE & CLIENT SOLUTIONS (Interactive 3-Card Carousel) */}
+      {/* 3. TRUSTED BY LEADING ENTERPRISES (Infinite Client Logos) */}
+      {/* ========================================================= */}
+      <ClientLogosCarousel
+        badge="OUR CLIENTS"
+        title={
+          <>
+            Trusted by <span className="text-[#E5A93C] font-light">Industry Leaders</span>
+          </>
+        }
+        subtitle="Empowering top GCC organizations and international enterprises with AI and robust software engineering."
+      />
+
+      {/* ========================================================= */}
+      {/* 4. COMPLETE WORK ARCHIVE & CLIENT SOLUTIONS (Interactive 3-Card Carousel) */}
       {/* ========================================================= */}
       <FeaturedPortfolioSlider
         items={caseStudies}

@@ -156,3 +156,16 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Responsive Logo Carousel Edge Mask: None on mobile (prevent clipping/darkening), smooth fade on desktop */
+.carousel-mask-container {
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+@media (min-width: 640px) {
+  .carousel-mask-container {
+    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  }
+}

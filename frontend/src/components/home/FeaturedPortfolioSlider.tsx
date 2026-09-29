@@ -61,36 +61,76 @@ export const FeaturedPortfolioSlider: React.FC<FeaturedPortfolioSliderProps> = (
   }, [items, activeCategory]);
 
   const total = filteredItems.length;
+  const [timerKey, setTimerKey] = useState(0);
+  const touchResumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Maximum starting index so we don't scroll past the end
   const maxIndex = Math.max(0, total - visibleCount);
 
-  // Reset index when changing category
+  // Reset index & restart timer fresh when changing category
   const handleCategorySelect = (cat: string) => {
     setActiveCategory(cat);
     setCurrentIndex(0);
+    setTimerKey((k) => k + 1);
   };
 
-  // Auto-play timer with hover-to-pause
+  // Industry Standard: Auto-play timer with visibility listener & clean interval reset
   useEffect(() => {
     if (total <= visibleCount || isPaused) return;
+
+    // Handle tab switching (pause when hidden, resume fresh when visible)
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setIsPaused(true);
+      } else {
+        setIsPaused(false);
+        setTimerKey((k) => k + 1);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, autoPlayInterval);
 
-    return () => clearInterval(timer);
-  }, [total, maxIndex, visibleCount, isPaused, autoPlayInterval]);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [total, maxIndex, visibleCount, isPaused, autoPlayInterval, timerKey]);
 
+  // Clean next/prev with timer key bump to prevent double-sliding
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+    setTimerKey((k) => k + 1);
   };
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    setTimerKey((k) => k + 1);
   };
 
-  // Touch Swipe Handlers for mobile & tablet
+  // Pointer-only hover pause: NEVER freeze on touch devices
+  const handleMouseEnter = () => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      setIsPaused(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      setIsPaused(false);
+      setTimerKey((k) => k + 1);
+    }
+  };
+
+  // Touch Handlers for mobile & tablet: pause during swipe, auto-resume after 2.5s
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (touchResumeTimer.current) {
+      clearTimeout(touchResumeTimer.current);
+    }
+    setIsPaused(true);
     touchStartX.current = e.targetTouches[0].clientX;
   };
 
@@ -99,19 +139,38 @@ export const FeaturedPortfolioSlider: React.FC<FeaturedPortfolioSliderProps> = (
   };
 
   const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const distance = touchStartX.current - touchEndX.current;
-    const minSwipeDistance = 45;
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const distance = touchStartX.current - touchEndX.current;
+      const minSwipeDistance = 45;
 
-    if (distance > minSwipeDistance) {
-      handleNext();
-    } else if (distance < -minSwipeDistance) {
-      handlePrev();
+      if (distance > minSwipeDistance) {
+        handleNext();
+      } else if (distance < -minSwipeDistance) {
+        handlePrev();
+      }
     }
 
     touchStartX.current = null;
     touchEndX.current = null;
+
+    // Gracefully resume autoplay on mobile after interaction
+    if (touchResumeTimer.current) {
+      clearTimeout(touchResumeTimer.current);
+    }
+    touchResumeTimer.current = setTimeout(() => {
+      setIsPaused(false);
+      setTimerKey((k) => k + 1);
+    }, 2500);
   };
+
+  // Cleanup touch resume timer on unmount
+  useEffect(() => {
+    return () => {
+      if (touchResumeTimer.current) {
+        clearTimeout(touchResumeTimer.current);
+      }
+    };
+  }, []);
 
   if (total === 0) return null;
 
@@ -120,11 +179,7 @@ export const FeaturedPortfolioSlider: React.FC<FeaturedPortfolioSliderProps> = (
   const transformX = -(currentIndex * stepPercent);
 
   return (
-    <section
-      className="relative py-24 bg-white border-b border-slate-200 overflow-hidden"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
+    <section className="relative py-24 bg-white border-b border-slate-200 overflow-hidden">
       {/* Subtle ambient luxury backdrop aura */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-gradient-to-tr from-[#E5A93C]/5 via-[#020E26]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
@@ -240,6 +295,8 @@ export const FeaturedPortfolioSlider: React.FC<FeaturedPortfolioSliderProps> = (
         ) : (
           <div
             className="relative overflow-hidden"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
