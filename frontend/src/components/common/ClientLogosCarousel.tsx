@@ -54,90 +54,67 @@ export const ClientLogosCarousel: React.FC<ClientLogosCarouselProps> = ({
   className = '',
   showNavigation = true,
 }) => {
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-  const isWrappingRef = useRef(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [manualOffset, setManualOffset] = useState(0);
+  const touchResumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Triplicate logos for seamless infinite wrapping in both directions
-  const loopedLogos = [...logos, ...logos, ...logos];
+  // Duplicate logos for seamless infinite looping
+  const loopedLogos = [...logos, ...logos];
 
-  // Initialize scroll position in the center buffer (Set 2 of 3)
+  // Pause on tab switch / window blur
   useEffect(() => {
-    const el = sliderRef.current;
-    if (!el) return;
-    const initScroll = () => {
-      const setWidth = el.scrollWidth / 3;
-      if (setWidth > 0) {
-        el.scrollLeft = setWidth;
+    const handleVisibilityChange = () => {
+      setIsPaused(document.hidden);
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  // Cleanup touch resume timer on unmount
+  useEffect(() => {
+    return () => {
+      if (touchResumeTimer.current) {
+        clearTimeout(touchResumeTimer.current);
       }
     };
-    initScroll();
-    const timer = setTimeout(initScroll, 100);
-    return () => clearTimeout(timer);
-  }, [logos]);
+  }, []);
 
-  // Seamless boundary wrap on scroll
-  const handleScroll = () => {
-    const el = sliderRef.current;
-    if (!el || isWrappingRef.current) return;
-    const setWidth = el.scrollWidth / 3;
-    if (setWidth <= 0) return;
+  // Arrow controls: manually nudge the track left or right smoothly
+  const handleNudge = (direction: 'left' | 'right') => {
+    const step = 220; // approximate width of one card + gap
+    setManualOffset((prev) => (direction === 'left' ? prev + step : prev - step));
+  };
 
-    // Approaching left end of Set 1 -> silently jump to Set 2
-    if (el.scrollLeft <= 10) {
-      isWrappingRef.current = true;
-      el.scrollLeft += setWidth;
-      requestAnimationFrame(() => {
-        isWrappingRef.current = false;
-      });
-    }
-    // Approaching right end of Set 3 -> silently jump to Set 2
-    else if (el.scrollLeft >= setWidth * 2 - 10) {
-      isWrappingRef.current = true;
-      el.scrollLeft -= setWidth;
-      requestAnimationFrame(() => {
-        isWrappingRef.current = false;
-      });
+  // Hover handlers for pointer devices
+  const handleMouseEnter = () => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      setIsPaused(true);
     }
   };
 
-  const scrollSlider = (direction: 'left' | 'right') => {
-    const el = sliderRef.current;
-    if (!el) return;
-    const scrollOffset = el.clientWidth * 0.65;
-    const setWidth = el.scrollWidth / 3;
-
-    if (direction === 'left' && el.scrollLeft <= scrollOffset + 10) {
-      el.scrollLeft += setWidth;
-    } else if (direction === 'right' && el.scrollLeft >= setWidth * 2 - scrollOffset - 10) {
-      el.scrollLeft -= setWidth;
+  const handleMouseLeave = () => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      setIsPaused(false);
     }
-
-    el.scrollBy({
-      left: direction === 'left' ? -scrollOffset : scrollOffset,
-      behavior: 'smooth',
-    });
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!sliderRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - sliderRef.current.offsetLeft);
-    setScrollLeftState(sliderRef.current.scrollLeft);
+  // Touch handlers: pause immediately on touch, auto-resume after 2s
+  const handleTouchStart = () => {
+    if (touchResumeTimer.current) {
+      clearTimeout(touchResumeTimer.current);
+    }
+    setIsPaused(true);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !sliderRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - sliderRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    sliderRef.current.scrollLeft = scrollLeftState - walk;
-  };
-
-  const handleMouseUpOrLeave = () => {
-    setIsDragging(false);
+  const handleTouchEnd = () => {
+    if (touchResumeTimer.current) {
+      clearTimeout(touchResumeTimer.current);
+    }
+    touchResumeTimer.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 2000);
   };
 
   return (
@@ -168,7 +145,7 @@ export const ClientLogosCarousel: React.FC<ClientLogosCarouselProps> = ({
                 type="button"
                 aria-label="Previous logos"
                 className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:text-[#020E26] hover:border-[#E5A93C] hover:bg-[#E5A93C]/10 active:scale-95 transition-all shadow-2xs"
-                onClick={() => scrollSlider('left')}
+                onClick={() => handleNudge('left')}
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -176,7 +153,7 @@ export const ClientLogosCarousel: React.FC<ClientLogosCarouselProps> = ({
                 type="button"
                 aria-label="Next logos"
                 className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:text-[#020E26] hover:border-[#E5A93C] hover:bg-[#E5A93C]/10 active:scale-95 transition-all shadow-2xs"
-                onClick={() => scrollSlider('right')}
+                onClick={() => handleNudge('right')}
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -184,35 +161,39 @@ export const ClientLogosCarousel: React.FC<ClientLogosCarouselProps> = ({
           )}
         </div>
 
-        {/* Draggable & Looping Logo Track */}
-        {/* On mobile: NO mask clipping or darkening; On desktop: smooth edge feathering */}
-        <div className="relative w-full overflow-hidden py-2 carousel-mask-container">
+        {/* Continuous Infinite Marquee Track with Edge Masking */}
+        <div
+          className="relative w-full overflow-hidden py-2 carousel-mask-container"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div
-            ref={sliderRef}
-            onScroll={handleScroll}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUpOrLeave}
-            onMouseLeave={handleMouseUpOrLeave}
-            className={`flex items-center gap-3 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth py-2 select-none ${
-              isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
-            }`}
+            className="flex items-center transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(${manualOffset}px)` }}
           >
-            {loopedLogos.map((client, idx) => (
-              <div
-                key={idx}
-                className="h-20 sm:h-24 w-32 sm:w-44 shrink-0 flex items-center justify-center p-3 rounded-xl bg-white border border-slate-100/90 shadow-2xs hover:shadow-md hover:border-slate-200 transition-all duration-300 group pointer-events-none sm:pointer-events-auto"
-              >
-                {/* Mobile: Full color (grayscale-0) & 100% opacity, zero dark layer. Desktop: subtle grayscale with hover transition */}
-                <img
-                  src={client.src}
-                  alt={client.name}
-                  draggable={false}
-                  className="h-12 sm:h-16 max-h-16 max-w-[130px] sm:max-w-[160px] w-auto object-contain grayscale-0 opacity-100 sm:grayscale sm:opacity-85 sm:group-hover:grayscale-0 sm:group-hover:opacity-100 sm:group-hover:scale-105 transition-all duration-300 select-none pointer-events-none"
-                  loading="lazy"
-                />
-              </div>
-            ))}
+            <div
+              className="flex items-center gap-3 sm:gap-6 animate-marquee py-2 select-none"
+              style={{
+                animationPlayState: isPaused ? 'paused' : 'running',
+              }}
+            >
+              {loopedLogos.map((client, idx) => (
+                <div
+                  key={idx}
+                  className="h-20 sm:h-24 w-32 sm:w-44 shrink-0 flex items-center justify-center p-3 rounded-xl bg-white border border-slate-100/90 shadow-2xs hover:shadow-md hover:border-slate-200 transition-all duration-300 group"
+                >
+                  <img
+                    src={client.src}
+                    alt={client.name}
+                    draggable={false}
+                    className="h-12 sm:h-16 max-h-16 max-w-[130px] sm:max-w-[160px] w-auto object-contain grayscale-0 opacity-100 sm:grayscale sm:opacity-85 sm:group-hover:grayscale-0 sm:group-hover:opacity-100 sm:group-hover:scale-105 transition-all duration-300 select-none pointer-events-none"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
