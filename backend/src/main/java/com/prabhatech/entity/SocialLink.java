@@ -17,7 +17,7 @@ public class SocialLink {
     @Column(name = "platform_name", nullable = false, length = 100)
     private String platformName;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String url;
 
     @Column(name = "bg_color", nullable = false, length = 150)
