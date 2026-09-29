@@ -6,6 +6,7 @@ import com.prabhatech.repository.CaseStudyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,22 +23,22 @@ public class CaseStudyService {
     public List<CaseStudyDto> getPublishedCaseStudies(String category) {
         List<CaseStudy> items;
         if (category != null && !category.isBlank() && !"all".equalsIgnoreCase(category)) {
-            items = caseStudyRepository.findByCategoryIgnoreCaseAndIsPublishedTrueOrderByDisplayOrderAsc(category);
+            items = caseStudyRepository.findByCategoryIgnoreCaseAndIsPublishedTrueAndDeletedAtIsNullOrderByDisplayOrderAsc(category);
         } else {
-            items = caseStudyRepository.findByIsPublishedTrueOrderByDisplayOrderAsc();
+            items = caseStudyRepository.findByIsPublishedTrueAndDeletedAtIsNullOrderByDisplayOrderAsc();
         }
         return items.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<CaseStudyDto> getFeaturedCaseStudies() {
-        return caseStudyRepository.findByFeaturedTrueAndIsPublishedTrueOrderByDisplayOrderAsc()
+        return caseStudyRepository.findByFeaturedTrueAndIsPublishedTrueAndDeletedAtIsNullOrderByDisplayOrderAsc()
                 .stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public CaseStudyDto getBySlug(String slug) {
-        return caseStudyRepository.findBySlug(slug)
+        return caseStudyRepository.findBySlugAndDeletedAtIsNull(slug)
                 .map(this::toDto)
                 .orElseThrow(() -> new RuntimeException("Case study not found for slug: " + slug));
     }
@@ -45,7 +46,8 @@ public class CaseStudyService {
     // Admin CMS methods
     @Transactional(readOnly = true)
     public List<CaseStudyDto> getAllCaseStudiesAdmin() {
-        return caseStudyRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+        return caseStudyRepository.findAllByDeletedAtIsNullOrderByDisplayOrderAsc()
+                .stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Transactional
@@ -82,7 +84,10 @@ public class CaseStudyService {
 
     @Transactional
     public void deleteCaseStudy(Long id) {
-        caseStudyRepository.deleteById(id);
+        CaseStudy entity = caseStudyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Case study not found: " + id));
+        entity.setDeletedAt(OffsetDateTime.now());
+        caseStudyRepository.save(entity);
     }
 
     private CaseStudyDto toDto(CaseStudy entity) {

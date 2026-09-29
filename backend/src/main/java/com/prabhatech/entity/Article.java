@@ -93,6 +93,12 @@ public class Article {
     public void setIsPublished(Boolean isPublished) { this.isPublished = isPublished; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+    @Column(name = "deleted_at")
+    private OffsetDateTime deletedAt;
+
+    public OffsetDateTime getDeletedAt() { return deletedAt; }
+    public void setDeletedAt(OffsetDateTime deletedAt) { this.deletedAt = deletedAt; }
+
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

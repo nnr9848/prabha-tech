@@ -6,6 +6,7 @@ import com.prabhatech.repository.LeadInquiryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,9 +40,9 @@ public class LeadInquiryService {
     public List<LeadInquiryDto> getAllInquiriesAdmin(String status) {
         List<LeadInquiry> list;
         if (status != null && !status.isBlank() && !"ALL".equalsIgnoreCase(status)) {
-            list = leadInquiryRepository.findByStatusOrderByCreatedAtDesc(status.toUpperCase());
+            list = leadInquiryRepository.findByStatusAndDeletedAtIsNullOrderByCreatedAtDesc(status.toUpperCase());
         } else {
-            list = leadInquiryRepository.findAllByOrderByCreatedAtDesc();
+            list = leadInquiryRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc();
         }
         return list.stream().map(this::toDto).collect(Collectors.toList());
     }
@@ -56,7 +57,10 @@ public class LeadInquiryService {
 
     @Transactional
     public void deleteInquiry(Long id) {
-        leadInquiryRepository.deleteById(id);
+        LeadInquiry entity = leadInquiryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lead inquiry not found: " + id));
+        entity.setDeletedAt(OffsetDateTime.now());
+        leadInquiryRepository.save(entity);
     }
 
     private LeadInquiryDto toDto(LeadInquiry entity) {

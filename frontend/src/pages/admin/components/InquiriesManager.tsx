@@ -469,9 +469,9 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
             setInquiryToDelete(null);
           }
         }}
-        title="Permanently Delete Inquiry?"
-        description={`Are you sure you want to remove the inquiry from "${inquiryToDelete?.fullName || 'this client'}"? This record will be permanently purged from the database and cannot be recovered.`}
-        confirmText="Delete Record"
+        title="Move Inquiry to Trash?"
+        description={`Are you sure you want to remove the inquiry from "${inquiryToDelete?.fullName || 'this client'}"? It will be moved to the Recycle Bin and kept for 30 days before permanent deletion.`}
+        confirmText="Move to Trash"
         cancelText="Keep Inquiry"
         variant="danger"
       />

@@ -130,5 +130,14 @@ export interface JobApplication {
   createdAt?: string;
 }
 
+export interface TrashItem {
+  id: number;
+  entityType: 'INQUIRY' | 'JOB_APPLICATION' | 'ARTICLE' | 'CASE_STUDY' | 'JOB_POSITION';
+  title: string;
+  subtitle: string;
+  deletedAt: string;
+  daysRemaining: number;
+}
+
 
 

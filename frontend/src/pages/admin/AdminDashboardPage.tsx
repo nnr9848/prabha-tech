@@ -12,6 +12,7 @@ import { JobsManager } from './components/JobsManager';
 import { JobApplicationsManager } from './components/JobApplicationsManager';
 import { InquiriesManager } from './components/InquiriesManager';
 import { SocialLinksManager } from './components/SocialLinksManager';
+import { AdminTrashHub } from './components/AdminTrashHub';
 import { useToast } from '../../context/ToastContext';
 import { X, Save, Image as ImageIcon } from 'lucide-react';
 import { ImageUploader } from '../../components/common/ImageUploader';
@@ -24,6 +25,7 @@ const VALID_TABS: AdminTab[] = [
   'job-applications',
   'inquiries',
   'social-links',
+  'trash',
 ];
 
 export const AdminDashboardPage: React.FC = () => {
@@ -105,6 +107,11 @@ export const AdminDashboardPage: React.FC = () => {
   const { data: applications = [] } = useQuery<JobApplication[]>({
     queryKey: ['adminApplications'],
     queryFn: () => adminApi.getAllApplications(),
+  });
+
+  const { data: trashCount = 0 } = useQuery<number>({
+    queryKey: ['adminTrashCount'],
+    queryFn: () => adminApi.getTrashCount(),
   });
 
   // Modal States
@@ -405,6 +412,7 @@ export const AdminDashboardPage: React.FC = () => {
           inquiries: inquiries.length,
           newInquiries: newInquiriesCount,
           socialLinks: socialLinks.length,
+          trash: trashCount,
         }}
       />
 
@@ -516,6 +524,8 @@ export const AdminDashboardPage: React.FC = () => {
               }
             />
           )}
+
+          {activeTab === 'trash' && <AdminTrashHub />}
         </main>
       </div>
 

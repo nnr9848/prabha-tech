@@ -77,6 +77,12 @@ public class LeadInquiry {
     public void setAttachmentFileName(String attachmentFileName) { this.attachmentFileName = attachmentFileName; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    @Column(name = "deleted_at")
+    private OffsetDateTime deletedAt;
+
+    public OffsetDateTime getDeletedAt() { return deletedAt; }
+    public void setDeletedAt(OffsetDateTime deletedAt) { this.deletedAt = deletedAt; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }

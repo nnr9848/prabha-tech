@@ -58,6 +58,11 @@ const TAB_TITLES: Record<AdminTab, { title: string; subtitle: string; category: 
     title: 'Brand Social Channels',
     subtitle: 'Configure dynamic social media channels rendered across the web portal.',
   },
+  trash: {
+    category: 'Data Governance & Recovery',
+    title: 'Centralized Recycle Bin & Trash Hub',
+    subtitle: 'Audit, restore, or permanently purge soft-deleted records across CMS, Careers, and Inquiries.',
+  },
 };
 
 export const AdminHeader: React.FC<AdminHeaderProps> = ({

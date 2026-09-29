@@ -518,9 +518,9 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
             setAppToDelete(null);
           }
         }}
-        title="Permanently Remove Application?"
-        description={`Are you sure you want to permanently delete the application record for ${appToDelete?.fullName || 'this candidate'} for the "${appToDelete?.jobTitle || 'role'}"? This action cannot be undone.`}
-        confirmText="Delete Application"
+        title="Move Application to Trash?"
+        description={`Are you sure you want to remove the application for ${appToDelete?.fullName || 'this candidate'} (${appToDelete?.jobTitle || 'role'})? It will be moved to the Recycle Bin and kept for 30 days before permanent deletion.`}
+        confirmText="Move to Trash"
         cancelText="Keep Candidate"
         variant="danger"
       />

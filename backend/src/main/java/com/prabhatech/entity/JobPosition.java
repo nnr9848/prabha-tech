@@ -99,6 +99,12 @@ public class JobPosition {
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean isActive) { this.isActive = isActive; }
 
+    @Column(name = "deleted_at")
+    private OffsetDateTime deletedAt;
+
+    public OffsetDateTime getDeletedAt() { return deletedAt; }
+    public void setDeletedAt(OffsetDateTime deletedAt) { this.deletedAt = deletedAt; }
+
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
 }

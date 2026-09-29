@@ -288,9 +288,9 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
             setJobToDelete(null);
           }
         }}
-        title="Delete Career Position?"
-        description={`Are you sure you want to remove the job opening "${jobToDelete?.title}"? Any linked applicants or saved candidates will retain their application history, but the role will no longer appear on the careers board.`}
-        confirmText="Delete Role"
+        title="Move Career Position to Trash?"
+        description={`Are you sure you want to remove the job opening "${jobToDelete?.title}"? It will be removed from the careers board and kept in the Recycle Bin for 30 days before permanent deletion.`}
+        confirmText="Move to Trash"
         cancelText="Keep Role"
         variant="danger"
       />

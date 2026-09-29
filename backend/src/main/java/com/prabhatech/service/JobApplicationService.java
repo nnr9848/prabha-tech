@@ -7,6 +7,7 @@ import com.prabhatech.repository.JobApplicationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,9 +47,9 @@ public class JobApplicationService {
     public List<JobApplicationDto> getAllApplications(String status) {
         List<JobApplication> list;
         if (status != null && !status.equalsIgnoreCase("ALL")) {
-            list = repository.findByStatusOrderByCreatedAtDesc(status.toUpperCase());
+            list = repository.findByStatusAndDeletedAtIsNullOrderByCreatedAtDesc(status.toUpperCase());
         } else {
-            list = repository.findAllByOrderByCreatedAtDesc();
+            list = repository.findAllByDeletedAtIsNullOrderByCreatedAtDesc();
         }
         return list.stream().map(this::toDto).collect(Collectors.toList());
     }
@@ -63,10 +64,10 @@ public class JobApplicationService {
 
     @Transactional
     public void deleteApplication(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Job application not found with ID: " + id);
-        }
-        repository.deleteById(id);
+        JobApplication application = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Job application not found with ID: " + id));
+        application.setDeletedAt(OffsetDateTime.now());
+        repository.save(application);
     }
 
     private JobApplicationDto toDto(JobApplication entity) {

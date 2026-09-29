@@ -13,10 +13,19 @@ import {
   ExternalLink,
   Sparkles,
   X,
+  Trash2,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export type AdminTab = 'overview' | 'case-studies' | 'articles' | 'jobs' | 'job-applications' | 'inquiries' | 'social-links';
+export type AdminTab =
+  | 'overview'
+  | 'case-studies'
+  | 'articles'
+  | 'jobs'
+  | 'job-applications'
+  | 'inquiries'
+  | 'social-links'
+  | 'trash';
 
 interface AdminSidebarProps {
   activeTab: AdminTab;
@@ -34,6 +43,7 @@ interface AdminSidebarProps {
     inquiries: number;
     newInquiries: number;
     socialLinks: number;
+    trash: number;
   };
 }
 
@@ -250,7 +260,39 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-3 border-t border-slate-100 space-y-2">
+        <div className="p-3 border-t border-slate-100 space-y-1.5">
+          {/* Centralized Trash / Recycle Bin Navigation */}
+          <button
+            onClick={() => handleTabClick('trash')}
+            title={isCollapsed && !isMobileOpen ? 'Recycle Bin / Trash' : undefined}
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
+              activeTab === 'trash'
+                ? 'bg-amber-50 text-amber-900 border border-amber-200/80 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Trash2
+                className={`w-4 h-4 transition-colors ${
+                  activeTab === 'trash' ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'
+                }`}
+              />
+              {(!isCollapsed || isMobileOpen) && <span>Recycle Bin</span>}
+            </div>
+
+            {(!isCollapsed || isMobileOpen) && counts.trash > 0 && (
+              <span
+                className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  activeTab === 'trash'
+                    ? 'bg-amber-100 text-amber-900'
+                    : 'bg-red-50 text-red-600 border border-red-200/60'
+                }`}
+              >
+                {counts.trash}
+              </span>
+            )}
+          </button>
+
           <Link
             to="/"
             target="_blank"

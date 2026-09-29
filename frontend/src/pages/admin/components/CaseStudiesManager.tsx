@@ -272,9 +272,9 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
             setStudyToDelete(null);
           }
         }}
-        title="Delete Case Study?"
-        description={`Are you sure you want to permanently remove "${studyToDelete?.title}"? It will be immediately un-published from the live website.`}
-        confirmText="Delete Study"
+        title="Move Case Study to Trash?"
+        description={`Are you sure you want to remove "${studyToDelete?.title}"? It will be un-published and kept in the Recycle Bin for 30 days before permanent deletion.`}
+        confirmText="Move to Trash"
         cancelText="Cancel"
         variant="danger"
       />

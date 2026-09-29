@@ -6,6 +6,7 @@ import com.prabhatech.repository.ArticleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,29 +23,30 @@ public class ArticleService {
     public List<ArticleDto> getPublishedArticles(String category) {
         List<Article> list;
         if (category != null && !category.isBlank() && !"all".equalsIgnoreCase(category)) {
-            list = articleRepository.findByCategoryIgnoreCaseAndIsPublishedTrueOrderByCreatedAtDesc(category);
+            list = articleRepository.findByCategoryIgnoreCaseAndIsPublishedTrueAndDeletedAtIsNullOrderByCreatedAtDesc(category);
         } else {
-            list = articleRepository.findByIsPublishedTrueOrderByCreatedAtDesc();
+            list = articleRepository.findByIsPublishedTrueAndDeletedAtIsNullOrderByCreatedAtDesc();
         }
         return list.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ArticleDto> getFeaturedArticles() {
-        return articleRepository.findByFeaturedTrueAndIsPublishedTrueOrderByCreatedAtDesc()
+        return articleRepository.findByFeaturedTrueAndIsPublishedTrueAndDeletedAtIsNullOrderByCreatedAtDesc()
                 .stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public ArticleDto getBySlug(String slug) {
-        return articleRepository.findBySlug(slug)
+        return articleRepository.findBySlugAndDeletedAtIsNull(slug)
                 .map(this::toDto)
                 .orElseThrow(() -> new RuntimeException("Article not found: " + slug));
     }
 
     @Transactional(readOnly = true)
     public List<ArticleDto> getAllArticlesAdmin() {
-        return articleRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+        return articleRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc()
+                .stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Transactional
@@ -75,7 +77,10 @@ public class ArticleService {
 
     @Transactional
     public void deleteArticle(Long id) {
-        articleRepository.deleteById(id);
+        Article entity = articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found: " + id));
+        entity.setDeletedAt(OffsetDateTime.now());
+        articleRepository.save(entity);
     }
 
     private ArticleDto toDto(Article entity) {

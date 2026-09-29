@@ -6,6 +6,7 @@ import com.prabhatech.repository.JobPositionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class JobPositionService {
 
     @Transactional(readOnly = true)
     public List<JobPositionDto> getActiveJobsPublic() {
-        return jobPositionRepository.findByIsActiveTrueOrderByDisplayOrderAscCreatedAtDesc()
+        return jobPositionRepository.findByIsActiveTrueAndDeletedAtIsNullOrderByDisplayOrderAscCreatedAtDesc()
                 .stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
@@ -28,7 +29,7 @@ public class JobPositionService {
 
     @Transactional(readOnly = true)
     public List<JobPositionDto> getAllJobsAdmin() {
-        return jobPositionRepository.findAllByOrderByDisplayOrderAscCreatedAtDesc()
+        return jobPositionRepository.findAllByDeletedAtIsNullOrderByDisplayOrderAscCreatedAtDesc()
                 .stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
@@ -41,7 +42,7 @@ public class JobPositionService {
             entity = jobPositionRepository.findById(dto.getId())
                     .orElse(new JobPosition());
         } else if (dto.getSlug() != null) {
-            entity = jobPositionRepository.findBySlug(dto.getSlug())
+            entity = jobPositionRepository.findBySlugAndDeletedAtIsNull(dto.getSlug())
                     .orElse(new JobPosition());
         } else {
             entity = new JobPosition();
@@ -65,7 +66,10 @@ public class JobPositionService {
 
     @Transactional
     public void deleteJob(Long id) {
-        jobPositionRepository.deleteById(id);
+        JobPosition entity = jobPositionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job position not found: " + id));
+        entity.setDeletedAt(OffsetDateTime.now());
+        jobPositionRepository.save(entity);
     }
 
     private JobPositionDto mapToDto(JobPosition entity) {

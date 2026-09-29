@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition, JobApplication } from '../types';
+import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition, JobApplication, TrashItem } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -244,6 +244,29 @@ export const adminApi = {
 
   deleteApplication: async (id: number): Promise<void> => {
     await adminClient.delete(`/admin/applications/${id}`);
+  },
+
+  // Centralized Trash / Recycle Bin CMS
+  getTrashItems: async (): Promise<TrashItem[]> => {
+    const res = await adminClient.get('/admin/trash');
+    return res.data;
+  },
+
+  getTrashCount: async (): Promise<number> => {
+    const res = await adminClient.get('/admin/trash/count');
+    return res.data?.count || 0;
+  },
+
+  restoreTrashItem: async (entityType: string, id: number): Promise<void> => {
+    await adminClient.post(`/admin/trash/${entityType}/${id}/restore`);
+  },
+
+  purgeTrashItem: async (entityType: string, id: number): Promise<void> => {
+    await adminClient.delete(`/admin/trash/${entityType}/${id}/permanent`);
+  },
+
+  emptyTrash: async (): Promise<void> => {
+    await adminClient.delete('/admin/trash/empty');
   },
 };
 

@@ -178,9 +178,9 @@ export const ArticlesManager: React.FC<ArticlesManagerProps> = ({
             setArticleToDelete(null);
           }
         }}
-        title="Delete Article & Publication?"
-        description={`Are you sure you want to permanently un-publish "${articleToDelete?.title}"? This article and its publication link will be removed from Insights.`}
-        confirmText="Delete Article"
+        title="Move Article to Trash?"
+        description={`Are you sure you want to remove "${articleToDelete?.title}"? It will be un-published and kept in the Recycle Bin for 30 days before permanent deletion.`}
+        confirmText="Move to Trash"
         cancelText="Cancel"
         variant="danger"
       />

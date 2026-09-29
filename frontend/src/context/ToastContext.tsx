@@ -4,20 +4,26 @@ import { CheckCircle2, AlertCircle, Info, AlertTriangle, X } from 'lucide-react'
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
+export interface ToastAction {
+  label: string;
+  onClick: () => void;
+}
+
 export interface Toast {
   id: string;
   type: ToastType;
   title: string;
   message?: string;
   duration?: number;
+  action?: ToastAction;
 }
 
 interface ToastContextType {
   toast: {
-    success: (title: string, message?: string, duration?: number) => void;
-    error: (title: string, message?: string, duration?: number) => void;
-    info: (title: string, message?: string, duration?: number) => void;
-    warning: (title: string, message?: string, duration?: number) => void;
+    success: (title: string, message?: string, duration?: number, action?: ToastAction) => void;
+    error: (title: string, message?: string, duration?: number, action?: ToastAction) => void;
+    info: (title: string, message?: string, duration?: number, action?: ToastAction) => void;
+    warning: (title: string, message?: string, duration?: number, action?: ToastAction) => void;
   };
   removeToast: (id: string) => void;
 }
@@ -32,9 +38,9 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const addToast = useCallback(
-    (type: ToastType, title: string, message?: string, duration = 4000) => {
+    (type: ToastType, title: string, message?: string, duration = 4000, action?: ToastAction) => {
       const id = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-      const newToast: Toast = { id, type, title, message, duration };
+      const newToast: Toast = { id, type, title, message, duration, action };
 
       setToasts((prev) => [...prev.slice(-4), newToast]); // Limit to max 5 simultaneous toasts
 
@@ -48,14 +54,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 
   const toastMethods = {
-    success: (title: string, message?: string, duration?: number) =>
-      addToast('success', title, message, duration),
-    error: (title: string, message?: string, duration?: number) =>
-      addToast('error', title, message, duration),
-    info: (title: string, message?: string, duration?: number) =>
-      addToast('info', title, message, duration),
-    warning: (title: string, message?: string, duration?: number) =>
-      addToast('warning', title, message, duration),
+    success: (title: string, message?: string, duration?: number, action?: ToastAction) =>
+      addToast('success', title, message, duration, action),
+    error: (title: string, message?: string, duration?: number, action?: ToastAction) =>
+      addToast('error', title, message, duration, action),
+    info: (title: string, message?: string, duration?: number, action?: ToastAction) =>
+      addToast('info', title, message, duration, action),
+    warning: (title: string, message?: string, duration?: number, action?: ToastAction) =>
+      addToast('warning', title, message, duration, action),
   };
 
   return (
@@ -112,6 +118,17 @@ const ToastContainer: React.FC<{ toasts: Toast[]; onDismiss: (id: string) => voi
                   <p className="text-[11px] text-slate-600 mt-1 leading-relaxed font-normal break-words">
                     {toast.message}
                   </p>
+                )}
+                {toast.action && (
+                  <button
+                    onClick={() => {
+                      toast.action?.onClick();
+                      onDismiss(toast.id);
+                    }}
+                    className="mt-2 inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-bold shadow-2xs transition-all cursor-pointer"
+                  >
+                    {toast.action.label}
+                  </button>
                 )}
               </div>
 
