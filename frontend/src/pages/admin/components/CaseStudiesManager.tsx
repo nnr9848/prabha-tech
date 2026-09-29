@@ -33,6 +33,14 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
 
   const categories = ['ALL', ...Array.from(new Set(caseStudies.map((c) => c.category)))];
 
+  const catCounts = React.useMemo(() => {
+    const res: Record<string, number> = { ALL: caseStudies.length };
+    caseStudies.forEach((c) => {
+      res[c.category] = (res[c.category] || 0) + 1;
+    });
+    return res;
+  }, [caseStudies]);
+
   const filteredStudies = caseStudies.filter((c) => {
     const matchesSearch =
       c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -61,21 +69,32 @@ export const CaseStudiesManager: React.FC<CaseStudiesManagerProps> = ({
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Category Chips */}
+          {/* Category Chips with Badges */}
           <div className="flex items-center gap-1.5 overflow-x-auto">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setCategoryFilter(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                  categoryFilter === cat
-                    ? 'bg-amber-500 text-slate-950 shadow-xs'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+            {categories.map((cat) => {
+              const isActive = categoryFilter === cat;
+              const count = catCounts[cat] ?? 0;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setCategoryFilter(cat)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                    isActive
+                      ? 'bg-amber-500 text-slate-950 shadow-xs'
+                      : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                  }`}
+                >
+                  <span>{cat === 'ALL' ? 'All Portfolio' : cat}</span>
+                  <span
+                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                      isActive ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-100 text-slate-500'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {/* View Toggle */}

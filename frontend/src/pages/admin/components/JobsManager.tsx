@@ -41,6 +41,15 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
 
   const departments = ['ALL', ...Array.from(new Set(jobs.map((j) => j.department || 'Other')))];
 
+  const deptCounts = React.useMemo(() => {
+    const res: Record<string, number> = { ALL: jobs.length };
+    jobs.forEach((j) => {
+      const d = j.department || 'Other';
+      res[d] = (res[d] || 0) + 1;
+    });
+    return res;
+  }, [jobs]);
+
   const filteredJobs = jobs.filter((job) => {
     const matchesSearch =
       job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -73,21 +82,32 @@ export const JobsManager: React.FC<JobsManagerProps> = ({
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Department Filter Chips */}
+          {/* Department Filter Chips with Badges */}
           <div className="flex items-center gap-1.5 overflow-x-auto">
-            {departments.map((dept) => (
-              <button
-                key={dept}
-                onClick={() => setDepartmentFilter(dept)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                  departmentFilter === dept
-                    ? 'bg-amber-500 text-slate-950 shadow-xs'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
-                }`}
-              >
-                {dept}
-              </button>
-            ))}
+            {departments.map((dept) => {
+              const isActive = departmentFilter === dept;
+              const count = deptCounts[dept] ?? 0;
+              return (
+                <button
+                  key={dept}
+                  onClick={() => setDepartmentFilter(dept)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                    isActive
+                      ? 'bg-amber-500 text-slate-950 shadow-xs'
+                      : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                  }`}
+                >
+                  <span>{dept === 'ALL' ? 'All Roles' : dept}</span>
+                  <span
+                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                      isActive ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-100 text-slate-500'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           <button

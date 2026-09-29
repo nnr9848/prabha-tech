@@ -52,10 +52,33 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
   onDelete,
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialRoleFilter);
-  const [statusFilter, setStatusFilter] = useState('ALL');
+  // Default to NEW if there are new candidates awaiting review, otherwise ALL
+  const [statusFilter, setStatusFilter] = useState(() => {
+    const hasNew = applications.some((a) => !a.status || a.status === 'NEW');
+    return hasNew ? 'NEW' : 'ALL';
+  });
   const [selectedApp, setSelectedApp] = useState<JobApplication | null>(null);
 
   const statuses = ['ALL', 'NEW', 'REVIEWING', 'SHORTLISTED', 'HIRED', 'REJECTED'];
+
+  // Calculate counts for each stage
+  const counts = React.useMemo(() => {
+    const res: Record<string, number> = {
+      ALL: applications.length,
+      NEW: 0,
+      REVIEWING: 0,
+      SHORTLISTED: 0,
+      HIRED: 0,
+      REJECTED: 0,
+    };
+    applications.forEach((app) => {
+      const st = app.status || 'NEW';
+      if (res[st] !== undefined) {
+        res[st] += 1;
+      }
+    });
+    return res;
+  }, [applications]);
 
   const filtered = applications.filter((app) => {
     const matchesSearch =
@@ -64,7 +87,10 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
       app.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (app.phone && app.phone.includes(searchTerm));
 
-    const matchesStatus = statusFilter === 'ALL' || app.status === statusFilter;
+    const matchesStatus =
+      statusFilter === 'ALL' ||
+      (statusFilter === 'NEW' && (!app.status || app.status === 'NEW')) ||
+      app.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
@@ -83,21 +109,36 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
           />
         </div>
 
-        {/* Filter Pills */}
+        {/* Filter Pills with Live Badges */}
         <div className="flex items-center gap-1.5 overflow-x-auto">
-          {statuses.map((st) => (
-            <button
-              key={st}
-              onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                statusFilter === st
-                  ? 'bg-amber-500 text-slate-950 shadow-xs'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
-              }`}
-            >
-              {st === 'ALL' ? 'All Applicants' : STATUS_CONFIG[st]?.label || st}
-            </button>
-          ))}
+          {statuses.map((st) => {
+            const isActive = statusFilter === st;
+            const count = counts[st] ?? 0;
+            return (
+              <button
+                key={st}
+                onClick={() => setStatusFilter(st)}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                  isActive
+                    ? 'bg-amber-500 text-slate-950 shadow-xs'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                }`}
+              >
+                <span>{st === 'ALL' ? 'All Applicants' : STATUS_CONFIG[st]?.label || st}</span>
+                <span
+                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full transition-colors ${
+                    isActive
+                      ? 'bg-slate-950/20 text-slate-950'
+                      : st === 'NEW' && count > 0
+                      ? 'bg-amber-100 text-amber-800'
+                      : 'bg-slate-100 text-slate-500'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

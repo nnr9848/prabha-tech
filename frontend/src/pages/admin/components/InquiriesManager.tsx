@@ -33,7 +33,37 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
   setSelectedInquiry,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('ALL');
+  // Default to NEW if there are unreviewed inquiries awaiting response, otherwise ALL
+  const [statusFilter, setStatusFilter] = useState<string>(() => {
+    const hasNew = inquiries.some((i) => !i.status || i.status === 'NEW');
+    return hasNew ? 'NEW' : 'ALL';
+  });
+
+  const statuses = [
+    { key: 'ALL', label: 'All Inquiries' },
+    { key: 'NEW', label: 'New' },
+    { key: 'IN_REVIEW', label: 'In Review' },
+    { key: 'CONTACTED', label: 'Contacted' },
+    { key: 'ARCHIVED', label: 'Archived' },
+  ];
+
+  // Calculate counts for each stage
+  const counts = React.useMemo(() => {
+    const res: Record<string, number> = {
+      ALL: inquiries.length,
+      NEW: 0,
+      IN_REVIEW: 0,
+      CONTACTED: 0,
+      ARCHIVED: 0,
+    };
+    inquiries.forEach((inq) => {
+      const st = inq.status || 'NEW';
+      if (res[st] !== undefined) {
+        res[st] += 1;
+      }
+    });
+    return res;
+  }, [inquiries]);
 
   const filteredInquiries = inquiries.filter((inq) => {
     const matchesSearch =
@@ -66,21 +96,36 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
           />
         </div>
 
-        {/* Status Filter Chips */}
+        {/* Status Filter Chips with Badges */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          {['ALL', 'NEW', 'IN_REVIEW', 'CONTACTED', 'ARCHIVED'].map((st) => (
-            <button
-              key={st}
-              onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                statusFilter === st
-                  ? 'bg-amber-500 text-slate-950 shadow-xs'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
-              }`}
-            >
-              {st === 'ALL' ? 'All Inquiries' : st.replace('_', ' ')}
-            </button>
-          ))}
+          {statuses.map(({ key, label }) => {
+            const isActive = statusFilter === key;
+            const count = counts[key] ?? 0;
+            return (
+              <button
+                key={key}
+                onClick={() => setStatusFilter(key)}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                  isActive
+                    ? 'bg-amber-500 text-slate-950 shadow-xs'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                }`}
+              >
+                <span>{label}</span>
+                <span
+                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full transition-colors ${
+                    isActive
+                      ? 'bg-slate-950/20 text-slate-950'
+                      : key === 'NEW' && count > 0
+                      ? 'bg-amber-100 text-amber-800'
+                      : 'bg-slate-100 text-slate-500'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
