@@ -28,7 +28,10 @@ public class FileStorageService {
     private final Path uploadLocation;
 
     private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(".pdf", ".doc", ".docx");
-    private static final long MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+    private static final List<String> ALLOWED_DOCUMENT_EXTENSIONS = Arrays.asList(
+            ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".png", ".jpg", ".jpeg", ".webp"
+    );
+    private static final long MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 
     public FileStorageService(@Value("${app.upload.dir:uploads/resumes}") String uploadDir) {
         this.uploadLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
@@ -40,24 +43,32 @@ public class FileStorageService {
         }
     }
 
+    public String storeDocument(MultipartFile file) {
+        return storeFileWithExtensions(file, ALLOWED_DOCUMENT_EXTENSIONS, "document");
+    }
+
     public String storeResume(MultipartFile file) {
+        return storeFileWithExtensions(file, ALLOWED_EXTENSIONS, "resume");
+    }
+
+    private String storeFileWithExtensions(MultipartFile file, List<String> allowedExtensions, String fileKind) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Cannot store empty file.");
         }
 
         if (file.getSize() > MAX_FILE_SIZE_BYTES) {
-            throw new IllegalArgumentException("File size exceeds 5MB limit.");
+            throw new IllegalArgumentException("File size exceeds 10MB limit.");
         }
 
-        String originalFilename = StringUtils.cleanPath(file.getOriginalFilename() != null ? file.getOriginalFilename() : "resume.pdf");
+        String originalFilename = StringUtils.cleanPath(file.getOriginalFilename() != null ? file.getOriginalFilename() : (fileKind + ".pdf"));
         String extension = "";
         int dotIndex = originalFilename.lastIndexOf('.');
         if (dotIndex >= 0) {
             extension = originalFilename.substring(dotIndex).toLowerCase();
         }
 
-        if (!ALLOWED_EXTENSIONS.contains(extension)) {
-            throw new IllegalArgumentException("Invalid file type (" + extension + "). Only PDF, DOC, and DOCX are allowed.");
+        if (!allowedExtensions.contains(extension)) {
+            throw new IllegalArgumentException("Invalid file type (" + extension + "). Permitted formats: " + String.join(", ", allowedExtensions));
         }
 
         // Sanitize base name (alphanumeric and dashes only)
@@ -81,7 +92,7 @@ public class FileStorageService {
                 Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            log.info("Successfully stored resume: {} (original: {})", storedFilename, originalFilename);
+            log.info("Successfully stored {}: {} (original: {})", fileKind, storedFilename, originalFilename);
             return storedFilename;
         } catch (IOException ex) {
             throw new RuntimeException("Failed to store file: " + storedFilename, ex);

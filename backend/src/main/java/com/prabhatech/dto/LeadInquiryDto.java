@@ -23,6 +23,8 @@ public class LeadInquiryDto {
     private String message;
 
     private String status;
+    private String attachmentUrl;
+    private String attachmentFileName;
     private OffsetDateTime createdAt;
 
     public LeadInquiryDto() {}
@@ -43,6 +45,10 @@ public class LeadInquiryDto {
     public void setBudgetRange(String budgetRange) { this.budgetRange = budgetRange; }
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
+    public String getAttachmentUrl() { return attachmentUrl; }
+    public void setAttachmentUrl(String attachmentUrl) { this.attachmentUrl = attachmentUrl; }
+    public String getAttachmentFileName() { return attachmentFileName; }
+    public void setAttachmentFileName(String attachmentFileName) { this.attachmentFileName = attachmentFileName; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
     public OffsetDateTime getCreatedAt() { return createdAt; }

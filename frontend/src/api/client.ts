@@ -107,6 +107,17 @@ export const publicApi = {
     });
     return res.data;
   },
+
+  uploadDocument: async (file: File): Promise<{ fileName: string; storedName: string; url: string }> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await publicClient.post('/public/upload/document', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return res.data;
+  },
 };
 
 // ==========================================

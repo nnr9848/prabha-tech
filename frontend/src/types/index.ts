@@ -66,6 +66,8 @@ export interface LeadInquiry {
   projectType?: string;
   budgetRange?: string;
   message: string;
+  attachmentUrl?: string;
+  attachmentFileName?: string;
   status?: string;
   createdAt?: string;
 }

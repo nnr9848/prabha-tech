@@ -70,6 +70,15 @@ export const ContactPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      let finalAttachmentUrl = '';
+      let finalAttachmentFileName = '';
+
+      if (attachedFile) {
+        const uploadResult = await publicApi.uploadDocument(attachedFile);
+        finalAttachmentUrl = uploadResult.url;
+        finalAttachmentFileName = uploadResult.fileName || attachedFile.name;
+      }
+
       const payload: LeadInquiry = {
         fullName,
         email,
@@ -78,6 +87,8 @@ export const ContactPage: React.FC = () => {
         projectType: inquiryType || 'General Inquiry',
         budgetRange: 'Enterprise',
         message: `Country: ${country}\nDetails: ${details}`,
+        attachmentUrl: finalAttachmentUrl || undefined,
+        attachmentFileName: finalAttachmentFileName || undefined,
       };
 
       await publicApi.submitInquiry(payload);

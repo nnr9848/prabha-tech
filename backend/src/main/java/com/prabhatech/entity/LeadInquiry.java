@@ -32,6 +32,12 @@ public class LeadInquiry {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
+    @Column(name = "attachment_url", columnDefinition = "TEXT")
+    private String attachmentUrl;
+
+    @Column(name = "attachment_file_name", length = 255)
+    private String attachmentFileName;
+
     @Column(length = 50)
     private String status = "NEW";
 
@@ -65,6 +71,10 @@ public class LeadInquiry {
     public void setBudgetRange(String budgetRange) { this.budgetRange = budgetRange; }
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
+    public String getAttachmentUrl() { return attachmentUrl; }
+    public void setAttachmentUrl(String attachmentUrl) { this.attachmentUrl = attachmentUrl; }
+    public String getAttachmentFileName() { return attachmentFileName; }
+    public void setAttachmentFileName(String attachmentFileName) { this.attachmentFileName = attachmentFileName; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
     public OffsetDateTime getCreatedAt() { return createdAt; }

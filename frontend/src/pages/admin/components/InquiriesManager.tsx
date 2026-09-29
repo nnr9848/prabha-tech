@@ -13,6 +13,9 @@ import {
   Clock,
   Archive,
   Filter,
+  FileText,
+  Image as ImageIcon,
+  ExternalLink,
 } from 'lucide-react';
 import { LeadInquiry } from '../../../types';
 
@@ -289,6 +292,41 @@ export const InquiriesManager: React.FC<InquiriesManagerProps> = ({
                     {selectedInquiry.message || 'No project description attached.'}
                   </p>
                 </div>
+
+                {/* Attached Project Document / RFP */}
+                {selectedInquiry.attachmentUrl && (
+                  <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
+                    <span className="text-[10px] text-amber-800 uppercase font-bold tracking-wider block">
+                      Attached Project Specification / RFP
+                    </span>
+                    <div className="flex items-center justify-between gap-3 bg-white p-3 rounded-xl border border-amber-200/80 shadow-2xs">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                          {selectedInquiry.attachmentFileName?.toLowerCase().match(/\.(jpg|jpeg|png|webp)$/) ? (
+                            <ImageIcon className="w-4 h-4" />
+                          ) : (
+                            <FileText className="w-4 h-4" />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-slate-900 truncate">
+                            {selectedInquiry.attachmentFileName || 'Attached Document'}
+                          </p>
+                          <p className="text-[10px] text-slate-400">Client Attachment</p>
+                        </div>
+                      </div>
+                      <a
+                        href={selectedInquiry.attachmentUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold transition-all shrink-0 cursor-pointer shadow-2xs"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>View / Download</span>
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

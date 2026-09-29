@@ -5,14 +5,17 @@ import {
   ExternalLink,
   Mail,
   Phone,
-  Clock,
   Briefcase,
   FileText,
   Trash2,
-  CheckCircle2,
-  AlertCircle,
-  Eye,
   X,
+  Send,
+  Building,
+  MapPin,
+  Calendar,
+  Clock,
+  DollarSign,
+  Award,
 } from 'lucide-react';
 import { JobApplication } from '../../../types';
 
@@ -25,13 +28,13 @@ interface JobApplicationsManagerProps {
 
 const STATUS_CONFIG: Record<
   string,
-  { label: string; bg: string; text: string; border: string }
+  { label: string; bg: string; text: string; border: string; barColor: string }
 > = {
-  NEW: { label: 'New', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
-  REVIEWING: { label: 'In Review', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
-  SHORTLISTED: { label: 'Shortlisted', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
-  REJECTED: { label: 'Archived / Rejected', bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200' },
-  HIRED: { label: 'Hired', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
+  NEW: { label: 'New', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', barColor: 'border-blue-500 text-blue-700' },
+  REVIEWING: { label: 'In Review', bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', barColor: 'border-amber-500 text-amber-700' },
+  SHORTLISTED: { label: 'Shortlisted', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', barColor: 'border-emerald-500 text-emerald-700' },
+  HIRED: { label: 'Hired', bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', barColor: 'border-purple-500 text-purple-700' },
+  REJECTED: { label: 'Archived', bg: 'bg-slate-100', text: 'text-slate-600', border: 'border-slate-200', barColor: 'border-slate-300 text-slate-600' },
 };
 
 const resolveResumeUrl = (link?: string) => {
@@ -52,7 +55,7 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [selectedApp, setSelectedApp] = useState<JobApplication | null>(null);
 
-  const statuses = ['ALL', 'NEW', 'REVIEWING', 'SHORTLISTED', 'REJECTED'];
+  const statuses = ['ALL', 'NEW', 'REVIEWING', 'SHORTLISTED', 'HIRED', 'REJECTED'];
 
   const filtered = applications.filter((app) => {
     const matchesSearch =
@@ -124,7 +127,11 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                 filtered.map((app) => {
                   const badge = STATUS_CONFIG[app.status || 'NEW'] || STATUS_CONFIG.NEW;
                   return (
-                    <tr key={app.id} className="hover:bg-slate-50/70 transition-colors group">
+                    <tr
+                      key={app.id}
+                      onClick={() => setSelectedApp(app)}
+                      className="hover:bg-slate-50 transition-colors cursor-pointer group"
+                    >
                       <td className="py-4 px-5">
                         <div className="space-y-0.5">
                           <span className="font-bold text-slate-900 group-hover:text-amber-600 transition-colors block">
@@ -158,7 +165,11 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                       <td className="py-4 px-4">
                         <select
                           value={app.status || 'NEW'}
-                          onChange={(e) => app.id && onUpdateStatus(app.id, e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            if (app.id) onUpdateStatus(app.id, e.target.value);
+                          }}
                           className={`px-2.5 py-1 rounded-full text-[10px] font-bold border outline-none cursor-pointer ${badge.bg} ${badge.text} ${badge.border}`}
                         >
                           <option value="NEW">New</option>
@@ -174,35 +185,15 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
                       </td>
 
                       <td className="py-4 px-5 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <a
-                            href={resolveResumeUrl(app.resumeLink)}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 transition-colors cursor-pointer"
-                            title="Open Resume / Portfolio"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                          <button
-                            onClick={() => setSelectedApp(app)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
-                            title="View Full Profile"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => {
-                              if (app.id && window.confirm(`Remove application from ${app.fullName}?`)) {
-                                onDelete(app.id);
-                              }
-                            }}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                            title="Delete Record"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedApp(app);
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+                        >
+                          Inspect
+                        </button>
                       </td>
                     </tr>
                   );
@@ -213,127 +204,219 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
         </div>
       </div>
 
-      {/* Candidate Profile Drawer / Modal */}
+      {/* Slide-over Inspection Drawer */}
       {selectedApp && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-start justify-between border-b border-slate-100 pb-4">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 block">
-                  Candidate Dossier
-                </span>
-                <h3 className="text-lg font-bold text-slate-900">{selectedApp.fullName}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Applied for {selectedApp.jobTitle}</p>
-              </div>
-              <button
-                onClick={() => setSelectedApp(null)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4 text-xs text-slate-600">
-              <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Email Address</span>
-                  <span className="font-medium text-slate-900 break-all">{selectedApp.email}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Phone</span>
-                  <span className="font-medium text-slate-900">{selectedApp.phone || 'N/A'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Current Location</span>
-                  <span className="font-medium text-slate-900">{selectedApp.currentLocation || 'N/A'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Total Experience</span>
-                  <span className="font-medium text-slate-900">{selectedApp.totalExperience || selectedApp.experience || 'N/A'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Current Company</span>
-                  <span className="font-medium text-slate-900">{selectedApp.currentCompany || 'N/A'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Current Designation</span>
-                  <span className="font-medium text-slate-900">{selectedApp.currentDesignation || 'N/A'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Expected Salary</span>
-                  <span className="font-medium text-slate-900">{selectedApp.expectedSalary || 'N/A'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Notice Period</span>
-                  <span className="font-medium text-slate-900">{selectedApp.noticePeriod || 'N/A'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Resume File</span>
-                  <span className="font-medium text-slate-900">{selectedApp.resumeFileName || 'resume.pdf'}</span>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block">Applied Date</span>
-                  <span className="font-medium text-slate-900">
-                    {selectedApp.createdAt ? new Date(selectedApp.createdAt).toLocaleDateString() : 'Recent'}
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[10px] text-slate-400 font-semibold uppercase block mb-1">
-                  Resume / Portfolio Link
-                </span>
-                <a
-                  href={resolveResumeUrl(selectedApp.resumeLink)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-amber-600 hover:underline flex items-center gap-1 font-medium break-all"
-                >
-                  <ExternalLink className="w-3.5 h-3.5 shrink-0" />
-                  <span>{selectedApp.resumeFileName || selectedApp.resumeLink || 'View Attached Resume'}</span>
-                </a>
-              </div>
-
-              {selectedApp.coverNote && (
-                <div>
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase block mb-1">
-                    Candidate Cover Note
-                  </span>
-                  <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl leading-relaxed whitespace-pre-wrap">
-                    {selectedApp.coverNote}
+        <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="w-full max-w-xl bg-white border-l border-slate-200 h-full overflow-y-auto p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-2xl">
+            <div className="space-y-6">
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
+                    <Briefcase className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900">{selectedApp.fullName}</h3>
+                    <p className="text-[11px] text-slate-500">
+                      Applied for <span className="font-semibold text-slate-700">{selectedApp.jobTitle}</span> &bull; ID #{selectedApp.id || 'N/A'}
+                    </p>
                   </div>
                 </div>
-              )}
-            </div>
-
-            <div className="flex justify-between items-center pt-3 border-t border-slate-100">
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-500">Stage:</span>
-                <select
-                  value={selectedApp.status || 'NEW'}
-                  onChange={(e) => {
-                    const newStatus = e.target.value;
-                    if (selectedApp.id) {
-                      onUpdateStatus(selectedApp.id, newStatus);
-                      setSelectedApp({ ...selectedApp, status: newStatus as any });
-                    }
-                  }}
-                  className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 border border-slate-200 text-slate-800"
+                <button
+                  onClick={() => setSelectedApp(null)}
+                  className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
                 >
-                  <option value="NEW">New</option>
-                  <option value="REVIEWING">In Review</option>
-                  <option value="SHORTLISTED">Shortlisted</option>
-                  <option value="HIRED">Hired</option>
-                  <option value="REJECTED">Archived</option>
-                </select>
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              <button
-                onClick={() => setSelectedApp(null)}
-                className="py-1.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
+              {/* Status Selector Bar */}
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                <span className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider block">
+                  Application Stage
+                </span>
+                <div className="grid grid-cols-5 gap-1.5">
+                  {[
+                    { key: 'NEW', label: 'New', color: 'border-blue-500 text-blue-700' },
+                    { key: 'REVIEWING', label: 'Reviewing', color: 'border-amber-500 text-amber-700' },
+                    { key: 'SHORTLISTED', label: 'Shortlist', color: 'border-emerald-500 text-emerald-700' },
+                    { key: 'HIRED', label: 'Hired', color: 'border-purple-500 text-purple-700' },
+                    { key: 'REJECTED', label: 'Archived', color: 'border-slate-300 text-slate-600' },
+                  ].map((st) => {
+                    const isCurrent = (selectedApp.status || 'NEW') === st.key;
+                    return (
+                      <button
+                        key={st.key}
+                        onClick={() => {
+                          if (selectedApp.id) {
+                            onUpdateStatus(selectedApp.id, st.key);
+                            setSelectedApp({ ...selectedApp, status: st.key as any });
+                          }
+                        }}
+                        className={`py-2 px-1 rounded-lg text-xs font-bold transition-all text-center cursor-pointer ${
+                          isCurrent
+                            ? `bg-white ${st.color} border shadow-xs`
+                            : 'bg-white/60 text-slate-500 hover:text-slate-900 border border-transparent'
+                        }`}
+                      >
+                        {st.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Candidate Info Grid */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider flex items-center gap-1">
+                      <Mail className="w-3 h-3 text-slate-400" /> Email Address
+                    </span>
+                    <a
+                      href={`mailto:${selectedApp.email}`}
+                      className="text-xs font-bold text-amber-700 hover:underline break-all block"
+                    >
+                      {selectedApp.email}
+                    </a>
+                  </div>
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider flex items-center gap-1">
+                      <Phone className="w-3 h-3 text-slate-400" /> Phone Number
+                    </span>
+                    <p className="text-xs font-bold text-slate-900">{selectedApp.phone || 'N/A'}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider flex items-center gap-1">
+                      <MapPin className="w-3 h-3 text-slate-400" /> Current Location
+                    </span>
+                    <p className="text-xs font-bold text-slate-900">{selectedApp.currentLocation || 'N/A'}</p>
+                  </div>
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider flex items-center gap-1">
+                      <Award className="w-3 h-3 text-slate-400" /> Total Experience
+                    </span>
+                    <p className="text-xs font-bold text-slate-900">
+                      {selectedApp.totalExperience || selectedApp.experience || 'N/A'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider flex items-center gap-1">
+                      <Building className="w-3 h-3 text-slate-400" /> Current Organization
+                    </span>
+                    <p className="text-xs font-bold text-slate-900">{selectedApp.currentCompany || 'N/A'}</p>
+                  </div>
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider flex items-center gap-1">
+                      <Briefcase className="w-3 h-3 text-slate-400" /> Current Designation
+                    </span>
+                    <p className="text-xs font-bold text-slate-900">{selectedApp.currentDesignation || 'N/A'}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider flex items-center gap-1">
+                      <DollarSign className="w-3 h-3 text-slate-400" /> Expected Salary
+                    </span>
+                    <p className="text-xs font-bold text-amber-700 font-mono">{selectedApp.expectedSalary || 'N/A'}</p>
+                  </div>
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-slate-400" /> Notice Period
+                    </span>
+                    <p className="text-xs font-bold text-slate-900">{selectedApp.noticePeriod || 'N/A'}</p>
+                  </div>
+                </div>
+
+                {/* Attached Resume / Portfolio Card */}
+                <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
+                  <span className="text-[10px] text-amber-800 uppercase font-bold tracking-wider block">
+                    Candidate Resume & Credentials
+                  </span>
+                  <div className="flex items-center justify-between gap-3 bg-white p-3 rounded-xl border border-amber-200/80 shadow-2xs">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-900 truncate">
+                          {selectedApp.resumeFileName || 'Resume Document'}
+                        </p>
+                        <p className="text-[10px] text-slate-400">Attached Portfolio / CV</p>
+                      </div>
+                    </div>
+                    <a
+                      href={resolveResumeUrl(selectedApp.resumeLink)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold transition-all shrink-0 cursor-pointer shadow-2xs"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>View / Download</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Candidate Cover Note */}
+                {selectedApp.coverNote && (
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">
+                      Candidate Cover Note
+                    </span>
+                    <p className="text-xs text-slate-800 leading-relaxed whitespace-pre-wrap">
+                      {selectedApp.coverNote}
+                    </p>
+                  </div>
+                )}
+
+                {/* Metadata info */}
+                <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-3.5 h-3.5" />
+                    Applied: {selectedApp.createdAt ? new Date(selectedApp.createdAt).toLocaleDateString() : 'Recent'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Actions Footer */}
+            <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setSelectedApp(null)}
+                  className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
+                >
+                  Close Drawer
+                </button>
+                <button
+                  onClick={() => {
+                    if (selectedApp.id && window.confirm(`Permanently remove candidate application for ${selectedApp.fullName}?`)) {
+                      onDelete(selectedApp.id);
+                      setSelectedApp(null);
+                    }
+                  }}
+                  className="py-2 px-3 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 font-semibold text-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
+                  title="Delete Application Record"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete</span>
+                </button>
+              </div>
+
+              <a
+                href={`mailto:${selectedApp.email}?subject=Regarding your application for ${encodeURIComponent(selectedApp.jobTitle)} at Prabha Technologies&body=Hi ${encodeURIComponent(selectedApp.fullName)},%0D%0A%0D%0AThank you for applying for the ${encodeURIComponent(selectedApp.jobTitle)} role at Prabha Technologies.`}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold shadow-xs transition-all"
               >
-                Close
-              </button>
+                <Send className="w-3.5 h-3.5 text-slate-950" />
+                <span>Direct Email Candidate</span>
+              </a>
             </div>
           </div>
         </div>
@@ -341,3 +424,4 @@ export const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({
     </div>
   );
 };
+

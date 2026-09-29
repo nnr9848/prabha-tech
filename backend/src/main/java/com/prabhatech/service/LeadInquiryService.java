@@ -28,6 +28,8 @@ public class LeadInquiryService {
         entity.setProjectType(dto.getProjectType());
         entity.setBudgetRange(dto.getBudgetRange());
         entity.setMessage(dto.getMessage());
+        entity.setAttachmentUrl(dto.getAttachmentUrl());
+        entity.setAttachmentFileName(dto.getAttachmentFileName());
         entity.setStatus("NEW");
 
         return toDto(leadInquiryRepository.save(entity));
@@ -67,6 +69,8 @@ public class LeadInquiryService {
         dto.setProjectType(entity.getProjectType());
         dto.setBudgetRange(entity.getBudgetRange());
         dto.setMessage(entity.getMessage());
+        dto.setAttachmentUrl(entity.getAttachmentUrl());
+        dto.setAttachmentFileName(entity.getAttachmentFileName());
         dto.setStatus(entity.getStatus());
         dto.setCreatedAt(entity.getCreatedAt());
         return dto;

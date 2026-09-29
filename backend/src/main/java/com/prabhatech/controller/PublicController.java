@@ -129,6 +129,51 @@ public class PublicController {
         return ResponseEntity.status(HttpStatus.CREATED).body(jobApplicationService.submitApplication(dto));
     }
 
+    // --- Document & Media Upload for Inquiries & RFPs ---
+    @PostMapping(value = "/upload/document", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<java.util.Map<String, String>> uploadDocument(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+        String storedFilename = fileStorageService.storeDocument(file);
+        String downloadUrl = "/api/v1/public/documents/" + storedFilename;
+        java.util.Map<String, String> response = new java.util.HashMap<>();
+        response.put("fileName", file.getOriginalFilename() != null ? file.getOriginalFilename() : storedFilename);
+        response.put("storedName", storedFilename);
+        response.put("url", downloadUrl);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/documents/{filename:.+}")
+    public ResponseEntity<org.springframework.core.io.Resource> getDocument(@PathVariable String filename) {
+        org.springframework.core.io.Resource resource = fileStorageService.loadAsResource(filename);
+        String lower = filename.toLowerCase();
+        String contentType = "application/octet-stream";
+        if (lower.endsWith(".pdf")) {
+            contentType = "application/pdf";
+        } else if (lower.endsWith(".png")) {
+            contentType = "image/png";
+        } else if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) {
+            contentType = "image/jpeg";
+        } else if (lower.endsWith(".webp")) {
+            contentType = "image/webp";
+        } else if (lower.endsWith(".doc")) {
+            contentType = "application/msword";
+        } else if (lower.endsWith(".docx")) {
+            contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        } else if (lower.endsWith(".xls")) {
+            contentType = "application/vnd.ms-excel";
+        } else if (lower.endsWith(".xlsx")) {
+            contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        } else if (lower.endsWith(".ppt")) {
+            contentType = "application/vnd.ms-powerpoint";
+        } else if (lower.endsWith(".pptx")) {
+            contentType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(org.springframework.http.MediaType.parseMediaType(contentType))
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
     // --- Resume Upload & Download ---
     @PostMapping(value = "/upload/resume", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<java.util.Map<String, String>> uploadResume(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
