@@ -293,6 +293,10 @@ export const adminApi = {
   deleteNavItem: async (id: number): Promise<void> => {
     await adminClient.delete(`/admin/nav-items/${id}`);
   },
+
+  reorderNavItems: async (items: NavItem[]): Promise<void> => {
+    await adminClient.put('/admin/nav-items/reorder', items);
+  },
 };
 
 export default adminClient;

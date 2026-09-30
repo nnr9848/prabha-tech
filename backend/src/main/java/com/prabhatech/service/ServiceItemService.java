@@ -53,6 +53,7 @@ public class ServiceItemService {
         entity.setShortDescription(dto.getShortDescription());
         entity.setFullDescription(dto.getFullDescription());
         entity.setDeliverables(dto.getDeliverables());
+        entity.setHeroImageUrl(dto.getHeroImageUrl());
         entity.setDisplayOrder(dto.getDisplayOrder() != null ? dto.getDisplayOrder() : 0);
         entity.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : true);
 
@@ -74,6 +75,7 @@ public class ServiceItemService {
         dto.setShortDescription(entity.getShortDescription());
         dto.setFullDescription(entity.getFullDescription());
         dto.setDeliverables(entity.getDeliverables());
+        dto.setHeroImageUrl(entity.getHeroImageUrl());
         dto.setDisplayOrder(entity.getDisplayOrder());
         dto.setIsActive(entity.getIsActive());
         return dto;

@@ -36,6 +36,7 @@ export interface ServiceItem {
   shortDescription: string;
   fullDescription?: string;
   deliverables?: string[];
+  heroImageUrl?: string;
   displayOrder?: number;
   isActive?: boolean;
 }

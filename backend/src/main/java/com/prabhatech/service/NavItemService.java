@@ -61,6 +61,19 @@ public class NavItemService {
         navItemRepository.deleteById(id);
     }
 
+    public void reorderNavItems(List<NavItemDto> orderedDtos) {
+        for (int i = 0; i < orderedDtos.size(); i++) {
+            NavItemDto dto = orderedDtos.get(i);
+            if (dto.getId() != null) {
+                final int newOrder = i + 1;
+                navItemRepository.findById(dto.getId()).ifPresent(item -> {
+                    item.setDisplayOrder(newOrder);
+                    navItemRepository.save(item);
+                });
+            }
+        }
+    }
+
     private NavItemDto mapToDto(NavItem item) {
         return new NavItemDto(
                 item.getId(),

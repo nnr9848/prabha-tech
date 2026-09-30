@@ -5,8 +5,7 @@ import {
   Edit,
   Trash2,
   ExternalLink,
-  ArrowUp,
-  ArrowDown,
+  GripVertical,
   CheckCircle2,
   XCircle,
   Link as LinkIcon,
@@ -20,7 +19,8 @@ interface NavItemsManagerProps {
   onOpenEdit: (item: NavItem) => void;
   onDelete: (id: number) => void;
   onToggleActive: (item: NavItem) => void;
-  onMoveOrder: (item: NavItem, direction: 'up' | 'down') => void;
+  onReorder?: (items: NavItem[]) => void;
+  onMoveOrder?: (item: NavItem, direction: 'up' | 'down') => void;
 }
 
 export const NavItemsManager: React.FC<NavItemsManagerProps> = ({
@@ -29,11 +29,60 @@ export const NavItemsManager: React.FC<NavItemsManagerProps> = ({
   onOpenEdit,
   onDelete,
   onToggleActive,
+  onReorder,
   onMoveOrder,
 }) => {
   const [itemToDelete, setItemToDelete] = useState<NavItem | null>(null);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const sortedItems = [...navItems].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+
+  const handleDragStart = (e: React.DragEvent<HTMLTableRowElement>, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    // Transparent or native ghost preview
+    e.dataTransfer.setData('text/plain', index.toString());
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLTableRowElement>, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (dragOverIndex !== index) {
+      setDragOverIndex(index);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLTableRowElement>, targetIndex: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === targetIndex) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    const reordered = [...sortedItems];
+    const [movedItem] = reordered.splice(draggedIndex, 1);
+    reordered.splice(targetIndex, 0, movedItem);
+
+    // Reassign sequence 1..N
+    const updatedWithOrder = reordered.map((item, idx) => ({
+      ...item,
+      displayOrder: idx + 1,
+    }));
+
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+
+    if (onReorder) {
+      onReorder(updatedWithOrder);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -45,7 +94,7 @@ export const NavItemsManager: React.FC<NavItemsManagerProps> = ({
             <h3 className="text-base font-bold text-slate-900">Navigation Menu Items CMS</h3>
           </div>
           <p className="text-xs text-slate-500">
-            Control the links, sequence, and external targets that appear in the Desktop Navigation Bar and Fullscreen Mobile Drawer.
+            Drag and drop rows using the grip handle to reorder menu items, or toggle visibility and targets for both Desktop & Mobile navigation.
           </p>
         </div>
         <button
@@ -60,10 +109,11 @@ export const NavItemsManager: React.FC<NavItemsManagerProps> = ({
       {/* Table of Navigation Items */}
       <div className="rounded-2xl bg-white border border-slate-200/80 shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse select-none">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/75 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                <th className="py-3 px-4 w-20 text-center">Order</th>
+                <th className="py-3 px-4 w-14 text-center"></th>
+                <th className="py-3 px-4 w-16 text-center">Order</th>
                 <th className="py-3 px-4">Menu Label</th>
                 <th className="py-3 px-4">Target Path</th>
                 <th className="py-3 px-4 text-center">Link Type</th>
@@ -74,43 +124,46 @@ export const NavItemsManager: React.FC<NavItemsManagerProps> = ({
             <tbody className="divide-y divide-slate-100 text-xs">
               {sortedItems.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-slate-400">
+                  <td colSpan={7} className="py-12 text-center text-slate-400">
                     No navigation items found. Click "Add Menu Item" above to add one.
                   </td>
                 </tr>
               ) : (
                 sortedItems.map((item, index) => {
-                  const isFirst = index === 0;
-                  const isLast = index === sortedItems.length - 1;
+                  const isDragging = draggedIndex === index;
+                  const isOver = dragOverIndex === index && draggedIndex !== index;
 
                   return (
                     <tr
                       key={item.id || item.label}
-                      className="hover:bg-slate-50/60 transition-colors group"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDragOver={(e) => handleDragOver(e, index)}
+                      onDragEnd={handleDragEnd}
+                      onDrop={(e) => handleDrop(e, index)}
+                      className={`transition-all duration-200 group ${
+                        isDragging
+                          ? 'opacity-40 bg-amber-50/50 scale-[0.99] border-dashed border-2 border-amber-400'
+                          : isOver
+                          ? 'bg-amber-50/70 border-t-2 border-amber-500 shadow-sm'
+                          : 'hover:bg-slate-50/80'
+                      }`}
                     >
-                      {/* Order Controls */}
-                      <td className="py-3 px-4 text-center">
-                        <div className="inline-flex items-center gap-1">
-                          <button
-                            onClick={() => onMoveOrder(item, 'up')}
-                            disabled={isFirst}
-                            className="p-1 rounded hover:bg-slate-200 text-slate-400 hover:text-slate-800 disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer"
-                            title="Move Up"
-                          >
-                            <ArrowUp className="w-3.5 h-3.5" />
-                          </button>
-                          <span className="font-bold text-slate-700 min-w-[18px]">
-                            {item.displayOrder || index + 1}
-                          </span>
-                          <button
-                            onClick={() => onMoveOrder(item, 'down')}
-                            disabled={isLast}
-                            className="p-1 rounded hover:bg-slate-200 text-slate-400 hover:text-slate-800 disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer"
-                            title="Move Down"
-                          >
-                            <ArrowDown className="w-3.5 h-3.5" />
-                          </button>
+                      {/* Tactile Drag Handle */}
+                      <td className="py-3 px-3 text-center cursor-grab active:cursor-grabbing w-14">
+                        <div
+                          className="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-300 group-hover:text-amber-600 hover:bg-amber-100/60 transition-colors"
+                          title="Drag to reorder"
+                        >
+                          <GripVertical className="w-4 h-4" />
                         </div>
+                      </td>
+
+                      {/* Sequence Number */}
+                      <td className="py-3 px-4 text-center w-16">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-xs">
+                          {item.displayOrder || index + 1}
+                        </span>
                       </td>
 
                       {/* Menu Label */}

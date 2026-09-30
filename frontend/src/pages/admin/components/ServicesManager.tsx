@@ -155,10 +155,21 @@ export const ServicesManager: React.FC<ServicesManagerProps> = ({
               className="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md transition-all overflow-hidden flex flex-col justify-between group"
             >
               <div className="p-5 space-y-3.5">
-                {/* Header Badge & Active Switch */}
+                {/* Header Badge, Hero Image Thumbnail & Active Switch */}
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-700 flex items-center justify-center shadow-2xs">
-                    {renderServiceIcon(service.icon, 'w-5 h-5')}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-700 flex items-center justify-center shadow-2xs shrink-0">
+                      {renderServiceIcon(service.icon, 'w-5 h-5')}
+                    </div>
+                    {service.heroImageUrl && (
+                      <div className="w-12 h-10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
+                        <img
+                          src={service.heroImageUrl}
+                          alt={service.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2">

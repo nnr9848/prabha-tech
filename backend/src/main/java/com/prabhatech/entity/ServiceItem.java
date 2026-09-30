@@ -36,6 +36,9 @@ public class ServiceItem {
     @Column(columnDefinition = "jsonb")
     private List<String> deliverables;
 
+    @Column(name = "hero_image_url", length = 500)
+    private String heroImageUrl;
+
     @Column(name = "display_order")
     private Integer displayOrder;
 
@@ -72,6 +75,8 @@ public class ServiceItem {
     public void setFullDescription(String fullDescription) { this.fullDescription = fullDescription; }
     public List<String> getDeliverables() { return deliverables; }
     public void setDeliverables(List<String> deliverables) { this.deliverables = deliverables; }
+    public String getHeroImageUrl() { return heroImageUrl; }
+    public void setHeroImageUrl(String heroImageUrl) { this.heroImageUrl = heroImageUrl; }
     public Integer getDisplayOrder() { return displayOrder; }
     public void setDisplayOrder(Integer displayOrder) { this.displayOrder = displayOrder; }
     public Boolean getIsActive() { return isActive; }

@@ -11,6 +11,7 @@ public class ServiceItemDto {
     private String shortDescription;
     private String fullDescription;
     private List<String> deliverables;
+    private String heroImageUrl;
     private Integer displayOrder;
     private Boolean isActive;
 
@@ -32,6 +33,8 @@ public class ServiceItemDto {
     public void setFullDescription(String fullDescription) { this.fullDescription = fullDescription; }
     public List<String> getDeliverables() { return deliverables; }
     public void setDeliverables(List<String> deliverables) { this.deliverables = deliverables; }
+    public String getHeroImageUrl() { return heroImageUrl; }
+    public void setHeroImageUrl(String heroImageUrl) { this.heroImageUrl = heroImageUrl; }
     public Integer getDisplayOrder() { return displayOrder; }
     public void setDisplayOrder(Integer displayOrder) { this.displayOrder = displayOrder; }
     public Boolean getIsActive() { return isActive; }

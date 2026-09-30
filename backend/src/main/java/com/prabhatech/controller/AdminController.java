@@ -205,4 +205,10 @@ public class AdminController {
         navItemService.deleteNavItem(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/nav-items/reorder")
+    public ResponseEntity<Void> reorderNavItems(@RequestBody List<com.prabhatech.dto.NavItemDto> orderedDtos) {
+        navItemService.reorderNavItems(orderedDtos);
+        return ResponseEntity.ok().build();
+    }
 }

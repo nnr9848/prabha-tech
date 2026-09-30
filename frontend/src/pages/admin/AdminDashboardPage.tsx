@@ -6,7 +6,7 @@ import { CaseStudy, Article, LeadInquiry, SocialLink, JobPosition, JobApplicatio
 import { AdminSidebar, AdminTab } from './components/AdminSidebar';
 import { AdminHeader } from './components/AdminHeader';
 import { AdminOverview } from './components/AdminOverview';
-import { ServicesManager } from './components/ServicesManager';
+import { ServicesManager, renderServiceIcon } from './components/ServicesManager';
 import { NavItemsManager } from './components/NavItemsManager';
 import { CaseStudiesManager } from './components/CaseStudiesManager';
 import { ArticlesManager } from './components/ArticlesManager';
@@ -16,7 +16,7 @@ import { InquiriesManager } from './components/InquiriesManager';
 import { SocialLinksManager } from './components/SocialLinksManager';
 import { AdminTrashHub } from './components/AdminTrashHub';
 import { useToast } from '../../context/ToastContext';
-import { X, Save, Image as ImageIcon } from 'lucide-react';
+import { X, Save, Image as ImageIcon, ExternalLink } from 'lucide-react';
 import { ImageUploader } from '../../components/common/ImageUploader';
 
 const VALID_TABS: AdminTab[] = [
@@ -236,7 +236,7 @@ export const AdminDashboardPage: React.FC = () => {
       const match = services.find((s) => s.id === idNum);
       if (match) {
         setEditingService(match);
-        setDeliverablesInput((match.deliverables || []).join(', '));
+        setDeliverablesInput('');
         setIsServiceModalOpen(true);
       }
     }
@@ -376,6 +376,27 @@ export const AdminDashboardPage: React.FC = () => {
       toast.info('Menu Item Removed', 'The navigation link has been deleted.');
     },
     onError: () => toast.error('Error', 'Failed to delete menu item.'),
+  });
+
+  const reorderNavItemsMutation = useMutation({
+    mutationFn: (items: NavItem[]) => adminApi.reorderNavItems(items),
+    onMutate: async (newItems: NavItem[]) => {
+      await queryClient.cancelQueries({ queryKey: ['adminNavItems'] });
+      const previousNav = queryClient.getQueryData<NavItem[]>(['adminNavItems']);
+      queryClient.setQueryData<NavItem[]>(['adminNavItems'], newItems);
+      return { previousNav };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminNavItems'] });
+      queryClient.invalidateQueries({ queryKey: ['publicNavItems'] });
+      toast.success('Menu Reordered', 'New navigation sequence saved and synchronized.');
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousNav) {
+        queryClient.setQueryData(['adminNavItems'], context.previousNav);
+      }
+      toast.error('Reorder Failed', 'Could not save new menu order. Please try again.');
+    },
   });
 
   const saveJobMutation = useMutation({
@@ -569,7 +590,7 @@ export const AdminDashboardPage: React.FC = () => {
               onOpenCreate={() => handleQuickCreate('service')}
               onOpenEdit={(service) => {
                 setEditingService(service);
-                setDeliverablesInput((service.deliverables || []).join(', '));
+                setDeliverablesInput('');
                 setIsServiceModalOpen(true);
               }}
               onDelete={(id) => deleteServiceMutation.mutate(id)}
@@ -678,11 +699,7 @@ export const AdminDashboardPage: React.FC = () => {
               onToggleActive={(item) =>
                 saveNavItemMutation.mutate({ ...item, isActive: item.isActive === false ? true : false })
               }
-              onMoveOrder={(item, direction) => {
-                const currentOrder = item.displayOrder || 1;
-                const newOrder = direction === 'up' ? Math.max(1, currentOrder - 1) : currentOrder + 1;
-                saveNavItemMutation.mutate({ ...item, displayOrder: newOrder });
-              }}
+              onReorder={(items) => reorderNavItemsMutation.mutate(items)}
             />
           )}
 
@@ -1265,34 +1282,67 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
       )}
 
-      {/* Enterprise Service Modal */}
+      {/* ========================================================= */}
+      {/* 5. MODAL: ENTERPRISE SERVICE CREATE / EDIT (State-of-the-Art UX) */}
+      {/* ========================================================= */}
       {isServiceModalOpen && (
         <div
           onClick={() => setIsServiceModalOpen(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs cursor-pointer animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-xs cursor-pointer animate-in fade-in duration-200"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl cursor-default"
+            className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl flex flex-col max-h-[92vh] shadow-2xl cursor-default overflow-hidden animate-in zoom-in-95 duration-200"
           >
-            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-              <h3 className="text-xl font-bold text-slate-900">
-                {editingService.id ? 'Edit Enterprise Service' : 'Create New Service'}
-              </h3>
-              <button
-                onClick={() => setIsServiceModalOpen(false)}
-                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
+            {/* 1. STICKY MODAL HEADER */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600">
+                  {renderServiceIcon(editingService.icon || 'Code2', 'w-5 h-5')}
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+                    {editingService.id ? `Edit Service: ${editingService.title || 'Enterprise Service'}` : 'Create New Enterprise Service'}
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Configure capabilities, technical deliverables, and public showcase parameters.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {editingService.slug && (
+                  <a
+                    href={`/services/${editingService.slug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-amber-50 hover:text-amber-700 text-slate-600 text-xs font-semibold transition-colors cursor-pointer"
+                    title="View live page in new tab"
+                  >
+                    <span>Live Page</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+                <button
+                  onClick={() => setIsServiceModalOpen(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                  title="Close Modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            <div className="space-y-4">
+            {/* 2. SCROLLABLE FORM BODY */}
+            <div className="p-6 overflow-y-auto space-y-5 text-xs flex-1">
+              {/* Row 1: Title & Slug */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">Service Title *</label>
+                  <label className="text-xs font-semibold text-slate-800 block mb-1">
+                    Service Title <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="text"
+                    required
                     placeholder="e.g. Enterprise Software Development"
                     value={editingService.title || ''}
                     onChange={(e) => {
@@ -1307,54 +1357,73 @@ export const AdminDashboardPage: React.FC = () => {
                         slug: editingService.id ? editingService.slug : slug,
                       });
                     }}
-                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-1 focus:ring-amber-500/20 transition-all font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">URL Slug *</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. enterprise-software-development"
-                    value={editingService.slug || ''}
-                    onChange={(e) => setEditingService({ ...editingService, slug: e.target.value })}
-                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-amber-500 focus:bg-white"
-                  />
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-semibold text-slate-800">
+                      URL Slug Path <span className="text-red-500">*</span>
+                    </label>
+                    <span className="text-[10px] text-slate-400">Unique route</span>
+                  </div>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 font-mono">
+                      /services/
+                    </span>
+                    <input
+                      type="text"
+                      required
+                      placeholder="enterprise-software"
+                      value={editingService.slug || ''}
+                      onChange={(e) => setEditingService({ ...editingService, slug: e.target.value })}
+                      className="w-full pl-20 pr-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-1 focus:ring-amber-500/20 transition-all"
+                    />
+                  </div>
                 </div>
               </div>
 
+              {/* Row 2: Tagline / Subtitle */}
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Tagline / Subtitle</label>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">
+                  Tagline / Subtitle <span className="text-slate-400 font-normal">(Display badge on hero & overview)</span>
+                </label>
                 <input
                   type="text"
-                  placeholder="e.g. Custom enterprise applications to streamline operations and digital transformation"
+                  placeholder="e.g. Scalable platforms, legacy modernization, and high-throughput systems"
                   value={editingService.tagline || ''}
                   onChange={(e) => setEditingService({ ...editingService, tagline: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-1 focus:ring-amber-500/20 transition-all"
                 />
               </div>
 
+              {/* Row 3: Icon Theme & Display Order */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">Icon Theme Key</label>
+                  <label className="text-xs font-semibold text-slate-800 block mb-1">
+                    Icon Theme Glyph
+                  </label>
                   <select
                     value={editingService.icon || 'Code2'}
                     onChange={(e) => setEditingService({ ...editingService, icon: e.target.value })}
                     className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white cursor-pointer"
                   >
-                    <option value="Code2">Code2 (Software / Engineering)</option>
-                    <option value="Smartphone">Smartphone (Mobile Apps)</option>
-                    <option value="Cpu">Cpu (AI & Analytics)</option>
-                    <option value="Radio">Radio (IIoT & Telemetry)</option>
-                    <option value="Box">Box (Metaverse & Web3)</option>
-                    <option value="Palette">Palette (UI/UX Design)</option>
-                    <option value="Cloud">Cloud (Cloud & DevOps)</option>
-                    <option value="ShieldCheck">ShieldCheck (Cybersecurity & Compliance)</option>
+                    <option value="Code2">⚡ Code2 (Custom Software & Full-Stack)</option>
+                    <option value="Smartphone">📱 Smartphone (iOS & Android Apps)</option>
+                    <option value="Cpu">🧠 Cpu (AI, Machine Learning & Analytics)</option>
+                    <option value="Radio">📡 Radio (Industrial IoT & Smart Sensors)</option>
+                    <option value="Box">🧊 Box (Metaverse, 3D & Digital Twins)</option>
+                    <option value="Palette">🎨 Palette (UI/UX Design Systems)</option>
+                    <option value="Cloud">☁️ Cloud (Cloud Architecture & DevOps)</option>
+                    <option value="ShieldCheck">🛡️ ShieldCheck (Cybersecurity & Compliance)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-slate-700 block mb-1">Display Order</label>
+                  <label className="text-xs font-semibold text-slate-800 block mb-1">
+                    Display Sequence
+                  </label>
                   <input
                     type="number"
                     min="1"
@@ -1367,88 +1436,165 @@ export const AdminDashboardPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* Row 4: Service Cover / Hero Image Upload */}
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Short Description *</label>
+                <ImageUploader
+                  label="Service Hero / Showcase Image"
+                  value={editingService.heroImageUrl || ''}
+                  onChange={(url) => setEditingService({ ...editingService, heroImageUrl: url })}
+                />
+              </div>
+
+              {/* Row 4: Short Description */}
+              <div>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">
+                  Short Description <span className="text-red-500">*</span> <span className="text-slate-400 font-normal">(Executive summary for catalog cards)</span>
+                </label>
                 <textarea
                   rows={2}
-                  placeholder="Summary shown on cards and service overviews..."
+                  required
+                  placeholder="Summarize the core capability and client business value in 1-2 sentences..."
                   value={editingService.shortDescription || ''}
                   onChange={(e) => setEditingService({ ...editingService, shortDescription: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-1 focus:ring-amber-500/20 transition-all resize-none"
                 />
               </div>
 
+              {/* Row 5: Full Technical Scope */}
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Full Technical Scope</label>
+                <label className="text-xs font-semibold text-slate-800 block mb-1">
+                  Full Technical Scope & Methodologies <span className="text-slate-400 font-normal">(Displayed on dedicated service landing page)</span>
+                </label>
                 <textarea
                   rows={4}
-                  placeholder="Comprehensive technical overview of services and methodologies..."
+                  placeholder="Provide comprehensive details about engineering architecture, methodologies, frameworks, and deployment strategies..."
                   value={editingService.fullDescription || ''}
                   onChange={(e) => setEditingService({ ...editingService, fullDescription: e.target.value })}
-                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white focus:ring-1 focus:ring-amber-500/20 transition-all"
                 />
               </div>
 
+              {/* Row 6: Interactive Deliverables Tag Builder */}
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">
-                  Deliverables (comma-separated)
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Web Applications, Cloud Infrastructure, Custom APIs, Ongoing SLA"
-                  value={deliverablesInput}
-                  onChange={(e) => {
-                    setDeliverablesInput(e.target.value);
-                    const list = e.target.value
-                      .split(',')
-                      .map((d) => d.trim())
-                      .filter(Boolean);
-                    setEditingService({ ...editingService, deliverables: list });
-                  }}
-                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
-                />
-                {editingService.deliverables && editingService.deliverables.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-2">
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-semibold text-slate-800">
+                    Deliverables & Technical Capabilities
+                  </label>
+                  <span className="text-[10px] text-slate-400">
+                    Type item & press Enter or comma
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="e.g. Cloud Native Microservices, 99.9% SLA, Zero-Trust RBAC"
+                    value={deliverablesInput}
+                    onChange={(e) => setDeliverablesInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        const val = deliverablesInput.trim().replace(/^,+|,+$/g, '');
+                        if (val) {
+                          const currentList = editingService.deliverables || [];
+                          if (!currentList.includes(val)) {
+                            setEditingService({ ...editingService, deliverables: [...currentList, val] });
+                          }
+                          setDeliverablesInput('');
+                        }
+                      }
+                    }}
+                    className="flex-1 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const val = deliverablesInput.trim().replace(/^,+|,+$/g, '');
+                      if (val) {
+                        const currentList = editingService.deliverables || [];
+                        if (!currentList.includes(val)) {
+                          setEditingService({ ...editingService, deliverables: [...currentList, val] });
+                        }
+                        setDeliverablesInput('');
+                      }
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    Add
+                  </button>
+                </div>
+
+                {/* Rendered Interactive Tags */}
+                {editingService.deliverables && editingService.deliverables.length > 0 ? (
+                  <div className="flex flex-wrap gap-1.5 pt-2.5">
                     {editingService.deliverables.map((deliv, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-amber-50 border border-amber-200 text-amber-800"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/10 border border-amber-500/30 text-amber-900 group"
                       >
-                        {deliv}
+                        <span>{deliv}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = (editingService.deliverables || []).filter((_, i) => i !== idx);
+                            setEditingService({ ...editingService, deliverables: updated });
+                          }}
+                          className="w-3.5 h-3.5 rounded-full hover:bg-amber-600/20 inline-flex items-center justify-center text-amber-700 hover:text-amber-950 transition-colors cursor-pointer"
+                        >
+                          <X className="w-2.5 h-2.5" />
+                        </button>
                       </span>
                     ))}
                   </div>
+                ) : (
+                  <p className="text-[11px] text-slate-400 pt-1 italic">
+                    No deliverables added yet. Add key items clients will receive.
+                  </p>
                 )}
               </div>
 
-              <div className="pt-2 border-t border-slate-100">
-                <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
+              {/* Row 7: Visibility Toggle */}
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-semibold text-slate-800 block">Service Status</span>
+                  <span className="text-[11px] text-slate-500">
+                    When active, this service appears in the header, capabilities strip, and service catalog.
+                  </span>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
                     checked={editingService.isActive !== false}
                     onChange={(e) => setEditingService({ ...editingService, isActive: e.target.checked })}
-                    className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-0"
+                    className="sr-only peer"
                   />
-                  <span>Active Service (Visible Across Public Website & Header)</span>
+                  <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
                 </label>
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
-              <button
-                onClick={() => setIsServiceModalOpen(false)}
-                className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => saveServiceMutation.mutate(editingService)}
-                disabled={!editingService.title || !editingService.shortDescription}
-                className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
-              >
-                <Save className="w-3.5 h-3.5 text-slate-950" />
-                <span>Save Service</span>
-              </button>
+            {/* 3. STICKY MODAL FOOTER */}
+            <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100 bg-slate-50/75 shrink-0">
+              <div className="text-[11px] text-slate-500">
+                <span className="text-red-500 font-bold">*</span> Required fields
+              </div>
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsServiceModalOpen(false)}
+                  className="py-2 px-4 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-colors cursor-pointer shadow-2xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => saveServiceMutation.mutate(editingService)}
+                  disabled={!editingService.title || !editingService.shortDescription || saveServiceMutation.isPending}
+                  className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Save className="w-3.5 h-3.5 text-slate-950" />
+                  <span>{saveServiceMutation.isPending ? 'Saving...' : 'Save Service'}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

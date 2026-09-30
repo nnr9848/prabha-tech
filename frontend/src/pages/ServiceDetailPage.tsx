@@ -107,33 +107,49 @@ export const ServiceDetailPage: React.FC = () => {
             </Link>
           </div>
 
-          <div className="max-w-3xl space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 text-[#E5A93C]">
-              <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span>{service.tagline || 'Enterprise Capability'}</span>
-            </div>
-
-            <div className="flex items-center gap-4 pt-2">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-[#E5A93C]">
-                {renderServiceIcon(service.icon, 'w-7 h-7')}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className={`${service.heroImageUrl ? 'lg:col-span-7' : 'lg:col-span-10 max-w-3xl'} space-y-6`}>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 border border-amber-500/30 text-[#E5A93C]">
+                <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span>{service.tagline || 'Enterprise Capability'}</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                {service.title}
-              </h1>
+
+              <div className="flex items-center gap-4 pt-2">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-[#E5A93C] shrink-0">
+                  {renderServiceIcon(service.icon, 'w-7 h-7')}
+                </div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                  {service.title}
+                </h1>
+              </div>
+
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-light">
+                {service.shortDescription}
+              </p>
+
+              <div className="pt-4 flex flex-wrap gap-4">
+                <BrandButton to="/contact" variant="gold" size="lg">
+                  Engage Our Specialists
+                </BrandButton>
+                <BrandButton to="/portfolio" variant="outline" size="lg">
+                  View Related Portfolio
+                </BrandButton>
+              </div>
             </div>
 
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-light">
-              {service.shortDescription}
-            </p>
-
-            <div className="pt-4 flex flex-wrap gap-4">
-              <BrandButton to="/contact" variant="gold" size="lg">
-                Engage Our Specialists
-              </BrandButton>
-              <BrandButton to="/portfolio" variant="outline" size="lg">
-                View Related Portfolio
-              </BrandButton>
-            </div>
+            {/* Showcase Image / Visual Mockup */}
+            {service.heroImageUrl && (
+              <div className="lg:col-span-5 relative flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/20 to-blue-500/10 rounded-3xl blur-2xl pointer-events-none" />
+                <div className="relative rounded-2xl overflow-hidden border border-slate-700/60 shadow-2xl bg-slate-900/60 aspect-[16/11] w-full">
+                  <img
+                    src={service.heroImageUrl}
+                    alt={service.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

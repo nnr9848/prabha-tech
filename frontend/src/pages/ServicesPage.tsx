@@ -48,17 +48,6 @@ const getServiceIcon = (iconName: string) => {
   }
 };
 
-// Curated service images
-const SERVICE_IMAGES: Record<string, { img: string; isTransparent?: boolean }> = {
-  'custom-software-development': { img: '/assets/images/enterprise-software.png', isTransparent: true },
-  'mobile-app-development': { img: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80' },
-  'ai-analytics': { img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
-  'iiot-automation': { img: '/assets/images/indistrial-iot.jpg' },
-  'metaverse-development': { img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=800&q=80' },
-  'managed-it-services': { img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80' },
-  'staffing-recruitment': { img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80' },
-};
-
 export const ServicesPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All Services');
 
@@ -203,10 +192,7 @@ export const ServicesPage: React.FC = () => {
           {!isLoading && !isError && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredServices.map((service, idx) => {
-                const serviceVisual = SERVICE_IMAGES[service.slug] || {
-                  img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-                  isTransparent: false,
-                };
+                const displayImg = service.heroImageUrl;
 
                 return (
                   <div
@@ -214,16 +200,20 @@ export const ServicesPage: React.FC = () => {
                     className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#E5A93C]/50 transition-all duration-300 flex flex-col group"
                   >
                     {/* Visual Header */}
-                    <div className={`aspect-[16/10] overflow-hidden relative flex items-center justify-center ${
-                      serviceVisual.isTransparent ? 'bg-gradient-to-tr from-slate-900 to-[#020E26] p-4' : 'bg-slate-100'
-                    }`}>
-                      <img
-                        src={serviceVisual.img}
-                        alt={service.title}
-                        className={`w-full h-full transition-transform duration-500 group-hover:scale-105 ${
-                          serviceVisual.isTransparent ? 'object-contain' : 'object-cover'
-                        }`}
-                      />
+                    <div className="aspect-[16/10] overflow-hidden relative flex items-center justify-center bg-slate-100">
+                      {displayImg ? (
+                        <img
+                          src={displayImg}
+                          alt={service.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-tr from-[#000B1E] via-[#020E26] to-slate-900 flex items-center justify-center">
+                          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500">
+                            {getServiceIcon(service.icon)}
+                          </div>
+                        </div>
+                      )}
                       <div className="absolute top-4 left-4 w-9 h-9 rounded-lg bg-[#020E26] border border-slate-700 flex items-center justify-center shadow-lg">
                         {getServiceIcon(service.icon)}
                       </div>
