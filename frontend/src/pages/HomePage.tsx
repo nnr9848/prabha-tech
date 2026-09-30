@@ -32,7 +32,8 @@ import { FeaturedPortfolioSlider } from '../components/home/FeaturedPortfolioSli
 import { ClientLogosCarousel } from '../components/common/ClientLogosCarousel';
 import { useQuery } from '@tanstack/react-query';
 import { publicApi } from '../api/client';
-import { CaseStudy } from '../types';
+import { CaseStudy, ServiceItem, Article } from '../types';
+import { renderServiceIcon } from './admin/components/ServicesManager';
 
 export const HomePage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -46,6 +47,26 @@ export const HomePage: React.FC = () => {
   } = useQuery<CaseStudy[]>({
     queryKey: ['allHomepagePortfolio'],
     queryFn: () => publicApi.getCaseStudies(),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  // Single Source of Truth: Load published enterprise services from PostgreSQL
+  const {
+    data: services = [],
+    isLoading: isServicesLoading,
+  } = useQuery<ServiceItem[]>({
+    queryKey: ['allHomepageServices'],
+    queryFn: () => publicApi.getServices(),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  // Single Source of Truth: Load published articles & insights from PostgreSQL
+  const {
+    data: articles = [],
+    isLoading: isArticlesLoading,
+  } = useQuery<Article[]>({
+    queryKey: ['allHomepageArticles'],
+    queryFn: () => publicApi.getArticles(),
     staleTime: 1000 * 60 * 5,
   });
 
@@ -314,98 +335,50 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* 6 Capabilities Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#E5A93C]/50 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors mb-6">
-                <Cpu className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-[#020E26] mb-3">AI & Automation</h3>
-              <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                Transform your business with intelligent automation, predictive analytics, and enterprise AI models that accelerate execution.
-              </p>
-              <Link to="/services" className="text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors">
-                <span>Learn More</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+          {/* Dynamic Enterprise Services Grid from PostgreSQL */}
+          {isServicesLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div key={n} className="p-8 rounded-2xl bg-white border border-slate-200 animate-pulse space-y-4">
+                  <div className="w-12 h-12 rounded-xl bg-slate-100" />
+                  <div className="h-6 w-3/4 bg-slate-100 rounded-md" />
+                  <div className="h-4 w-full bg-slate-100 rounded-md" />
+                  <div className="h-4 w-5/6 bg-slate-100 rounded-md" />
+                  <div className="h-4 w-1/3 bg-slate-100 rounded-md pt-2" />
+                </div>
+              ))}
             </div>
-
-            {/* Card 2 */}
-            <div className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#E5A93C]/50 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors mb-6">
-                <Layers className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-[#020E26] mb-3">Enterprise Software</h3>
-              <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                Custom, scalable, and secure software platforms engineered for modern enterprises to digitize mission-critical workflows.
-              </p>
-              <Link to="/services" className="text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors">
-                <span>Learn More</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {services
+                .filter((s) => s.isActive !== false)
+                .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+                .slice(0, 6)
+                .map((service) => (
+                  <div
+                    key={service.id || service.slug}
+                    className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#E5A93C]/50 hover:shadow-xl transition-all duration-300 group flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors mb-6">
+                        {renderServiceIcon(service.icon, 'w-6 h-6')}
+                      </div>
+                      <h3 className="text-xl font-bold text-[#020E26] mb-3">{service.title}</h3>
+                      <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                        {service.shortDescription}
+                      </p>
+                    </div>
+                    <Link
+                      to={`/services/${service.slug}`}
+                      className="text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors pt-2"
+                    >
+                      <span>Learn More</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                ))}
             </div>
-
-            {/* Card 3 */}
-            <div className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#E5A93C]/50 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors mb-6">
-                <Smartphone className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-[#020E26] mb-3">Mobile Applications</h3>
-              <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                High-performance mobile solutions for iOS and Android tailored for exceptional user engagement and operational speed.
-              </p>
-              <Link to="/services" className="text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors">
-                <span>Learn More</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            {/* Card 4 */}
-            <div className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#E5A93C]/50 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors mb-6">
-                <Radio className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-[#020E26] mb-3">Industrial IoT</h3>
-              <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                Connect, monitor, and optimize your physical infrastructure, machinery, and fleet operations with sensor telemetry.
-              </p>
-              <Link to="/services" className="text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors">
-                <span>Learn More</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            {/* Card 5 */}
-            <div className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#E5A93C]/50 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors mb-6">
-                <Cloud className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-[#020E26] mb-3">Cloud & DevOps</h3>
-              <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                Build, scale, and innovate with reliable cloud infrastructure, automated CI/CD pipelines, and zero-trust security.
-              </p>
-              <Link to="/services" className="text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors">
-                <span>Learn More</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            {/* Card 6 */}
-            <div className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#E5A93C]/50 hover:shadow-xl transition-all duration-300 group">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors mb-6">
-                <Headphones className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-[#020E26] mb-3">Managed IT Services</h3>
-              <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                Reliable 24/7 IT support, AMC maintenance, network management, and server administration for seamless business continuity.
-              </p>
-              <Link to="/services" className="text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors">
-                <span>Learn More</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -627,62 +600,62 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                title: 'How AI is Transforming Smart Buildings in the GCC',
-                date: 'JUN 15, 2026',
-                category: 'AI & Innovation',
-                img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80',
-              },
-              {
-                title: 'The Future of Industrial IoT in Manufacturing',
-                date: 'MAY 28, 2026',
-                category: 'Industry Trends',
-                img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80',
-              },
-              {
-                title: 'Sustainable Cities Through Intelligent Technology',
-                date: 'MAY 12, 2026',
-                category: 'Sustainability',
-                img: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=600&q=80',
-              },
-              {
-                title: 'Why Custom Software Drives Sustainable Business Growth',
-                date: 'APR 30, 2026',
-                category: 'Enterprise',
-                img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80',
-              },
-            ].map((art, i) => (
-              <div
-                key={i}
-                className="group rounded-2xl bg-white border border-slate-200 overflow-hidden hover:border-[#E5A93C]/50 hover:shadow-lg transition-all duration-300 flex flex-col"
-              >
-                <div className="aspect-[16/10] overflow-hidden bg-slate-100 relative">
-                  <img
-                    src={art.img}
-                    alt={art.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#020E26]/80 backdrop-blur-sm text-[10px] font-bold uppercase tracking-wider text-[#E5A93C]">
-                    {art.category}
-                  </span>
-                </div>
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="text-[11px] font-semibold text-slate-400 mb-2">{art.date}</div>
-                    <h3 className="font-bold text-sm text-[#020E26] group-hover:text-[#E5A93C] transition-colors leading-snug">
-                      {art.title}
-                    </h3>
-                  </div>
-                  <div className="pt-4 mt-4 border-t border-slate-100 flex items-center text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] transition-colors">
-                    <span>Read More</span>
-                    <ArrowRight className="w-3.5 h-3.5 ml-1" />
+          {/* Dynamic Articles & Insights Grid from PostgreSQL */}
+          {isArticlesLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((n) => (
+                <div key={n} className="rounded-2xl bg-white border border-slate-200 overflow-hidden animate-pulse">
+                  <div className="aspect-[16/10] bg-slate-100" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-3 w-1/3 bg-slate-100 rounded" />
+                    <div className="h-4 w-5/6 bg-slate-100 rounded" />
+                    <div className="h-4 w-2/3 bg-slate-100 rounded" />
+                    <div className="h-3 w-1/4 bg-slate-100 rounded pt-2" />
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {articles
+                .filter((a) => a.isPublished !== false)
+                .slice(0, 4)
+                .map((art) => (
+                  <Link
+                    key={art.id || art.slug}
+                    to={`/insights/${art.slug}`}
+                    className="group rounded-2xl bg-white border border-slate-200 overflow-hidden hover:border-[#E5A93C]/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+                        <img
+                          src={art.coverImageUrl}
+                          alt={art.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        {art.category && (
+                          <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#020E26]/80 backdrop-blur-sm text-[10px] font-bold uppercase tracking-wider text-[#E5A93C]">
+                            {art.category}
+                          </span>
+                        )}
+                      </div>
+                      <div className="p-6">
+                        <div className="text-[11px] font-semibold text-slate-400 mb-2">
+                          {art.createdAt ? new Date(art.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase() : 'LATEST'}
+                        </div>
+                        <h3 className="font-bold text-sm text-[#020E26] group-hover:text-[#E5A93C] transition-colors leading-snug">
+                          {art.title}
+                        </h3>
+                      </div>
+                    </div>
+                    <div className="px-6 pb-6 pt-2 border-t border-slate-100 flex items-center text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] transition-colors">
+                      <span>Read More</span>
+                      <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                    </div>
+                  </Link>
+                ))}
+            </div>
+          )}
         </div>
       </section>
 
