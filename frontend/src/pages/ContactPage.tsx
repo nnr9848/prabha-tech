@@ -93,9 +93,11 @@ export const ContactPage: React.FC = () => {
 
       await publicApi.submitInquiry(payload);
       setIsSuccess(true);
-    } catch {
-      // Graceful fallback for UI demonstration
-      setIsSuccess(true);
+    } catch (err: any) {
+      setErrorMessage(
+        err?.response?.data?.message ||
+        'Unable to submit your inquiry at this moment. Please check your network connection or try again shortly.'
+      );
     } finally {
       setIsSubmitting(false);
     }

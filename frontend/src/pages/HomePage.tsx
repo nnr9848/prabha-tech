@@ -1,29 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-  Sparkles,
   ArrowRight,
-  Cpu,
-  Layers,
-  Smartphone,
-  Radio,
-  Cloud,
-  Headphones,
-  CheckCircle2,
-  Building2,
-  Factory,
-  Zap,
-  Truck,
-  Landmark,
-  HeartPulse,
-  TrendingUp,
-  BarChart3,
-  Globe2,
-  ShieldCheck,
-  Award,
   ChevronRight,
-  ExternalLink,
+  CheckCircle2,
 } from 'lucide-react';
 
 import { BrandButton } from '../components/common/BrandButton';
@@ -36,8 +17,6 @@ import { CaseStudy, ServiceItem, Article } from '../types';
 import { renderServiceIcon } from './admin/components/ServicesManager';
 
 export const HomePage: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState('all');
-
   // Single Source of Truth: Load published portfolio from PostgreSQL via Spring Boot REST API
   const {
     data: caseStudies = [],
@@ -137,71 +116,49 @@ export const HomePage: React.FC = () => {
 
       {/* ========================================================= */}
       {/* 2. WHITE BACKGROUND SECTION: 6 CAPABILITIES STRIP */}
-      {/* (Dividing Hero and Globe as in Reference Screenshot 2) */}
+      {/* (Dynamic Capabilities Strip powered by PostgreSQL) */}
       {/* ========================================================= */}
       <section className="bg-white text-slate-800 py-6 border-y border-slate-100 shadow-sm relative z-20">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center">
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors shrink-0">
-                <Cpu className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs font-bold text-[#020E26] leading-tight">AI & Automation</div>
-                <div className="text-[10px] text-slate-500 leading-tight mt-0.5">Intelligent Solutions</div>
-              </div>
+          {isServicesLoading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div key={n} className="flex items-center gap-3 animate-pulse">
+                  <div className="w-9 h-9 rounded-lg bg-slate-100 shrink-0" />
+                  <div className="space-y-1.5 flex-1">
+                    <div className="h-3 w-3/4 bg-slate-100 rounded" />
+                    <div className="h-2 w-1/2 bg-slate-100 rounded" />
+                  </div>
+                </div>
+              ))}
             </div>
-
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors shrink-0">
-                <Layers className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs font-bold text-[#020E26] leading-tight">Enterprise Software</div>
-                <div className="text-[10px] text-slate-500 leading-tight mt-0.5">Scalable Platforms</div>
-              </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center">
+              {services
+                .filter((s) => s.isActive !== false)
+                .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+                .slice(0, 6)
+                .map((srv) => (
+                  <Link
+                    key={srv.id || srv.slug}
+                    to={`/services/${srv.slug}`}
+                    className="flex items-center gap-3 group cursor-pointer"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors shrink-0">
+                      {renderServiceIcon(srv.icon, 'w-5 h-5')}
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#020E26] group-hover:text-[#E5A93C] transition-colors leading-tight line-clamp-1">
+                        {srv.title}
+                      </div>
+                      <div className="text-[10px] text-slate-500 leading-tight mt-0.5 line-clamp-1">
+                        {srv.tagline || 'Enterprise Service'}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
             </div>
-
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors shrink-0">
-                <Radio className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs font-bold text-[#020E26] leading-tight">Industrial IoT</div>
-                <div className="text-[10px] text-slate-500 leading-tight mt-0.5">Connected Operations</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors shrink-0">
-                <Smartphone className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs font-bold text-[#020E26] leading-tight">Mobile Applications</div>
-                <div className="text-[10px] text-slate-500 leading-tight mt-0.5">Innovative Experiences</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors shrink-0">
-                <Cloud className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs font-bold text-[#020E26] leading-tight">Cloud & DevOps</div>
-                <div className="text-[10px] text-slate-500 leading-tight mt-0.5">Trusted Infrastructure</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors shrink-0">
-                <Headphones className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs font-bold text-[#020E26] leading-tight">Managed IT Services</div>
-                <div className="text-[10px] text-slate-500 leading-tight mt-0.5">Always-On Support</div>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
