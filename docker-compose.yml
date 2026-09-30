@@ -36,6 +36,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+      SERVER_PORT: 8080
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-prabhatech_db}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-prabhatech_user}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-prabhatech_pass}
