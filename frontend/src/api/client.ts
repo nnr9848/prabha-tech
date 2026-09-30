@@ -69,6 +69,11 @@ export const publicApi = {
     return res.data;
   },
 
+  getServiceBySlug: async (slug: string): Promise<ServiceItem> => {
+    const res = await publicClient.get(`/public/services/${slug}`);
+    return res.data;
+  },
+
   getArticleBySlug: async (slug: string): Promise<Article> => {
     const res = await publicClient.get(`/public/articles/${slug}`);
     return res.data;

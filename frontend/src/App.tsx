@@ -10,6 +10,7 @@ import { HomePage } from './pages/HomePage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { CaseStudyDetailPage } from './pages/CaseStudyDetailPage';
 import { ServicesPage } from './pages/ServicesPage';
+import { ServiceDetailPage } from './pages/ServiceDetailPage';
 import { InsightsPage } from './pages/InsightsPage';
 import { InsightDetailPage } from './pages/InsightDetailPage';
 import { AboutPage } from './pages/AboutPage';
@@ -81,6 +82,7 @@ export const App: React.FC = () => {
                 <Route path="/portfolio" element={<CaseStudiesPage />} />
                 <Route path="/portfolio/:slug" element={<CaseStudyDetailPage />} />
                 <Route path="/services" element={<ServicesPage />} />
+                <Route path="/services/:slug" element={<ServiceDetailPage />} />
                 <Route path="/services/custom-software-development" element={<CustomSoftwareDevelopmentPage />} />
                 <Route path="/services/mobile-app-development" element={<MobileAppDevelopmentPage />} />
                 <Route path="/services/ai-analytics" element={<AiAnalyticsPage />} />
