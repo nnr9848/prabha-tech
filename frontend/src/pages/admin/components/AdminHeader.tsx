@@ -74,6 +74,11 @@ const TAB_TITLES: Record<AdminTab, { title: string; subtitle: string; category: 
     title: 'Brand Social Channels',
     subtitle: 'Configure dynamic social media channels rendered across the web portal.',
   },
+  'nav-items': {
+    category: 'Platform Settings',
+    title: 'Navigation Menu CMS',
+    subtitle: 'Manage public navigation links, display sequence, external flags, and mobile drawer items.',
+  },
   trash: {
     category: 'Data Governance & Recovery',
     title: 'Centralized Recycle Bin & Trash Hub',

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../../api/client';
-import { CaseStudy, Article, LeadInquiry, SocialLink, JobPosition, JobApplication, ServiceItem } from '../../types';
+import { CaseStudy, Article, LeadInquiry, SocialLink, JobPosition, JobApplication, ServiceItem, NavItem } from '../../types';
 import { AdminSidebar, AdminTab } from './components/AdminSidebar';
 import { AdminHeader } from './components/AdminHeader';
 import { AdminOverview } from './components/AdminOverview';
 import { ServicesManager } from './components/ServicesManager';
+import { NavItemsManager } from './components/NavItemsManager';
 import { CaseStudiesManager } from './components/CaseStudiesManager';
 import { ArticlesManager } from './components/ArticlesManager';
 import { JobsManager } from './components/JobsManager';
@@ -27,6 +28,7 @@ const VALID_TABS: AdminTab[] = [
   'job-applications',
   'inquiries',
   'social-links',
+  'nav-items',
   'trash',
 ];
 
@@ -106,6 +108,11 @@ export const AdminDashboardPage: React.FC = () => {
     queryFn: () => adminApi.getAllSocialLinks(),
   });
 
+  const { data: navItems = [] } = useQuery<NavItem[]>({
+    queryKey: ['adminNavItems'],
+    queryFn: () => adminApi.getAllNavItems(),
+  });
+
   const { data: jobs = [] } = useQuery<JobPosition[]>({
     queryKey: ['adminJobs'],
     queryFn: () => adminApi.getAllJobs(),
@@ -174,6 +181,15 @@ export const AdminDashboardPage: React.FC = () => {
     url: '',
     bgColor: '#0A66C2',
     displayOrder: 1,
+    isActive: true,
+  });
+
+  const [isNavModalOpen, setIsNavModalOpen] = useState(false);
+  const [editingNavItem, setEditingNavItem] = useState<Partial<NavItem>>({
+    label: '',
+    path: '',
+    displayOrder: 1,
+    isExternal: false,
     isActive: true,
   });
 
@@ -339,6 +355,29 @@ export const AdminDashboardPage: React.FC = () => {
     onError: () => toast.error('Error', 'Failed to delete social channel.'),
   });
 
+  const saveNavItemMutation = useMutation({
+    mutationFn: (data: Partial<NavItem>) => adminApi.saveNavItem(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminNavItems'] });
+      queryClient.invalidateQueries({ queryKey: ['publicNavItems'] });
+      setIsNavModalOpen(false);
+      toast.success('Navigation Item Saved', 'Public navbar & mobile menu updated.');
+    },
+    onError: (err: any) => {
+      toast.error('Failed to save Menu Item', err.response?.data?.message || 'Check required fields.');
+    },
+  });
+
+  const deleteNavItemMutation = useMutation({
+    mutationFn: (id: number) => adminApi.deleteNavItem(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminNavItems'] });
+      queryClient.invalidateQueries({ queryKey: ['publicNavItems'] });
+      toast.info('Menu Item Removed', 'The navigation link has been deleted.');
+    },
+    onError: () => toast.error('Error', 'Failed to delete menu item.'),
+  });
+
   const saveJobMutation = useMutation({
     mutationFn: (data: Partial<JobPosition>) => adminApi.saveJob(data),
     onSuccess: () => {
@@ -478,6 +517,7 @@ export const AdminDashboardPage: React.FC = () => {
           inquiries: inquiries.length,
           newInquiries: newInquiriesCount,
           socialLinks: socialLinks.length,
+          navItems: navItems.length,
           trash: trashCount,
         }}
       />
@@ -614,6 +654,35 @@ export const AdminDashboardPage: React.FC = () => {
               onToggleActive={(link) =>
                 saveSocialMutation.mutate({ ...link, isActive: !link.isActive })
               }
+            />
+          )}
+
+          {activeTab === 'nav-items' && (
+            <NavItemsManager
+              navItems={navItems}
+              onOpenCreate={() => {
+                setEditingNavItem({
+                  label: '',
+                  path: '',
+                  displayOrder: navItems.length + 1,
+                  isExternal: false,
+                  isActive: true,
+                });
+                setIsNavModalOpen(true);
+              }}
+              onOpenEdit={(item) => {
+                setEditingNavItem(item);
+                setIsNavModalOpen(true);
+              }}
+              onDelete={(id) => deleteNavItemMutation.mutate(id)}
+              onToggleActive={(item) =>
+                saveNavItemMutation.mutate({ ...item, isActive: item.isActive === false ? true : false })
+              }
+              onMoveOrder={(item, direction) => {
+                const currentOrder = item.displayOrder || 1;
+                const newOrder = direction === 'up' ? Math.max(1, currentOrder - 1) : currentOrder + 1;
+                saveNavItemMutation.mutate({ ...item, displayOrder: newOrder });
+              }}
             />
           )}
 
@@ -1379,6 +1448,139 @@ export const AdminDashboardPage: React.FC = () => {
               >
                 <Save className="w-3.5 h-3.5 text-slate-950" />
                 <span>Save Service</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Navigation Item Modal */}
+      {isNavModalOpen && (
+        <div
+          onClick={() => setIsNavModalOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs cursor-pointer animate-in fade-in duration-150"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg p-6 sm:p-8 space-y-5 shadow-2xl cursor-default"
+          >
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 block">
+                  Header & Navigation
+                </span>
+                <h3 className="text-base font-bold text-slate-900">
+                  {editingNavItem.id ? 'Edit Navigation Link' : 'Add Navigation Link'}
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsNavModalOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Menu Label *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Solutions, AI Platform, Partner"
+                  value={editingNavItem.label || ''}
+                  onChange={(e) => setEditingNavItem({ ...editingNavItem, label: e.target.value })}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Target Route / URL *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. /services, /about, or https://..."
+                  value={editingNavItem.path || ''}
+                  onChange={(e) => {
+                    const pathVal = e.target.value;
+                    const isExt = pathVal.startsWith('http://') || pathVal.startsWith('https://');
+                    setEditingNavItem({
+                      ...editingNavItem,
+                      path: pathVal,
+                      isExternal: isExt ? true : editingNavItem.isExternal,
+                    });
+                  }}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Display Order
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={editingNavItem.displayOrder ?? 1}
+                    onChange={(e) =>
+                      setEditingNavItem({
+                        ...editingNavItem,
+                        displayOrder: parseInt(e.target.value, 10) || 1,
+                      })
+                    }
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  />
+                </div>
+
+                <div className="flex flex-col justify-end">
+                  <label className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-800 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editingNavItem.isExternal || false}
+                      onChange={(e) =>
+                        setEditingNavItem({ ...editingNavItem, isExternal: e.target.checked })
+                      }
+                      className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-0"
+                    />
+                    <span>Open in New Tab</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-slate-100">
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={editingNavItem.isActive !== false}
+                    onChange={(e) =>
+                      setEditingNavItem({ ...editingNavItem, isActive: e.target.checked })
+                    }
+                    className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-0"
+                  />
+                  <span>Active Item (Visible in Header & Mobile Menu)</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+              <button
+                onClick={() => setIsNavModalOpen(false)}
+                className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => saveNavItemMutation.mutate(editingNavItem)}
+                disabled={!editingNavItem.label || !editingNavItem.path}
+                className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+              >
+                <Save className="w-3.5 h-3.5 text-slate-950" />
+                <span>Save Link</span>
               </button>
             </div>
           </div>

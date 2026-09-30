@@ -30,6 +30,7 @@ public class PublicController {
     private final com.prabhatech.service.JobPositionService jobPositionService;
     private final com.prabhatech.service.JobApplicationService jobApplicationService;
     private final com.prabhatech.service.FileStorageService fileStorageService;
+    private final com.prabhatech.service.NavItemService navItemService;
 
     public PublicController(CaseStudyService caseStudyService,
                             ServiceItemService serviceItemService,
@@ -39,7 +40,8 @@ public class PublicController {
                             com.prabhatech.service.HeroConfigService heroConfigService,
                             com.prabhatech.service.JobPositionService jobPositionService,
                             com.prabhatech.service.JobApplicationService jobApplicationService,
-                            com.prabhatech.service.FileStorageService fileStorageService) {
+                            com.prabhatech.service.FileStorageService fileStorageService,
+                            com.prabhatech.service.NavItemService navItemService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
@@ -49,6 +51,15 @@ public class PublicController {
         this.jobPositionService = jobPositionService;
         this.jobApplicationService = jobApplicationService;
         this.fileStorageService = fileStorageService;
+        this.navItemService = navItemService;
+    }
+
+    // --- Navigation Items ---
+    @GetMapping("/nav-items")
+    public ResponseEntity<List<com.prabhatech.dto.NavItemDto>> getActiveNavItems() {
+        return ResponseEntity.ok()
+                .cacheControl(org.springframework.http.CacheControl.maxAge(60, java.util.concurrent.TimeUnit.SECONDS).cachePublic().staleWhileRevalidate(300, java.util.concurrent.TimeUnit.SECONDS))
+                .body(navItemService.getActiveNavItems());
     }
 
     // --- Hero Section Dynamic Config ---

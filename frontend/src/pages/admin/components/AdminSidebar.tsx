@@ -15,6 +15,7 @@ import {
   X,
   Trash2,
   Wrench,
+  Menu,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -27,6 +28,7 @@ export type AdminTab =
   | 'job-applications'
   | 'inquiries'
   | 'social-links'
+  | 'nav-items'
   | 'trash';
 
 interface AdminSidebarProps {
@@ -46,6 +48,7 @@ interface AdminSidebarProps {
     inquiries: number;
     newInquiries: number;
     socialLinks: number;
+    navItems: number;
     trash: number;
   };
 }
@@ -123,6 +126,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           label: 'Social Channels',
           icon: <Share2 className="w-4 h-4" />,
           badge: counts.socialLinks,
+        },
+        {
+          id: 'nav-items',
+          label: 'Navigation Menu',
+          icon: <Menu className="w-4 h-4" />,
+          badge: counts.navItems,
         },
       ],
     },

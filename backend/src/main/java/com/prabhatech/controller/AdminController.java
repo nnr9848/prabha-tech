@@ -24,6 +24,7 @@ public class AdminController {
     private final com.prabhatech.service.HeroConfigService heroConfigService;
     private final com.prabhatech.service.JobPositionService jobPositionService;
     private final com.prabhatech.service.JobApplicationService jobApplicationService;
+    private final com.prabhatech.service.NavItemService navItemService;
 
     public AdminController(CaseStudyService caseStudyService,
                            ServiceItemService serviceItemService,
@@ -32,7 +33,8 @@ public class AdminController {
                            SocialLinkService socialLinkService,
                            com.prabhatech.service.HeroConfigService heroConfigService,
                            com.prabhatech.service.JobPositionService jobPositionService,
-                           com.prabhatech.service.JobApplicationService jobApplicationService) {
+                           com.prabhatech.service.JobApplicationService jobApplicationService,
+                           com.prabhatech.service.NavItemService navItemService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
@@ -41,6 +43,7 @@ public class AdminController {
         this.heroConfigService = heroConfigService;
         this.jobPositionService = jobPositionService;
         this.jobApplicationService = jobApplicationService;
+        this.navItemService = navItemService;
     }
 
     // --- Hero Section CMS ---
@@ -183,6 +186,23 @@ public class AdminController {
     @DeleteMapping("/applications/{id}")
     public ResponseEntity<Void> deleteApplication(@PathVariable Long id) {
         jobApplicationService.deleteApplication(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // --- Navigation Menu Items CMS ---
+    @GetMapping("/nav-items")
+    public ResponseEntity<List<com.prabhatech.dto.NavItemDto>> getAllNavItems() {
+        return ResponseEntity.ok(navItemService.getAllNavItemsAdmin());
+    }
+
+    @PostMapping("/nav-items")
+    public ResponseEntity<com.prabhatech.dto.NavItemDto> saveNavItem(@Valid @RequestBody com.prabhatech.dto.NavItemDto dto) {
+        return ResponseEntity.ok(navItemService.saveNavItem(dto));
+    }
+
+    @DeleteMapping("/nav-items/{id}")
+    public ResponseEntity<Void> deleteNavItem(@PathVariable Long id) {
+        navItemService.deleteNavItem(id);
         return ResponseEntity.noContent().build();
     }
 }

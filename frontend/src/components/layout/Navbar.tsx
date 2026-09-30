@@ -6,12 +6,22 @@ import logoImg from '../../assets/prabhatech-logo.png';
 import { SocialIconsGroup } from '../common/SocialIconsGroup';
 import { BrandButton } from '../common/BrandButton';
 import { useAuth } from '../../context/AuthContext';
+import { useQuery } from '@tanstack/react-query';
+import { publicApi } from '../../api/client';
+import { NavItem } from '../../types';
 
 export const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  // Single Source of Truth: Fetch published navigation items from PostgreSQL
+  const { data: dbNavItems = [] } = useQuery<NavItem[]>({
+    queryKey: ['publicNavItems'],
+    queryFn: () => publicApi.getNavItems(),
+    staleTime: 1000 * 60 * 5,
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,16 +43,10 @@ export const Navbar: React.FC = () => {
     };
   }, [mobileMenuOpen]);
 
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: 'Portfolio', path: '/portfolio' },
-    { name: 'Industries', path: '/industries' },
-    { name: 'About', path: '/about' },
-    { name: 'Careers', path: '/careers' },
-    { name: 'Insights', path: '/insights' },
-    { name: 'Contact', path: '/contact' },
-  ];
+  // Filter and sort active items by displayOrder
+  const navLinks = dbNavItems
+    .filter((item) => item.isActive !== false)
+    .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
 
   return (
     <>
@@ -66,13 +70,26 @@ export const Navbar: React.FC = () => {
             />
           </Link>
 
-          {/* Center Navigation Links (Desktop) matching screenshot 2 exactly */}
+          {/* Center Navigation Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
+              if (link.isExternal) {
+                return (
+                  <a
+                    key={link.id || link.label}
+                    href={link.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[14px] tracking-tight transition-all duration-150 relative py-1 text-[#020E26]/85 hover:text-[#020E26] font-semibold flex items-center gap-1"
+                  >
+                    <span>{link.label}</span>
+                  </a>
+                );
+              }
               return (
                 <Link
-                  key={link.name}
+                  key={link.id || link.label}
                   to={link.path}
                   className={`text-[14px] tracking-tight transition-all duration-150 relative py-1 ${
                     isActive
@@ -80,7 +97,7 @@ export const Navbar: React.FC = () => {
                       : 'text-[#020E26]/85 hover:text-[#020E26] font-semibold'
                   }`}
                 >
-                  {link.name}
+                  {link.label}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
@@ -165,20 +182,32 @@ export const Navbar: React.FC = () => {
                 const isActive = location.pathname === link.path;
                 return (
                   <motion.div
-                    key={link.name}
+                    key={link.id || link.label}
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 + idx * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <Link
-                      to={link.path}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`text-xl sm:text-2xl tracking-wide font-normal transition-colors ${
-                        isActive ? 'text-white font-medium' : 'text-[#8E9BAE] hover:text-white'
-                      }`}
-                    >
-                      {link.name}
-                    </Link>
+                    {link.isExternal ? (
+                      <a
+                        href={link.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-xl sm:text-2xl tracking-wide font-normal transition-colors text-[#8E9BAE] hover:text-white"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.path}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`text-xl sm:text-2xl tracking-wide font-normal transition-colors ${
+                          isActive ? 'text-white font-medium' : 'text-[#8E9BAE] hover:text-white'
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </motion.div>
                 );
               })}

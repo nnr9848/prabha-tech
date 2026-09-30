@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition, JobApplication, TrashItem } from '../types';
+import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition, JobApplication, TrashItem, NavItem } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -46,6 +46,11 @@ adminClient.interceptors.response.use(
 // Public API Services
 // ==========================================
 export const publicApi = {
+  getNavItems: async (): Promise<NavItem[]> => {
+    const res = await publicClient.get('/public/nav-items');
+    return res.data;
+  },
+
   getSocialLinks: async (): Promise<SocialLink[]> => {
     const res = await publicClient.get('/public/social-links');
     return res.data;
@@ -272,6 +277,21 @@ export const adminApi = {
 
   emptyTrash: async (): Promise<void> => {
     await adminClient.delete('/admin/trash/empty');
+  },
+
+  // Navigation Menu CMS
+  getAllNavItems: async (): Promise<NavItem[]> => {
+    const res = await adminClient.get('/admin/nav-items');
+    return res.data;
+  },
+
+  saveNavItem: async (data: Partial<NavItem>): Promise<NavItem> => {
+    const res = await adminClient.post('/admin/nav-items', data);
+    return res.data;
+  },
+
+  deleteNavItem: async (id: number): Promise<void> => {
+    await adminClient.delete(`/admin/nav-items/${id}`);
   },
 };
 

@@ -139,5 +139,15 @@ export interface TrashItem {
   daysRemaining: number;
 }
 
+export interface NavItem {
+  id?: number;
+  label: string;
+  path: string;
+  displayOrder?: number;
+  isExternal?: boolean;
+  isActive?: boolean;
+}
+
+
 
 
