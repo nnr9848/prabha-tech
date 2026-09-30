@@ -23,7 +23,7 @@ import { LeadInquiry, JobApplication } from '../../../types';
 
 interface AdminHeaderProps {
   activeTab: AdminTab;
-  onQuickCreate: (type: 'case' | 'article' | 'social') => void;
+  onQuickCreate: (type: 'case' | 'article' | 'social' | 'service') => void;
   unreadInquiriesCount: number;
   unreadApplicationsCount?: number;
   recentInquiries?: LeadInquiry[];
@@ -38,6 +38,11 @@ const TAB_TITLES: Record<AdminTab, { title: string; subtitle: string; category: 
     category: 'Analytics',
     title: 'Executive Dashboard',
     subtitle: 'Real-time performance metrics, portfolio statistics, and inbound client velocity.',
+  },
+  services: {
+    category: 'Content Management',
+    title: 'Enterprise Services CMS',
+    subtitle: 'Manage core capabilities, technical deliverables, architectural scopes, and icons.',
   },
   'case-studies': {
     category: 'Content Management',

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../../api/client';
-import { CaseStudy, Article, LeadInquiry, SocialLink, JobPosition, JobApplication } from '../../types';
+import { CaseStudy, Article, LeadInquiry, SocialLink, JobPosition, JobApplication, ServiceItem } from '../../types';
 import { AdminSidebar, AdminTab } from './components/AdminSidebar';
 import { AdminHeader } from './components/AdminHeader';
 import { AdminOverview } from './components/AdminOverview';
+import { ServicesManager } from './components/ServicesManager';
 import { CaseStudiesManager } from './components/CaseStudiesManager';
 import { ArticlesManager } from './components/ArticlesManager';
 import { JobsManager } from './components/JobsManager';
@@ -19,6 +20,7 @@ import { ImageUploader } from '../../components/common/ImageUploader';
 
 const VALID_TABS: AdminTab[] = [
   'overview',
+  'services',
   'case-studies',
   'articles',
   'jobs',
@@ -92,6 +94,11 @@ export const AdminDashboardPage: React.FC = () => {
   const { data: inquiries = [] } = useQuery<LeadInquiry[]>({
     queryKey: ['adminInquiries'],
     queryFn: () => adminApi.getAllInquiries(),
+  });
+
+  const { data: services = [] } = useQuery<ServiceItem[]>({
+    queryKey: ['adminServices'],
+    queryFn: () => adminApi.getAllServices(),
   });
 
   const { data: socialLinks = [] } = useQuery<SocialLink[]>({
@@ -170,6 +177,20 @@ export const AdminDashboardPage: React.FC = () => {
     isActive: true,
   });
 
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [editingService, setEditingService] = useState<Partial<ServiceItem>>({
+    title: '',
+    slug: '',
+    tagline: '',
+    icon: 'Code2',
+    shortDescription: '',
+    fullDescription: '',
+    deliverables: [],
+    displayOrder: 1,
+    isActive: true,
+  });
+  const [deliverablesInput, setDeliverablesInput] = useState('');
+
   // Auto-open edit modal if ?edit=<id> is present in the URL
   useEffect(() => {
     const editId = searchParams.get('edit');
@@ -195,8 +216,15 @@ export const AdminDashboardPage: React.FC = () => {
         setSkillsInput((match.skills || []).join(', '));
         setIsJobModalOpen(true);
       }
+    } else if (activeTab === 'services' && services.length > 0) {
+      const match = services.find((s) => s.id === idNum);
+      if (match) {
+        setEditingService(match);
+        setDeliverablesInput((match.deliverables || []).join(', '));
+        setIsServiceModalOpen(true);
+      }
     }
-  }, [searchParams, activeTab, caseStudies, articles, jobs]);
+  }, [searchParams, activeTab, caseStudies, articles, jobs, services]);
 
   // Mutations
   const deleteCaseMutation = useMutation({
@@ -218,6 +246,29 @@ export const AdminDashboardPage: React.FC = () => {
     onError: (err: any) => {
       toast.error('Failed to save Case Study', err.response?.data?.message || 'Check required fields.');
     },
+  });
+
+  const saveServiceMutation = useMutation({
+    mutationFn: (data: Partial<ServiceItem>) => adminApi.saveService(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      queryClient.invalidateQueries({ queryKey: ['publicServices'] });
+      setIsServiceModalOpen(false);
+      toast.success('Service Saved', 'Enterprise service updated and live on public site.');
+    },
+    onError: (err: any) => {
+      toast.error('Failed to save Service', err.response?.data?.message || 'Check required fields.');
+    },
+  });
+
+  const deleteServiceMutation = useMutation({
+    mutationFn: (id: number) => adminApi.deleteService(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminServices'] });
+      queryClient.invalidateQueries({ queryKey: ['publicServices'] });
+      toast.info('Service Deleted', 'The service has been removed.');
+    },
+    onError: () => toast.error('Error', 'Failed to delete service.'),
   });
 
   const deleteArticleMutation = useMutation({
@@ -331,8 +382,22 @@ export const AdminDashboardPage: React.FC = () => {
   });
 
   // Modal Triggers
-  const handleQuickCreate = (type: 'case' | 'article' | 'job' | 'social') => {
-    if (type === 'case') {
+  const handleQuickCreate = (type: 'case' | 'article' | 'job' | 'social' | 'service') => {
+    if (type === 'service') {
+      setEditingService({
+        title: '',
+        slug: '',
+        tagline: '',
+        icon: 'Code2',
+        shortDescription: '',
+        fullDescription: '',
+        deliverables: ['Custom Web Applications', 'Cloud Architecture', 'API Integrations'],
+        displayOrder: services.length + 1,
+        isActive: true,
+      });
+      setDeliverablesInput('Custom Web Applications, Cloud Architecture, API Integrations');
+      setIsServiceModalOpen(true);
+    } else if (type === 'case') {
       setEditingCase({
         title: '',
         slug: '',
@@ -404,6 +469,7 @@ export const AdminDashboardPage: React.FC = () => {
         isMobileOpen={isMobileMenuOpen}
         setIsMobileOpen={setIsMobileMenuOpen}
         counts={{
+          services: services.length,
           caseStudies: caseStudies.length,
           articles: articles.length,
           jobs: jobs.length,
@@ -454,6 +520,22 @@ export const AdminDashboardPage: React.FC = () => {
                 setSelectedInquiry(inq);
                 handleTabChange('inquiries');
               }}
+            />
+          )}
+
+          {activeTab === 'services' && (
+            <ServicesManager
+              services={services}
+              onOpenCreate={() => handleQuickCreate('service')}
+              onOpenEdit={(service) => {
+                setEditingService(service);
+                setDeliverablesInput((service.deliverables || []).join(', '));
+                setIsServiceModalOpen(true);
+              }}
+              onDelete={(id) => deleteServiceMutation.mutate(id)}
+              onToggleActive={(srv) =>
+                saveServiceMutation.mutate({ ...srv, isActive: srv.isActive === false ? true : false })
+              }
             />
           )}
 
@@ -1108,6 +1190,195 @@ export const AdminDashboardPage: React.FC = () => {
               >
                 <Save className="w-3.5 h-3.5 text-slate-950" />
                 <span>Save Role</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Enterprise Service Modal */}
+      {isServiceModalOpen && (
+        <div
+          onClick={() => setIsServiceModalOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs cursor-pointer animate-in fade-in duration-150"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl cursor-default"
+          >
+            <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+              <h3 className="text-xl font-bold text-slate-900">
+                {editingService.id ? 'Edit Enterprise Service' : 'Create New Service'}
+              </h3>
+              <button
+                onClick={() => setIsServiceModalOpen(false)}
+                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 block mb-1">Service Title *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Enterprise Software Development"
+                    value={editingService.title || ''}
+                    onChange={(e) => {
+                      const title = e.target.value;
+                      const slug = title
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/(^-|-$)+/g, '');
+                      setEditingService({
+                        ...editingService,
+                        title,
+                        slug: editingService.id ? editingService.slug : slug,
+                      });
+                    }}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 block mb-1">URL Slug *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. enterprise-software-development"
+                    value={editingService.slug || ''}
+                    onChange={(e) => setEditingService({ ...editingService, slug: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-mono focus:outline-none focus:border-amber-500 focus:bg-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">Tagline / Subtitle</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Custom enterprise applications to streamline operations and digital transformation"
+                  value={editingService.tagline || ''}
+                  onChange={(e) => setEditingService({ ...editingService, tagline: e.target.value })}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 block mb-1">Icon Theme Key</label>
+                  <select
+                    value={editingService.icon || 'Code2'}
+                    onChange={(e) => setEditingService({ ...editingService, icon: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white cursor-pointer"
+                  >
+                    <option value="Code2">Code2 (Software / Engineering)</option>
+                    <option value="Smartphone">Smartphone (Mobile Apps)</option>
+                    <option value="Cpu">Cpu (AI & Analytics)</option>
+                    <option value="Radio">Radio (IIoT & Telemetry)</option>
+                    <option value="Box">Box (Metaverse & Web3)</option>
+                    <option value="Palette">Palette (UI/UX Design)</option>
+                    <option value="Cloud">Cloud (Cloud & DevOps)</option>
+                    <option value="ShieldCheck">ShieldCheck (Cybersecurity & Compliance)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 block mb-1">Display Order</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={editingService.displayOrder ?? 1}
+                    onChange={(e) =>
+                      setEditingService({ ...editingService, displayOrder: parseInt(e.target.value) || 1 })
+                    }
+                    className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">Short Description *</label>
+                <textarea
+                  rows={2}
+                  placeholder="Summary shown on cards and service overviews..."
+                  value={editingService.shortDescription || ''}
+                  onChange={(e) => setEditingService({ ...editingService, shortDescription: e.target.value })}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">Full Technical Scope</label>
+                <textarea
+                  rows={4}
+                  placeholder="Comprehensive technical overview of services and methodologies..."
+                  value={editingService.fullDescription || ''}
+                  onChange={(e) => setEditingService({ ...editingService, fullDescription: e.target.value })}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">
+                  Deliverables (comma-separated)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Web Applications, Cloud Infrastructure, Custom APIs, Ongoing SLA"
+                  value={deliverablesInput}
+                  onChange={(e) => {
+                    setDeliverablesInput(e.target.value);
+                    const list = e.target.value
+                      .split(',')
+                      .map((d) => d.trim())
+                      .filter(Boolean);
+                    setEditingService({ ...editingService, deliverables: list });
+                  }}
+                  className="w-full p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs focus:outline-none focus:border-amber-500 focus:bg-white"
+                />
+                {editingService.deliverables && editingService.deliverables.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {editingService.deliverables.map((deliv, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-amber-50 border border-amber-200 text-amber-800"
+                      >
+                        {deliv}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="pt-2 border-t border-slate-100">
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={editingService.isActive !== false}
+                    onChange={(e) => setEditingService({ ...editingService, isActive: e.target.checked })}
+                    className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-0"
+                  />
+                  <span>Active Service (Visible Across Public Website & Header)</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+              <button
+                onClick={() => setIsServiceModalOpen(false)}
+                className="py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => saveServiceMutation.mutate(editingService)}
+                disabled={!editingService.title || !editingService.shortDescription}
+                className="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+              >
+                <Save className="w-3.5 h-3.5 text-slate-950" />
+                <span>Save Service</span>
               </button>
             </div>
           </div>

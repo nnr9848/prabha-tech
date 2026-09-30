@@ -37,7 +37,7 @@ logging:
     com.prabhatech: INFO
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8082}
   forward-headers-strategy: framework
   servlet:
     context-path: /

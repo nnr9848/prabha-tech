@@ -14,11 +14,13 @@ import {
   Sparkles,
   X,
   Trash2,
+  Wrench,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export type AdminTab =
   | 'overview'
+  | 'services'
   | 'case-studies'
   | 'articles'
   | 'jobs'
@@ -35,6 +37,7 @@ interface AdminSidebarProps {
   isMobileOpen?: boolean;
   setIsMobileOpen?: (open: boolean) => void;
   counts: {
+    services: number;
     caseStudies: number;
     articles: number;
     jobs: number;
@@ -84,6 +87,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     {
       group: 'Content & CMS',
       items: [
+        {
+          id: 'services',
+          label: 'Services CMS',
+          icon: <Wrench className="w-4 h-4" />,
+          badge: counts.services,
+        },
         {
           id: 'case-studies',
           label: 'Case Studies',
