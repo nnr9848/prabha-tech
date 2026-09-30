@@ -148,42 +148,54 @@ export const ServicesManager: React.FC<ServicesManagerProps> = ({
 
       {/* Grid View */}
       {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredServices.map((service) => (
             <div
               key={service.id || service.slug}
-              className="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md transition-all overflow-hidden flex flex-col justify-between group"
+              className="group rounded-2xl bg-white border border-slate-200/80 hover:border-amber-400 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-md shadow-2xs"
             >
-              <div className="p-5 space-y-3.5">
-                {/* Header Badge, Hero Image Thumbnail & Active Switch */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-700 flex items-center justify-center shadow-2xs shrink-0">
-                      {renderServiceIcon(service.icon, 'w-5 h-5')}
-                    </div>
-                    {service.heroImageUrl && (
-                      <div className="w-12 h-10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
-                        <img
-                          src={service.heroImageUrl}
-                          alt={service.title}
-                          className="w-full h-full object-cover"
-                        />
+              <div>
+                {/* 16:9 Edge-to-Edge Media Hero Banner with Floating Glass Badges */}
+                <div className="relative overflow-hidden rounded-xl mb-4 h-44 bg-gradient-to-br from-slate-100 to-slate-200 border border-slate-200/70">
+                  {service.heroImageUrl ? (
+                    <img
+                      src={service.heroImageUrl}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-2 bg-slate-50">
+                      <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
+                        {renderServiceIcon(service.icon, 'w-6 h-6')}
                       </div>
-                    )}
+                      <span className="text-[11px] font-medium text-slate-400">No cover image</span>
+                    </div>
+                  )}
+
+                  {/* Gradient Overlay for Text Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+
+                  {/* Top-Left: Service Icon + Order Badge */}
+                  <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                    <div className="w-8 h-8 rounded-lg bg-white/90 backdrop-blur-md text-amber-700 flex items-center justify-center shadow-xs border border-white/60">
+                      {renderServiceIcon(service.icon, 'w-4 h-4')}
+                    </div>
+                    <span className="px-2 py-1 rounded-md text-[10px] font-mono font-bold bg-slate-900/80 backdrop-blur-md text-white border border-white/20 shadow-xs">
+                      #{service.displayOrder ?? 0}
+                    </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono text-slate-400 font-semibold">
-                      Order: #{service.displayOrder ?? 0}
-                    </span>
+                  {/* Top-Right: Active / Draft Pill Switch */}
+                  <div className="absolute top-2.5 right-2.5">
                     {onToggleActive && (
                       <button
                         onClick={() => onToggleActive(service)}
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border transition-colors cursor-pointer ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide backdrop-blur-md border shadow-xs transition-all cursor-pointer ${
                           service.isActive !== false
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                            : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'
+                            ? 'bg-emerald-500/90 text-white border-emerald-400/80 hover:bg-emerald-600'
+                            : 'bg-slate-900/80 text-slate-300 border-white/20 hover:bg-slate-900'
                         }`}
+                        title="Click to toggle status"
                       >
                         {service.isActive !== false ? 'Active' : 'Draft'}
                       </button>
@@ -192,36 +204,35 @@ export const ServicesManager: React.FC<ServicesManagerProps> = ({
                 </div>
 
                 {/* Title & Tagline */}
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900 group-hover:text-amber-900 transition-colors">
-                    {service.title}
-                  </h4>
-                  {service.tagline && (
-                    <p className="text-[11px] font-medium text-amber-800/90 mt-0.5 line-clamp-1">
-                      {service.tagline}
-                    </p>
-                  )}
-                </div>
+                <h3 className="text-base font-bold text-slate-900 mb-1 group-hover:text-amber-700 transition-colors line-clamp-1">
+                  {service.title}
+                </h3>
+
+                {service.tagline && (
+                  <p className="text-xs font-semibold text-amber-700 mb-2 line-clamp-1">
+                    {service.tagline}
+                  </p>
+                )}
 
                 {/* Short Description */}
-                <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-3">
                   {service.shortDescription}
                 </p>
 
-                {/* Deliverables Pills */}
+                {/* Deliverables / Capabilities Pills */}
                 {service.deliverables && service.deliverables.length > 0 && (
-                  <div className="pt-1 flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1.5 pt-1">
                     {service.deliverables.slice(0, 3).map((item, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-50 border border-slate-200 text-slate-600 truncate max-w-[140px]"
+                        className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200/60 truncate max-w-[150px]"
                       >
                         {item}
                       </span>
                     ))}
                     {service.deliverables.length > 3 && (
-                      <span className="px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-500">
-                        +{service.deliverables.length - 3}
+                      <span className="px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/60">
+                        +{service.deliverables.length - 3} more
                       </span>
                     )}
                   </div>
@@ -229,24 +240,32 @@ export const ServicesManager: React.FC<ServicesManagerProps> = ({
               </div>
 
               {/* Card Footer Actions */}
-              <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-[10px] font-mono text-slate-400">/{service.slug}</span>
+              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                <a
+                  href={`/services/${service.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-mono text-amber-700 hover:text-amber-800 hover:underline flex items-center gap-1 font-semibold"
+                >
+                  <span>/{service.slug}</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => onOpenEdit(service)}
-                    className="p-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 shadow-2xs transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 transition-colors cursor-pointer"
                     title="Edit Service"
                   >
-                    <Edit className="w-3.5 h-3.5" />
+                    <Edit className="w-4 h-4" />
                   </button>
                   {service.id && (
                     <button
                       onClick={() => setServiceToDelete(service)}
-                      className="p-1.5 rounded-lg bg-white hover:bg-red-50 text-slate-400 hover:text-red-600 border border-slate-200 hover:border-red-200 shadow-2xs transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors cursor-pointer"
                       title="Delete Service"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   )}
                 </div>
