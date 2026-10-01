@@ -36,7 +36,7 @@ public class ServiceItem {
     @Column(columnDefinition = "jsonb")
     private List<String> deliverables;
 
-    @Column(name = "hero_image_url", length = 500)
+    @Column(name = "hero_image_url", columnDefinition = "TEXT")
     private String heroImageUrl;
 
     @Column(name = "display_order")

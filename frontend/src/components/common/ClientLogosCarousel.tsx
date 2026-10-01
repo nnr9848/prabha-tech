@@ -188,7 +188,7 @@ export const ClientLogosCarousel: React.FC<ClientLogosCarouselProps> = ({
                     src={client.src}
                     alt={client.name}
                     draggable={false}
-                    className="h-12 sm:h-16 max-h-16 max-w-[130px] sm:max-w-[160px] w-auto object-contain grayscale-0 opacity-100 sm:grayscale sm:opacity-85 sm:group-hover:grayscale-0 sm:group-hover:opacity-100 sm:group-hover:scale-105 transition-all duration-300 select-none pointer-events-none"
+                    className="h-12 sm:h-16 max-h-16 max-w-[130px] sm:max-w-[160px] w-auto object-contain grayscale-0 opacity-100 group-hover:scale-105 transition-all duration-300 select-none pointer-events-none"
                     loading="lazy"
                   />
                 </div>
