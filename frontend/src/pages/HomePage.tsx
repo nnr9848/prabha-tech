@@ -55,19 +55,30 @@ export const HomePage: React.FC = () => {
       {/* 1. HERO SECTION (Dark Luxury Dubai Skyline & Golden Vortex) */}
       {/* ========================================================= */}
       <section className="relative min-h-[90vh] flex flex-col justify-center pt-40 sm:pt-44 lg:pt-48 pb-20 bg-[#000B1E] text-white overflow-hidden">
-        {/* Dubai Skyline with Burj Khalifa centered strictly in the RIGHT half on Desktop */}
-        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[48%] z-0 pointer-events-none overflow-hidden">
-          <img
-            src="/assets/images/dubai-hero-rings.jpg"
-            alt="Dubai Skyline with Golden Rings"
-            className="w-full h-full object-cover object-[46%_center]"
-          />
-          {/* Smooth left-edge gradient dissolving into the solid navy background */}
-          <div className="hidden lg:block absolute inset-y-0 left-0 w-48 sm:w-60 bg-gradient-to-r from-[#000B1E] via-[#000B1E]/60 to-transparent"></div>
+        {/* Video Hero Canvas centered in the right half on Desktop with gentle edge feathering */}
+        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[55%] z-0 pointer-events-none overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster="/assets/images/dubai-hero-rings.jpg"
+            className="w-full h-full object-cover object-[48%_center]"
+          >
+            <source src="/assets/video/hero-bg.mp4" type="video/mp4" />
+            <img
+              src="/assets/images/dubai-hero-rings.jpg"
+              alt="Intelligent Automation Logistics"
+              className="w-full h-full object-cover object-[48%_center]"
+            />
+          </video>
+          {/* Diluted soft left-edge feather: allows full warehouse video visibility while smoothly blending */}
+          <div className="hidden lg:block absolute inset-y-0 left-0 w-28 sm:w-36 bg-gradient-to-r from-[#000B1E]/80 via-[#000B1E]/30 to-transparent"></div>
           {/* Subtle bottom edge feathering */}
-          <div className="hidden lg:block absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#000B1E]/50 to-transparent"></div>
-          {/* Mobile/Tablet readability gradient */}
-          <div className="lg:hidden absolute inset-0 bg-gradient-to-r from-[#000B1E] via-[#000B1E]/85 to-transparent"></div>
+          <div className="hidden lg:block absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#000B1E]/40 to-transparent"></div>
+          {/* Mobile/Tablet readability gradient: soft dissolve keeping typography sharp */}
+          <div className="lg:hidden absolute inset-0 bg-gradient-to-r from-[#000B1E]/95 via-[#000B1E]/60 to-transparent"></div>
         </div>
 
         {/* Hero Main Content - Left Aligned to Page Margin */}
