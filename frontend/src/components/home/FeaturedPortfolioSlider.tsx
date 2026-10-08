@@ -179,13 +179,13 @@ export const FeaturedPortfolioSlider: React.FC<FeaturedPortfolioSliderProps> = (
   const transformX = -(currentIndex * stepPercent);
 
   return (
-    <section className="relative py-24 bg-white border-b border-slate-200 overflow-hidden">
+    <section className="relative py-14 lg:py-16 bg-white border-b border-slate-200 overflow-hidden">
       {/* Subtle ambient luxury backdrop aura */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-gradient-to-tr from-[#E5A93C]/5 via-[#020E26]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
         {/* Section Header: Left Title, Right Controls */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-6">
           <div>
             <SectionHeading
               theme="light"

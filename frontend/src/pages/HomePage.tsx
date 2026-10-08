@@ -176,7 +176,7 @@ export const HomePage: React.FC = () => {
       {/* ========================================================= */}
       {/* 3. STATS SECTION WITH CRYSTAL-CLEAR NIGHT GLOBE ON RIGHT END */}
       {/* ========================================================= */}
-      <section className="relative text-white py-16 overflow-hidden bg-[#000B1E]">
+      <section className="relative text-white py-12 lg:py-14 overflow-hidden bg-[#000B1E]">
         {/* Crystal-Clear Blue Night Earth Globe strictly confined to RIGHT SIDE */}
         <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[46%] pointer-events-none overflow-hidden">
           <img
@@ -272,78 +272,74 @@ export const HomePage: React.FC = () => {
 
 
       {/* ========================================================= */}
-      {/* 4. TECHNOLOGY THAT DRIVES REAL IMPACT (6-Pillar Grid) */}
+      {/* 4. TECHNOLOGY THAT DRIVES REAL IMPACT (Reference Design 3x2 Matrix) */}
       {/* ========================================================= */}
-      <section className="py-24 bg-white">
+      <section className="py-14 lg:py-16 bg-white">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          {/* Header matching reference mockup */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 lg:mb-16 gap-6">
             <div>
-              <SectionHeading
-                theme="light"
-                size="section"
-                badge="Our Capabilities"
-                title={
-                  <>
-                    Technology That Drives <br /> Real Impact
-                  </>
-                }
-              />
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#020E26] tracking-tight leading-[1.15]">
+                Technology <br />
+                <span className="font-bold">That Drives</span> <br />
+                <span className="font-bold">Real Impact</span>
+              </h2>
             </div>
-            <div className="max-w-md">
-              <p className="text-sm text-slate-600 mb-4">
+            <div className="max-w-xl flex flex-col items-start lg:items-end text-left lg:text-right">
+              <p className="text-xs sm:text-sm text-slate-600 mb-4 max-w-lg leading-relaxed">
                 From intelligent automation to connected industries, we deliver end-to-end technology solutions that solve complex challenges and create lasting value.
               </p>
               <Link
                 to="/services"
-                className="text-xs font-bold uppercase tracking-wider text-[#020E26] hover:text-[#E5A93C] flex items-center gap-1 transition-colors"
+                className="text-xs font-bold uppercase tracking-wider text-[#020E26] hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors group cursor-pointer"
               >
-                <span>Explore All Services</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>EXPLORE ALL SERVICES</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
 
-          {/* Dynamic Enterprise Services Grid from PostgreSQL */}
+          {/* Dynamic 6-Card Horizontal Matrix matching Reference Image */}
           {isServicesLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
               {[1, 2, 3, 4, 5, 6].map((n) => (
-                <div key={n} className="p-8 rounded-2xl bg-white border border-slate-200 animate-pulse space-y-4">
-                  <div className="w-12 h-12 rounded-xl bg-slate-100" />
-                  <div className="h-6 w-3/4 bg-slate-100 rounded-md" />
-                  <div className="h-4 w-full bg-slate-100 rounded-md" />
-                  <div className="h-4 w-5/6 bg-slate-100 rounded-md" />
-                  <div className="h-4 w-1/3 bg-slate-100 rounded-md pt-2" />
+                <div key={n} className="p-6 rounded-2xl bg-white border border-slate-200/90 animate-pulse flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-slate-100 shrink-0" />
+                  <div className="space-y-2 flex-1">
+                    <div className="h-4 w-3/4 bg-slate-100 rounded" />
+                    <div className="h-3 w-full bg-slate-100 rounded" />
+                    <div className="h-3 w-5/6 bg-slate-100 rounded" />
+                  </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
               {services
                 .filter((s) => s.isActive !== false)
                 .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
                 .slice(0, 6)
                 .map((service) => (
-                  <div
+                  <Link
                     key={service.id || service.slug}
-                    className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#E5A93C]/50 hover:shadow-xl transition-all duration-300 group flex flex-col justify-between"
+                    to={`/services/${service.slug}`}
+                    className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 hover:border-[#E5A93C]/60 hover:shadow-lg transition-all duration-300 group flex items-start gap-4 cursor-pointer"
                   >
-                    <div>
-                      <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-[#020E26] group-hover:bg-[#020E26] group-hover:text-[#E5A93C] transition-colors mb-6">
-                        {renderServiceIcon(service.icon, 'w-6 h-6')}
-                      </div>
-                      <h3 className="text-xl font-bold text-[#020E26] mb-3">{service.title}</h3>
-                      <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                    {/* Outline Icon Box with smooth hover highlight */}
+                    <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-800 group-hover:bg-[#020E26] group-hover:text-[#E5A93C] group-hover:border-[#020E26] transition-colors shrink-0 shadow-2xs">
+                      {renderServiceIcon(service.icon, 'w-6 h-6 stroke-[1.75]')}
+                    </div>
+
+                    {/* Content: Title & 2-line Description */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#020E26] transition-colors leading-snug line-clamp-1 mb-1">
+                        {service.title}
+                      </h3>
+                      <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
                         {service.shortDescription}
                       </p>
                     </div>
-                    <Link
-                      to={`/services/${service.slug}`}
-                      className="text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] flex items-center gap-1.5 transition-colors pt-2"
-                    >
-                      <span>Learn More</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+                  </Link>
                 ))}
             </div>
           )}
@@ -429,7 +425,7 @@ export const HomePage: React.FC = () => {
       {/* ========================================================= */}
       {/* 6. SPOTLIGHT: ENTERPRISE SOFTWARE */}
       {/* ========================================================= */}
-      <section className="py-24 bg-white">
+      <section className="py-14 lg:py-16 bg-white">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Content */}
@@ -477,153 +473,171 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 7. BUILDING SOLUTIONS FOR EVERY INDUSTRY */}
+      {/* 7. BUILDING SOLUTIONS FOR EVERY INDUSTRY (Reference Asymmetric Layout) */}
       {/* ========================================================= */}
-      <section className="py-24 bg-slate-50 border-y border-slate-200">
+      <section className="py-14 lg:py-16 bg-white border-t border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <SectionHeading
-              theme="light"
-              size="section"
-              align="center"
-              badge="Cross-Sector Expertise"
-              title="Building Solutions for Every Industry"
-              subtitle="Our domain experience spans key enterprise verticals across the GCC and international markets."
-            />
-          </div>
+          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12">
+            {/* Left Title Column matching Reference Mockup */}
+            <div className="lg:w-[26%] shrink-0">
+              <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-light text-[#020E26] tracking-tight leading-[1.15]">
+                Building <br />
+                <span className="font-bold">Solutions for</span> <br />
+                <span className="font-bold">Every Industry</span>
+              </h2>
+            </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              {
-                title: 'Real Estate',
-                subtitle: 'Smart Buildings',
-                img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80',
-              },
-              {
-                title: 'Manufacturing',
-                subtitle: 'Industry 4.0',
-                img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80',
-              },
-              {
-                title: 'Energy & Utilities',
-                subtitle: 'Sustainable Ops',
-                img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80',
-              },
-              {
-                title: 'Logistics',
-                subtitle: 'Supply Chain',
-                img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80',
-              },
-              {
-                title: 'Government',
-                subtitle: 'Digital Services',
-                img: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80',
-              },
-              {
-                title: 'Healthcare',
-                subtitle: 'Smart Care',
-                img: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=600&q=80',
-              },
-            ].map((ind, i) => (
-              <div
-                key={i}
-                className="group relative rounded-2xl overflow-hidden aspect-[4/5] shadow-sm hover:shadow-lg transition-all duration-300"
-              >
-                <img
-                  src={ind.img}
-                  alt={ind.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020E26] via-[#020E26]/40 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h4 className="font-bold text-sm">{ind.title}</h4>
-                  <p className="text-[11px] text-[#E5A93C]">{ind.subtitle}</p>
-                </div>
-              </div>
-            ))}
+            {/* Right 6-Card Horizontal Strip */}
+            <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+              {[
+                {
+                  title: 'Real Estate',
+                  subtitle: 'Smart Buildings',
+                  img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80',
+                  link: '/industries#real-estate',
+                },
+                {
+                  title: 'Manufacturing',
+                  subtitle: 'Industry 4.0',
+                  img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80',
+                  link: '/industries#manufacturing',
+                },
+                {
+                  title: 'Energy & Utilities',
+                  subtitle: 'Sustainable Ops',
+                  img: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80',
+                  link: '/industries#energy',
+                },
+                {
+                  title: 'Logistics & Transp.',
+                  subtitle: 'Connected Supply Chains',
+                  img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80',
+                  link: '/industries#logistics',
+                },
+                {
+                  title: 'Government',
+                  subtitle: 'Digital Transformation',
+                  img: 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80',
+                  link: '/industries#government',
+                },
+                {
+                  title: 'Healthcare',
+                  subtitle: 'Better, Smarter Care',
+                  img: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=600&q=80',
+                  link: '/industries#healthcare',
+                },
+              ].map((ind, i) => (
+                <Link
+                  key={i}
+                  to={ind.link}
+                  className="group relative rounded-xl overflow-hidden aspect-[4/5] shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-end p-3 cursor-pointer"
+                >
+                  <img
+                    src={ind.img}
+                    alt={ind.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  {/* Dark gradient overlay for text legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#000B1E] via-[#000B1E]/60 to-transparent"></div>
+                  
+                  <div className="relative z-10 text-white">
+                    <h4 className="font-bold text-xs sm:text-sm text-white group-hover:text-[#E5A93C] transition-colors leading-tight">
+                      {ind.title}
+                    </h4>
+                    <p className="text-[10px] text-slate-300 leading-tight mt-0.5 line-clamp-1">
+                      {ind.subtitle}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ========================================================= */}
-      {/* 8. INSIGHTS & PERSPECTIVES */}
+      {/* 8. INSIGHTS & PERSPECTIVES (Exact Reference: Asymmetric Left Title + 4 Horizontal Cards) */}
       {/* ========================================================= */}
-      <section className="py-24 bg-white">
+      <section className="py-14 lg:py-16 bg-white border-t border-slate-100">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-            <div>
-              <SectionHeading
-                theme="light"
-                size="section"
-                badge="Knowledge & Frameworks"
-                title="Insights & Perspectives"
-              />
-            </div>
-            <Link
-              to="/insights"
-              className="text-xs font-bold uppercase tracking-wider text-[#020E26] hover:text-[#E5A93C] flex items-center gap-1 transition-colors"
-            >
-              <span>View All Insights</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+          <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
+            {/* Left Column: Stacked Title, Subtitle, and View All Link */}
+            <div className="lg:w-[24%] shrink-0">
+              <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-light text-[#020E26] tracking-tight leading-[1.15]">
+                Insights & <br />
+                <span className="font-bold">Perspectives</span>
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 mt-3 mb-6 leading-relaxed max-w-sm">
+                Latest trends, stories, and ideas shaping a smarter, more connected future.
+              </p>
 
-          {/* Dynamic Articles & Insights Grid from PostgreSQL */}
-          {isArticlesLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[1, 2, 3, 4].map((n) => (
-                <div key={n} className="rounded-2xl bg-white border border-slate-200 overflow-hidden animate-pulse">
-                  <div className="aspect-[16/10] bg-slate-100" />
-                  <div className="p-6 space-y-3">
+              <Link
+                to="/insights"
+                className="text-xs font-bold uppercase tracking-wider text-[#020E26] hover:text-[#E5A93C] inline-flex items-center gap-1.5 transition-colors group cursor-pointer"
+              >
+                <span>VIEW ALL INSIGHTS</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            {/* Right Column: 4 Compact Editorial Cards */}
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full">
+              {isArticlesLoading ? (
+                [1, 2, 3, 4].map((n) => (
+                  <div key={n} className="animate-pulse space-y-3">
+                    <div className="aspect-[16/9] bg-slate-100 rounded-xl" />
                     <div className="h-3 w-1/3 bg-slate-100 rounded" />
                     <div className="h-4 w-5/6 bg-slate-100 rounded" />
-                    <div className="h-4 w-2/3 bg-slate-100 rounded" />
-                    <div className="h-3 w-1/4 bg-slate-100 rounded pt-2" />
+                    <div className="h-3 w-1/4 bg-slate-100 rounded pt-1" />
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {articles
-                .filter((a) => a.isPublished !== false)
-                .slice(0, 4)
-                .map((art) => (
-                  <Link
-                    key={art.id || art.slug}
-                    to={`/insights/${art.slug}`}
-                    className="group rounded-2xl bg-white border border-slate-200 overflow-hidden hover:border-[#E5A93C]/50 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="aspect-[16/10] overflow-hidden bg-slate-100 relative">
-                        <img
-                          src={art.coverImageUrl}
-                          alt={art.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        {art.category && (
-                          <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#020E26]/80 backdrop-blur-sm text-[10px] font-bold uppercase tracking-wider text-[#E5A93C]">
-                            {art.category}
-                          </span>
-                        )}
-                      </div>
-                      <div className="p-6">
-                        <div className="text-[11px] font-semibold text-slate-400 mb-2">
-                          {art.createdAt ? new Date(art.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase() : 'LATEST'}
+                ))
+              ) : (
+                articles
+                  .filter((a) => a.isPublished !== false)
+                  .slice(0, 4)
+                  .map((art) => (
+                    <Link
+                      key={art.id || art.slug}
+                      to={`/insights/${art.slug}`}
+                      className="group flex flex-col justify-between cursor-pointer"
+                    >
+                      <div>
+                        {/* 16:9 Compact Rounded Image */}
+                        <div className="relative overflow-hidden rounded-xl aspect-[16/9] bg-slate-100 mb-3 shadow-2xs group-hover:shadow-md transition-shadow">
+                          <img
+                            src={art.coverImageUrl}
+                            alt={art.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
                         </div>
-                        <h3 className="font-bold text-sm text-[#020E26] group-hover:text-[#E5A93C] transition-colors leading-snug">
+
+                        {/* Eyebrow: Category & Date */}
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-amber-700/90 mb-1 line-clamp-1">
+                          <span>{art.category || 'INNOVATION'}</span>
+                          <span className="mx-1 text-slate-300">•</span>
+                          <span className="text-slate-400 font-medium">
+                            {art.createdAt
+                              ? new Date(art.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                              : 'JUN 12, 2026'}
+                          </span>
+                        </div>
+
+                        {/* Headline */}
+                        <h3 className="font-bold text-xs sm:text-sm text-[#020E26] group-hover:text-amber-700 transition-colors leading-snug line-clamp-2">
                           {art.title}
                         </h3>
                       </div>
-                    </div>
-                    <div className="px-6 pb-6 pt-2 border-t border-slate-100 flex items-center text-xs font-bold uppercase tracking-wider text-[#020E26] group-hover:text-[#E5A93C] transition-colors">
-                      <span>Read More</span>
-                      <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                    </div>
-                  </Link>
-                ))}
+
+                      {/* Inline Read More Link */}
+                      <div className="pt-2 flex items-center text-[11px] font-bold text-[#020E26] group-hover:text-amber-700 transition-colors">
+                        <span>Read More</span>
+                        <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </Link>
+                  ))
+              )}
             </div>
-          )}
+          </div>
         </div>
       </section>
 
