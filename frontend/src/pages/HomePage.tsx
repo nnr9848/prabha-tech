@@ -16,6 +16,58 @@ import { publicApi } from '../api/client';
 import { CaseStudy, ServiceItem, Article, HeroConfig } from '../types';
 import { renderServiceIcon } from './admin/components/ServicesManager';
 
+// Tiered Fallback Articles: Curated editorial insights used if the backend is restarting or DB unseeded
+const DEFAULT_FALLBACK_ARTICLES: Article[] = [
+  {
+    id: 901,
+    slug: 'ai-powered-smart-building-management',
+    title: 'AI-Powered Smart Building Management Systems (BEMS)',
+    excerpt: 'Deep-learning energy optimization cutting commercial facility power overhead by up to 34%.',
+    content: '',
+    coverImageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=85',
+    authorName: 'Smart Facilities Team',
+    category: 'Smart Buildings (BEMS)',
+    createdAt: '2026-09-28T11:47:47Z',
+    isPublished: true,
+  },
+  {
+    id: 902,
+    slug: 'digital-transformation-in-heavy-equipment-industry',
+    title: 'Digital Transformation in Heavy Equipment Industry',
+    excerpt: 'Connecting heavy construction fleets with CAN bus telemetry and cloud predictive maintenance.',
+    content: '',
+    coverImageUrl: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1000&q=85',
+    authorName: 'Industrial IoT Division',
+    category: 'Industrial IoT',
+    createdAt: '2026-09-28T11:47:47Z',
+    isPublished: true,
+  },
+  {
+    id: 903,
+    slug: 'super-app-all-in-one-solution-for-modern-businesses',
+    title: 'Super App: All-in-One Solution for Modern Businesses',
+    excerpt: 'Consolidating customer self-service, marketplace transactions, and communications into unified suites.',
+    content: '',
+    coverImageUrl: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80',
+    authorName: 'Mobile Engineering',
+    category: 'Enterprise Software',
+    createdAt: '2026-09-28T11:47:47Z',
+    isPublished: true,
+  },
+  {
+    id: 904,
+    slug: 'how-ai-hrms-is-redefining-workplace-management',
+    title: 'How AI HRMS is Redefining Workplace Management',
+    excerpt: 'Automating talent acquisition, compliance tracking, and predictive retention modeling.',
+    content: '',
+    coverImageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+    authorName: 'Workforce Solutions',
+    category: 'HR & Workforce',
+    createdAt: '2026-09-28T11:47:47Z',
+    isPublished: true,
+  },
+];
+
 export const HomePage: React.FC = () => {
   const [isVideoLoaded, setIsVideoLoaded] = React.useState(false);
 
@@ -61,6 +113,10 @@ export const HomePage: React.FC = () => {
     queryFn: () => publicApi.getArticles(),
     staleTime: 1000 * 60 * 5,
   });
+
+  // Tiered Resolution: Filter published articles, and fall back safely if DB is empty/reconnecting
+  const publishedDbArticles = articles.filter((a) => a.isPublished !== false);
+  const displayArticles = publishedDbArticles.length > 0 ? publishedDbArticles : DEFAULT_FALLBACK_ARTICLES;
 
   return (
     <div className="bg-white text-slate-900 font-sans selection:bg-[#E5A93C]/30">
@@ -605,8 +661,7 @@ export const HomePage: React.FC = () => {
                   </div>
                 ))
               ) : (
-                articles
-                  .filter((a) => a.isPublished !== false)
+                displayArticles
                   .slice(0, 4)
                   .map((art) => (
                     <Link
