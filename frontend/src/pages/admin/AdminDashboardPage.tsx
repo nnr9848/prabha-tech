@@ -14,6 +14,7 @@ import { JobsManager } from './components/JobsManager';
 import { JobApplicationsManager } from './components/JobApplicationsManager';
 import { InquiriesManager } from './components/InquiriesManager';
 import { SocialLinksManager } from './components/SocialLinksManager';
+import { HeroSectionManager } from './components/HeroSectionManager';
 import { AdminTrashHub } from './components/AdminTrashHub';
 import { useToast } from '../../context/ToastContext';
 import { X, Save, Image as ImageIcon, ExternalLink } from 'lucide-react';
@@ -21,6 +22,7 @@ import { ImageUploader } from '../../components/common/ImageUploader';
 
 const VALID_TABS: AdminTab[] = [
   'overview',
+  'hero-section',
   'services',
   'case-studies',
   'articles',
@@ -583,6 +585,8 @@ export const AdminDashboardPage: React.FC = () => {
               }}
             />
           )}
+
+          {activeTab === 'hero-section' && <HeroSectionManager />}
 
           {activeTab === 'services' && (
             <ServicesManager

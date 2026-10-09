@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition, JobApplication, TrashItem, NavItem } from '../types';
+import { CaseStudy, ServiceItem, Article, LeadInquiry, AuthResponse, SocialLink, JobPosition, JobApplication, TrashItem, NavItem, HeroConfig } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
@@ -126,6 +126,11 @@ export const publicApi = {
         'Content-Type': 'multipart/form-data',
       },
     });
+    return res.data;
+  },
+
+  getHeroConfig: async (): Promise<HeroConfig> => {
+    const res = await publicClient.get('/public/hero-config');
     return res.data;
   },
 };
@@ -296,6 +301,28 @@ export const adminApi = {
 
   reorderNavItems: async (items: NavItem[]): Promise<void> => {
     await adminClient.put('/admin/nav-items/reorder', items);
+  },
+
+  // Hero Section Configuration & Media Upload CMS
+  getHeroConfig: async (): Promise<HeroConfig> => {
+    const res = await adminClient.get('/admin/hero-config');
+    return res.data;
+  },
+
+  updateHeroConfig: async (data: Partial<HeroConfig>): Promise<HeroConfig> => {
+    const res = await adminClient.put('/admin/hero-config', data);
+    return res.data;
+  },
+
+  uploadHeroMedia: async (file: File): Promise<{ fileName: string; storedName: string; url: string }> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await adminClient.post('/admin/upload/hero-media', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return res.data;
   },
 };
 

@@ -31,7 +31,11 @@ public class FileStorageService {
     private static final List<String> ALLOWED_DOCUMENT_EXTENSIONS = Arrays.asList(
             ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".png", ".jpg", ".jpeg", ".webp"
     );
+    private static final List<String> ALLOWED_MEDIA_EXTENSIONS = Arrays.asList(
+            ".mp4", ".webm", ".ogg", ".png", ".jpg", ".jpeg", ".webp", ".svg"
+    );
     private static final long MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
+    private static final long MAX_MEDIA_FILE_SIZE_BYTES = 50 * 1024 * 1024; // 50 MB
 
     public FileStorageService(@Value("${app.upload.dir:uploads/resumes}") String uploadDir) {
         this.uploadLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
@@ -44,20 +48,24 @@ public class FileStorageService {
     }
 
     public String storeDocument(MultipartFile file) {
-        return storeFileWithExtensions(file, ALLOWED_DOCUMENT_EXTENSIONS, "document");
+        return storeFileWithExtensions(file, ALLOWED_DOCUMENT_EXTENSIONS, "document", MAX_FILE_SIZE_BYTES);
     }
 
     public String storeResume(MultipartFile file) {
-        return storeFileWithExtensions(file, ALLOWED_EXTENSIONS, "resume");
+        return storeFileWithExtensions(file, ALLOWED_EXTENSIONS, "resume", MAX_FILE_SIZE_BYTES);
     }
 
-    private String storeFileWithExtensions(MultipartFile file, List<String> allowedExtensions, String fileKind) {
+    public String storeMedia(MultipartFile file) {
+        return storeFileWithExtensions(file, ALLOWED_MEDIA_EXTENSIONS, "hero-media", MAX_MEDIA_FILE_SIZE_BYTES);
+    }
+
+    private String storeFileWithExtensions(MultipartFile file, List<String> allowedExtensions, String fileKind, long maxSizeBytes) {
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Cannot store empty file.");
         }
 
-        if (file.getSize() > MAX_FILE_SIZE_BYTES) {
-            throw new IllegalArgumentException("File size exceeds 10MB limit.");
+        if (file.getSize() > maxSizeBytes) {
+            throw new IllegalArgumentException("File size exceeds " + (maxSizeBytes / (1024 * 1024)) + "MB limit.");
         }
 
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename() != null ? file.getOriginalFilename() : (fileKind + ".pdf"));

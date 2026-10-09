@@ -25,6 +25,7 @@ public class AdminController {
     private final com.prabhatech.service.JobPositionService jobPositionService;
     private final com.prabhatech.service.JobApplicationService jobApplicationService;
     private final com.prabhatech.service.NavItemService navItemService;
+    private final com.prabhatech.service.FileStorageService fileStorageService;
 
     public AdminController(CaseStudyService caseStudyService,
                            ServiceItemService serviceItemService,
@@ -34,7 +35,8 @@ public class AdminController {
                            com.prabhatech.service.HeroConfigService heroConfigService,
                            com.prabhatech.service.JobPositionService jobPositionService,
                            com.prabhatech.service.JobApplicationService jobApplicationService,
-                           com.prabhatech.service.NavItemService navItemService) {
+                           com.prabhatech.service.NavItemService navItemService,
+                           com.prabhatech.service.FileStorageService fileStorageService) {
         this.caseStudyService = caseStudyService;
         this.serviceItemService = serviceItemService;
         this.articleService = articleService;
@@ -44,6 +46,7 @@ public class AdminController {
         this.jobPositionService = jobPositionService;
         this.jobApplicationService = jobApplicationService;
         this.navItemService = navItemService;
+        this.fileStorageService = fileStorageService;
     }
 
     // --- Hero Section CMS ---
@@ -55,6 +58,17 @@ public class AdminController {
     @PutMapping("/hero-config")
     public ResponseEntity<HeroConfigDto.Response> updateHeroConfig(@Valid @RequestBody HeroConfigDto.Request request) {
         return ResponseEntity.ok(heroConfigService.updateHeroConfig(request));
+    }
+
+    @PostMapping(value = "/upload/hero-media", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<java.util.Map<String, String>> uploadHeroMedia(@RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+        String storedFilename = fileStorageService.storeMedia(file);
+        String downloadUrl = "/api/v1/public/documents/" + storedFilename;
+        java.util.Map<String, String> response = new java.util.HashMap<>();
+        response.put("fileName", file.getOriginalFilename() != null ? file.getOriginalFilename() : storedFilename);
+        response.put("storedName", storedFilename);
+        response.put("url", downloadUrl);
+        return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED).body(response);
     }
 
     // --- Social Links CMS ---

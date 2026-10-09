@@ -118,10 +118,10 @@ export const ClientLogosCarousel: React.FC<ClientLogosCarouselProps> = ({
   };
 
   return (
-    <section className={`py-10 sm:py-12 bg-white border-b border-slate-100 overflow-hidden ${className}`}>
+    <section className={`py-8 sm:py-10 bg-white border-b border-slate-100 overflow-hidden ${className}`}>
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 sm:mb-6 gap-4">
           <div>
             {badge && (
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#E5A93C] block mb-1.5">

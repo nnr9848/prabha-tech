@@ -177,6 +177,14 @@ public class PublicController {
             contentType = "application/vnd.ms-powerpoint";
         } else if (lower.endsWith(".pptx")) {
             contentType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        } else if (lower.endsWith(".mp4")) {
+            contentType = "video/mp4";
+        } else if (lower.endsWith(".webm")) {
+            contentType = "video/webm";
+        } else if (lower.endsWith(".ogg")) {
+            contentType = "video/ogg";
+        } else if (lower.endsWith(".svg")) {
+            contentType = "image/svg+xml";
         }
 
         return ResponseEntity.ok()

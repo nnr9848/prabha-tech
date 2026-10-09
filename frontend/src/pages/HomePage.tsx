@@ -13,10 +13,23 @@ import { FeaturedPortfolioSlider } from '../components/home/FeaturedPortfolioSli
 import { ClientLogosCarousel } from '../components/common/ClientLogosCarousel';
 import { useQuery } from '@tanstack/react-query';
 import { publicApi } from '../api/client';
-import { CaseStudy, ServiceItem, Article } from '../types';
+import { CaseStudy, ServiceItem, Article, HeroConfig } from '../types';
 import { renderServiceIcon } from './admin/components/ServicesManager';
 
 export const HomePage: React.FC = () => {
+  const [isVideoLoaded, setIsVideoLoaded] = React.useState(false);
+
+  // Single Source of Truth: Load dynamic Hero Section Configuration from PostgreSQL
+  const { data: heroConfig } = useQuery<HeroConfig>({
+    queryKey: ['homepageHeroConfig'],
+    queryFn: () => publicApi.getHeroConfig(),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  // Effective video and poster URLs with production defaults
+  const activeVideoUrl = heroConfig?.videoUrl?.trim() || '/assets/video/hero-bg.mp4';
+  const activePosterUrl = heroConfig?.posterUrl?.trim() || undefined;
+
   // Single Source of Truth: Load published portfolio from PostgreSQL via Spring Boot REST API
   const {
     data: caseStudies = [],
@@ -56,22 +69,22 @@ export const HomePage: React.FC = () => {
       {/* ========================================================= */}
       <section className="relative min-h-[90vh] flex flex-col justify-center pt-40 sm:pt-44 lg:pt-48 pb-20 bg-[#000B1E] text-white overflow-hidden">
         {/* Video Hero Canvas centered in the right half on Desktop with gentle edge feathering */}
-        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[55%] z-0 pointer-events-none overflow-hidden">
+        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[55%] z-0 pointer-events-none overflow-hidden bg-[#000B1E]">
           <video
+            key={activeVideoUrl}
             autoPlay
             muted
             loop
             playsInline
             preload="auto"
-            poster="/assets/images/dubai-hero-rings.jpg"
-            className="w-full h-full object-cover object-[48%_center]"
+            poster={activePosterUrl}
+            onLoadedData={() => setIsVideoLoaded(true)}
+            onPlaying={() => setIsVideoLoaded(true)}
+            className={`w-full h-full object-cover object-[48%_center] transition-opacity duration-700 ease-out ${
+              isVideoLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
           >
-            <source src="/assets/video/hero-bg.mp4" type="video/mp4" />
-            <img
-              src="/assets/images/dubai-hero-rings.jpg"
-              alt="Intelligent Automation Logistics"
-              className="w-full h-full object-cover object-[48%_center]"
-            />
+            <source src={activeVideoUrl} type="video/mp4" />
           </video>
           {/* Diluted soft left-edge feather: allows full warehouse video visibility while smoothly blending */}
           <div className="hidden lg:block absolute inset-y-0 left-0 w-28 sm:w-36 bg-gradient-to-r from-[#000B1E]/80 via-[#000B1E]/30 to-transparent"></div>
@@ -274,10 +287,10 @@ export const HomePage: React.FC = () => {
       {/* ========================================================= */}
       {/* 4. TECHNOLOGY THAT DRIVES REAL IMPACT (Reference Design 3x2 Matrix) */}
       {/* ========================================================= */}
-      <section className="py-14 lg:py-16 bg-white">
+      <section className="py-10 lg:py-12 bg-white">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14">
           {/* Header matching reference mockup */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 lg:mb-16 gap-6">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 lg:mb-10 gap-6">
             <div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#020E26] tracking-tight leading-[1.15]">
                 Technology <br />

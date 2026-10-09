@@ -16,11 +16,13 @@ import {
   Trash2,
   Wrench,
   Menu,
+  Video,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export type AdminTab =
   | 'overview'
+  | 'hero-section'
   | 'services'
   | 'case-studies'
   | 'articles'
@@ -90,6 +92,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     {
       group: 'Content & CMS',
       items: [
+        {
+          id: 'hero-section',
+          label: 'Hero Section & Media',
+          icon: <Video className="w-4 h-4" />,
+          badge: null,
+        },
         {
           id: 'services',
           label: 'Services CMS',

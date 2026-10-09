@@ -39,6 +39,11 @@ const TAB_TITLES: Record<AdminTab, { title: string; subtitle: string; category: 
     title: 'Executive Dashboard',
     subtitle: 'Real-time performance metrics, portfolio statistics, and inbound client velocity.',
   },
+  'hero-section': {
+    category: 'Content Management',
+    title: 'Hero Section & Media CMS',
+    subtitle: 'Manage homepage video background, poster frame, dynamic headlines, and primary CTA.',
+  },
   services: {
     category: 'Content Management',
     title: 'Enterprise Services CMS',
